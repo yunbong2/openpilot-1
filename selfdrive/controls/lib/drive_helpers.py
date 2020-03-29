@@ -9,6 +9,8 @@ V_CRUISE_MAX = 144
 V_CRUISE_MIN = 8
 V_CRUISE_DELTA = int(kegman.conf['CruiseDelta'])
 V_CRUISE_ENABLE_MIN = int(kegman.conf['CruiseEnableMin'])
+No_ASCM = 1
+V_CRUISE_DELTA2 = 1
 clip(V_CRUISE_DELTA, 2, 16)
 clip(V_CRUISE_ENABLE_MIN, 1, 80)
 
@@ -69,9 +71,15 @@ def update_v_cruise(v_cruise_kph, buttonEvents, enabled):
   for b in buttonEvents:
     if enabled and not b.pressed:
       if b.type == "accelCruise":
-        v_cruise_kph += V_CRUISE_DELTA - (v_cruise_kph % V_CRUISE_DELTA)
+        if No_ASCM == 1:
+          v_cruise_kph += V_CRUISE_DELTA2
+        else:
+          v_cruise_kph += V_CRUISE_DELTA - (v_cruise_kph % V_CRUISE_DELTA)
       elif b.type == "decelCruise":
-        v_cruise_kph -= V_CRUISE_DELTA - ((V_CRUISE_DELTA - v_cruise_kph) % V_CRUISE_DELTA)
+        if No_ASCM == 1:
+          v_cruise_kph -= V_CRUISE_DELTA2
+        else:
+          v_cruise_kph -= V_CRUISE_DELTA - ((V_CRUISE_DELTA - v_cruise_kph) % V_CRUISE_DELTA)
       v_cruise_kph = clip(v_cruise_kph, V_CRUISE_MIN, V_CRUISE_MAX)
 
   return v_cruise_kph
