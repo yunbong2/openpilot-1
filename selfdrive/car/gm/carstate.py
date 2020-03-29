@@ -35,7 +35,7 @@ def get_powertrain_can_parser(CP, canbus):
     ("DistanceButton", "ASCMSteeringButton", 0),
   ]
 
-  if CP.carFingerprint == CAR.VOLT:
+  if CP.carFingerprint == CAR.VOLT or CP.carFingerprint == CAR.BOLT:
     signals += [
       ("RegenPaddle", "EBCMRegenPaddle", 0),
     ]
@@ -68,7 +68,7 @@ class CarState(CarStateBase):
     super().__init__(CP)
     can_define = CANDefine(DBC[CP.carFingerprint]['pt'])
     self.shifter_values = can_define.dv["ECMPRDNL"]["PRNDL"]
-      
+
     self.CP = CP
     # initialize can parser
 
@@ -155,7 +155,7 @@ class CarState(CarStateBase):
       self.acc_active = False
       self.esp_disabled = pt_cp.vl["ESPStatus"]['TractionControlOn'] != 1
       self.pcm_acc_status = pt_cp.vl["AcceleratorPedal2"]['CruiseState']
-      if self.car_fingerprint == CAR.VOLT:
+      if self.car_fingerprint == CAR.VOLT or self.car_fingerprint == CAR.BOLT:
         self.regen_pressed = bool(pt_cp.vl["EBCMRegenPaddle"]['RegenPaddle'])
       else:
         self.regen_pressed = False
@@ -172,6 +172,6 @@ class CarState(CarStateBase):
 
     # Update Friction Brakes from Chassis Canbus
     self.frictionBrakesActive = bool(ch_cp.vl["EBCMFrictionBrakeStatus"]["FrictionBrakePressure"] != 0)
-    
+
   def get_follow_level(self):
     return self.follow_level
