@@ -817,7 +817,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   // Draw "MAX" Text
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   nvgFontFace(s->vg, "sans-regular");
-  nvgFontSize(s->vg, 26*2.5);
+  nvgFontSize(s->vg, 26*3);
   if (is_cruise_set) {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   } else {
@@ -827,14 +827,14 @@ static void ui_draw_vision_maxspeed(UIState *s) {
 
   // Draw Speed Text
   nvgFontFace(s->vg, "sans-bold");
-  nvgFontSize(s->vg, 48*2.5);
+  nvgFontSize(s->vg, 48*3);
   if (is_cruise_set) {
     snprintf(maxspeed_str, sizeof(maxspeed_str), "%d", maxspeed_calc);
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
     nvgText(s->vg, viz_maxspeed_x+(viz_maxspeed_xo/2)+(viz_maxspeed_w/2), 242, maxspeed_str, NULL);
   } else {
     nvgFontFace(s->vg, "sans-semibold");
-    nvgFontSize(s->vg, 42*2.5);
+    nvgFontSize(s->vg, 42*3);
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 100));
     nvgText(s->vg, viz_maxspeed_x+(viz_maxspeed_xo/2)+(viz_maxspeed_w/2), 242, "-", NULL);
   }
@@ -959,7 +959,7 @@ static void ui_draw_vision_speed(UIState *s) {
   }
 
   if(s->scene.leftBlinker || s->scene.rightBlinker) {
-    s->scene.blinker_blinkingrate -= 3;
+    s->scene.blinker_blinkingrate -= 5.5;
     if(s->scene.blinker_blinkingrate<0) s->scene.blinker_blinkingrate = 120;
   }
 
