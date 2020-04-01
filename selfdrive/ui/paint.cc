@@ -1,4 +1,4 @@
-﻿#include <assert.h>
+#include <assert.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
@@ -690,7 +690,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
       snprintf(val_str, sizeof(val_str), "%.1f°",(scene->angleSteers));
 
       snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "핸들조향각",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "현재조향각",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -817,7 +817,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   // Draw "MAX" Text
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   nvgFontFace(s->vg, "sans-regular");
-  nvgFontSize(s->vg, 26*3);
+  nvgFontSize(s->vg, 26*2.5);
   if (is_cruise_set) {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   } else {
@@ -827,14 +827,14 @@ static void ui_draw_vision_maxspeed(UIState *s) {
 
   // Draw Speed Text
   nvgFontFace(s->vg, "sans-bold");
-  nvgFontSize(s->vg, 48*3);
+  nvgFontSize(s->vg, 48*2.5);
   if (is_cruise_set) {
     snprintf(maxspeed_str, sizeof(maxspeed_str), "%d", maxspeed_calc);
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
     nvgText(s->vg, viz_maxspeed_x+(viz_maxspeed_xo/2)+(viz_maxspeed_w/2), 242, maxspeed_str, NULL);
   } else {
     nvgFontFace(s->vg, "sans-semibold");
-    nvgFontSize(s->vg, 42*3);
+    nvgFontSize(s->vg, 42*2.5);
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 100));
     nvgText(s->vg, viz_maxspeed_x+(viz_maxspeed_xo/2)+(viz_maxspeed_w/2), 242, "-", NULL);
   }
@@ -1199,21 +1199,21 @@ void ui_draw_vision_alert(UIState *s, int va_size, int va_color,
 
   if (va_size == ALERTSIZE_SMALL) {
     nvgFontFace(s->vg, "sans-semibold");
-    nvgFontSize(s->vg, 40*2.5);
+    nvgFontSize(s->vg, 40*3);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+15, va_text1, NULL);
   } else if (va_size== ALERTSIZE_MID) {
     nvgFontFace(s->vg, "sans-bold");
-    nvgFontSize(s->vg, 48*2.5);
+    nvgFontSize(s->vg, 48*3);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2-45, va_text1, NULL);
     nvgFontFace(s->vg, "sans-regular");
-    nvgFontSize(s->vg, 36*2.5);
+    nvgFontSize(s->vg, 36*3);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+75, va_text2, NULL);
   } else if (va_size== ALERTSIZE_FULL) {
     nvgFontSize(s->vg, (longAlert1?72:96)*2.5);
     nvgFontFace(s->vg, "sans-bold");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, alr_x, alr_y+(longAlert1?360:420), alr_w-60, va_text1, NULL);
-    nvgFontSize(s->vg, 48*2.5);
+    nvgFontSize(s->vg, 48*3);
     nvgFontFace(s->vg, "sans-regular");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BOTTOM);
     nvgTextBox(s->vg, alr_x, alr_h-(longAlert1?300:360), alr_w-60, va_text2, NULL);
