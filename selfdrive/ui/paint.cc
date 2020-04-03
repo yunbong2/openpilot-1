@@ -1199,21 +1199,21 @@ void ui_draw_vision_alert(UIState *s, int va_size, int va_color,
 
   if (va_size == ALERTSIZE_SMALL) {
     nvgFontFace(s->vg, "sans-semibold");
-    nvgFontSize(s->vg, 40*3);
+    nvgFontSize(s->vg, 40*2);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+15, va_text1, NULL);
   } else if (va_size== ALERTSIZE_MID) {
     nvgFontFace(s->vg, "sans-bold");
-    nvgFontSize(s->vg, 48*3);
+    nvgFontSize(s->vg, 48*2);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2-45, va_text1, NULL);
     nvgFontFace(s->vg, "sans-regular");
-    nvgFontSize(s->vg, 36*3);
+    nvgFontSize(s->vg, 36*2);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+75, va_text2, NULL);
   } else if (va_size== ALERTSIZE_FULL) {
-    nvgFontSize(s->vg, (longAlert1?72:96)*2.5);
+    nvgFontSize(s->vg, (longAlert1?72:96)*2);
     nvgFontFace(s->vg, "sans-bold");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, alr_x, alr_y+(longAlert1?360:420), alr_w-60, va_text1, NULL);
-    nvgFontSize(s->vg, 48*3);
+    nvgFontSize(s->vg, 48*2);
     nvgFontFace(s->vg, "sans-regular");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BOTTOM);
     nvgTextBox(s->vg, alr_x, alr_h-(longAlert1?300:360), alr_w-60, va_text2, NULL);
