@@ -433,12 +433,12 @@ static int bb_ui_draw_measure(UIState *s,  const char* bb_value, const char* bb_
    }
   //print value
   nvgFontFace(s->vg, "sans-semibold");
-  nvgFontSize(s->vg, bb_valueFontSize*2.5);
+  nvgFontSize(s->vg, bb_valueFontSize*2);
   nvgFillColor(s->vg, bb_valueColor);
   nvgText(s->vg, bb_x-dx/2, bb_y+ (int)(bb_valueFontSize*2.5)+5, bb_value, NULL);
   //print label
   nvgFontFace(s->vg, "sans-regular");
-  nvgFontSize(s->vg, bb_labelFontSize*2.5);
+  nvgFontSize(s->vg, bb_labelFontSize*2);
   nvgFillColor(s->vg, bb_labelColor);
   nvgText(s->vg, bb_x, bb_y + (int)(bb_valueFontSize*2.5)+5 + (int)(bb_labelFontSize*2.5)+5, bb_label, NULL);
   //print uom
@@ -449,7 +449,7 @@ static int bb_ui_draw_measure(UIState *s,  const char* bb_value, const char* bb_
     nvgTranslate(s->vg,rx,ry);
     nvgRotate(s->vg, -1.5708); //-90deg in radians
     nvgFontFace(s->vg, "sans-regular");
-    nvgFontSize(s->vg, (int)(bb_uomFontSize*2.5));
+    nvgFontSize(s->vg, (int)(bb_uomFontSize*2));
     nvgFillColor(s->vg, bb_uomColor);
     nvgText(s->vg, 0, 0, bb_uom, NULL);
     nvgRestore(s->vg);
@@ -483,7 +483,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
       // temp is alway in C * 10
       snprintf(val_str, sizeof(val_str), "%d°C", (int)(scene->maxCpuTemp/10));
       snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "CPU TEMP",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "CPU온도",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -504,7 +504,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
     // temp is alway in C * 1000
     snprintf(val_str, sizeof(val_str), "%d°C", (int)(scene->maxBatTemp/1000));
     snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "BAT TEMP",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "배터리온도",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -538,7 +538,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
 
     snprintf(val_str, sizeof(val_str), "%s%%", bat_lvl);
     snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "BAT LVL",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "배터리레벨",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -560,7 +560,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
     // gps accuracy is always in meters
     snprintf(val_str, sizeof(val_str), "%.2f", (s->scene.gpsAccuracy));
     snprintf(uom_str, sizeof(uom_str), "m");;
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "GPS PREC",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "GPS정확도",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -634,7 +634,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
        snprintf(val_str, sizeof(val_str), "-");
     }
     snprintf(uom_str, sizeof(uom_str), "m   ");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "REL DIST",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "차간거리",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -669,7 +669,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
     } else {
       snprintf(uom_str, sizeof(uom_str), "mph");
     }
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "REL SPEED",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "상대속도",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -693,7 +693,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
       snprintf(val_str, sizeof(val_str), "%.1f°",(scene->angleSteers));
 
       snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "REAL STEER",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "현재조향각",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -720,7 +720,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
        snprintf(val_str, sizeof(val_str), "-");
     }
       snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "DESIR STEER",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "필요조향각",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -820,24 +820,24 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   // Draw "MAX" Text
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   nvgFontFace(s->vg, "sans-regular");
-  nvgFontSize(s->vg, 26*2.5);
+  nvgFontSize(s->vg, 26*2);
   if (is_cruise_set) {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   } else {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 100));
   }
-  nvgText(s->vg, viz_maxspeed_x+(viz_maxspeed_xo/2)+(viz_maxspeed_w/2), 148, "MAX", NULL);
+  nvgText(s->vg, viz_maxspeed_x+(viz_maxspeed_xo/2)+(viz_maxspeed_w/2), 148, "설정속도", NULL);
 
   // Draw Speed Text
   nvgFontFace(s->vg, "sans-bold");
-  nvgFontSize(s->vg, 48*2.5);
+  nvgFontSize(s->vg, 48*2);
   if (is_cruise_set) {
     snprintf(maxspeed_str, sizeof(maxspeed_str), "%d", maxspeed_calc);
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
     nvgText(s->vg, viz_maxspeed_x+(viz_maxspeed_xo/2)+(viz_maxspeed_w/2), 242, maxspeed_str, NULL);
   } else {
     nvgFontFace(s->vg, "sans-semibold");
-    nvgFontSize(s->vg, 42*2.5);
+    nvgFontSize(s->vg, 42*2);
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 100));
     nvgText(s->vg, viz_maxspeed_x+(viz_maxspeed_xo/2)+(viz_maxspeed_w/2), 242, "-", NULL);
   }
@@ -905,7 +905,7 @@ static void ui_draw_vision_speedlimit(UIState *s) {
   // Draw "Speed Limit" Text
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   nvgFontFace(s->vg, "sans-semibold");
-  nvgFontSize(s->vg, 50);
+  nvgFontSize(s->vg, 40);
   nvgFillColor(s->vg, nvgRGBA(0, 0, 0, 255));
   if (is_speedlim_valid && s->is_ego_over_limit) {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
@@ -915,7 +915,7 @@ static void ui_draw_vision_speedlimit(UIState *s) {
 
   // Draw Speed Text
   nvgFontFace(s->vg, "sans-bold");
-  nvgFontSize(s->vg, 48*2.5);
+  nvgFontSize(s->vg, 48*2);
   if (s->is_ego_over_limit) {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
   } else {
@@ -926,7 +926,7 @@ static void ui_draw_vision_speedlimit(UIState *s) {
     nvgText(s->vg, viz_speedlim_x+viz_speedlim_w/2, viz_speedlim_y + (is_speedlim_valid ? 170 : 165), speedlim_str, NULL);
   } else {
     nvgFontFace(s->vg, "sans-semibold");
-    nvgFontSize(s->vg, 42*2.5);
+    nvgFontSize(s->vg, 42*2);
     nvgText(s->vg, viz_speedlim_x+viz_speedlim_w/2, viz_speedlim_y + (is_speedlim_valid ? 170 : 165), "N/A", NULL);
   }
 }
@@ -976,18 +976,18 @@ static void ui_draw_vision_speed(UIState *s) {
     snprintf(speed_str, sizeof(speed_str), "%d", (int)(speed * 2.2369363 + 0.5));
   }
   nvgFontFace(s->vg, "sans-bold");
-  nvgFontSize(s->vg, 96*2.5);
+  nvgFontSize(s->vg, 96*2);
   nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
   nvgText(s->vg, viz_speed_x+viz_speed_w/2, 240, speed_str, NULL);
 
   nvgFontFace(s->vg, "sans-regular");
-  nvgFontSize(s->vg, 36*2.5);
+  nvgFontSize(s->vg, 36*2);
   nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
 
   if (s->is_metric) {
-    nvgText(s->vg, viz_speed_x+viz_speed_w/2, 320, "kph", NULL);
+    nvgText(s->vg, viz_speed_x+viz_speed_w/2, 320, "km/h", NULL);
   } else {
-    nvgText(s->vg, viz_speed_x+viz_speed_w/2, 320, "mph", NULL);
+    nvgText(s->vg, viz_speed_x+viz_speed_w/2, 320, "m/h", NULL);
   }
 }
 
@@ -1202,21 +1202,21 @@ void ui_draw_vision_alert(UIState *s, int va_size, int va_color,
 
   if (va_size == ALERTSIZE_SMALL) {
     nvgFontFace(s->vg, "sans-semibold");
-    nvgFontSize(s->vg, 40*2.5);
+    nvgFontSize(s->vg, 40*2);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+15, va_text1, NULL);
   } else if (va_size== ALERTSIZE_MID) {
     nvgFontFace(s->vg, "sans-bold");
-    nvgFontSize(s->vg, 48*2.5);
+    nvgFontSize(s->vg, 48*2);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2-45, va_text1, NULL);
     nvgFontFace(s->vg, "sans-regular");
-    nvgFontSize(s->vg, 36*2.5);
+    nvgFontSize(s->vg, 36*2);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+75, va_text2, NULL);
   } else if (va_size== ALERTSIZE_FULL) {
-    nvgFontSize(s->vg, (longAlert1?72:96)*2.5);
+    nvgFontSize(s->vg, (longAlert1?72:96)*2);
     nvgFontFace(s->vg, "sans-bold");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, alr_x, alr_y+(longAlert1?360:420), alr_w-60, va_text1, NULL);
-    nvgFontSize(s->vg, 48*2.5);
+    nvgFontSize(s->vg, 48*2);
     nvgFontFace(s->vg, "sans-regular");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BOTTOM);
     nvgTextBox(s->vg, alr_x, alr_h-(longAlert1?300:360), alr_w-60, va_text2, NULL);
