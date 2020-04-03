@@ -820,7 +820,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   // Draw "MAX" Text
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   nvgFontFace(s->vg, "sans-regular");
-  nvgFontSize(s->vg, 26*2);
+  nvgFontSize(s->vg, 26*1.8);
   if (is_cruise_set) {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   } else {
@@ -905,7 +905,7 @@ static void ui_draw_vision_speedlimit(UIState *s) {
   // Draw "Speed Limit" Text
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   nvgFontFace(s->vg, "sans-semibold");
-  nvgFontSize(s->vg, 40);
+  nvgFontSize(s->vg, 35);
   nvgFillColor(s->vg, nvgRGBA(0, 0, 0, 255));
   if (is_speedlim_valid && s->is_ego_over_limit) {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
@@ -915,7 +915,7 @@ static void ui_draw_vision_speedlimit(UIState *s) {
 
   // Draw Speed Text
   nvgFontFace(s->vg, "sans-bold");
-  nvgFontSize(s->vg, 48*2);
+  nvgFontSize(s->vg, 48*1.8);
   if (s->is_ego_over_limit) {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
   } else {
@@ -976,12 +976,12 @@ static void ui_draw_vision_speed(UIState *s) {
     snprintf(speed_str, sizeof(speed_str), "%d", (int)(speed * 2.2369363 + 0.5));
   }
   nvgFontFace(s->vg, "sans-bold");
-  nvgFontSize(s->vg, 96*2);
+  nvgFontSize(s->vg, 96*1.8);
   nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
   nvgText(s->vg, viz_speed_x+viz_speed_w/2, 240, speed_str, NULL);
 
   nvgFontFace(s->vg, "sans-regular");
-  nvgFontSize(s->vg, 36*2);
+  nvgFontSize(s->vg, 36*1.8);
   nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
 
   if (s->is_metric) {
