@@ -136,13 +136,13 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1616. + STD_CARGO_KG
       ret.safetyModel = car.CarParams.SafetyModel.gm
       ret.wheelbase = 2.60096
-      ret.steerRatio = 16.8
+      ret.steerRatio = 13.8  #for dynamic steer ratio. Bolt has 16.8 steer ratio. 
       ret.steerRatioRear = 0.
       ret.centerToFront = ret.wheelbase * 0.4 # wild guess
-      #Thanks Kish
+      #for dynamic steer ratio
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.3], [0.01]]
-      ret.lateralTuning.pid.kf = 0.000045
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.21], [0.01]]
+      ret.lateralTuning.pid.kf = 0.00005
 
     elif candidate == CAR.MALIBU:
       # supports stop and go, but initial engage must be above 18mph (which include conservatism)
