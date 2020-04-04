@@ -184,7 +184,7 @@ ALERTS = [
       "오픈파일럿 사용준비가 되었습니다",
       "안전운전을 위해 항상 핸들을 잡고 도로교통 상황을 주시하세요",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.chimeReady, 5., 0., 5.),
+      Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.chimeReady, 6., 0., 6.),
 
   Alert(
       "startupMaster",
