@@ -382,8 +382,8 @@ class CarInterface(CarInterfaceBase):
       #  events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
       if ret.brakePressed:
         events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
-      if ret.gasPressed:
-        events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
+      #if ret.gasPressed:
+      #  events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
       if ret.cruiseState.standstill:
         events.append(create_event('resumeRequired', [ET.WARNING]))
       #if not self.CS.car_fingerprint in NO_ASCM_CARS:
