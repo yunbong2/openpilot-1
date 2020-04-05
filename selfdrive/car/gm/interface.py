@@ -276,7 +276,10 @@ class CarInterface(CarInterfaceBase):
 
     # cruise state
     ret.cruiseState.available = bool(self.CS.main_on)
-    cruiseEnabled = self.CS.pcm_acc_status != AccState.OFF
+    if self.CS.car_fingerprint not in NO_ASCM_CARS:
+      cruiseEnabled = self.CS.pcm_acc_status != AccState.OFF
+    else:
+      cruiseEnabled = bool(self.CS.main_on)
     ret.cruiseState.enabled = cruiseEnabled
     ret.cruiseState.standstill = False
 
@@ -315,12 +318,14 @@ class CarInterface(CarInterfaceBase):
         if not (cruiseEnabled and self.CS.standstill):
           be.type = ButtonType.accelCruise # Suppress resume button if we're resuming from stop so we don't adjust speed.
       elif but == CruiseButtons.DECEL_SET:
-        if not cruiseEnabled and not self.CS.lkMode:
-          self.lkMode = True
+        #if not cruiseEnabled and not self.CS.lkMode:
+        #  self.lkMode = True
         be.type = ButtonType.decelCruise
       elif but == CruiseButtons.CANCEL:
         be.type = ButtonType.cancel
       elif but == CruiseButtons.MAIN:
+        if not cruiseEnabled and not self.CS.lkMode:
+          self.lkMode = True
         be.type = ButtonType.altButton3
       buttonEvents.append(be)
 
@@ -363,7 +368,7 @@ class CarInterface(CarInterfaceBase):
         events.append(create_event('wrongGear', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
       if self.CS.esp_disabled:
         events.append(create_event('espDisabled', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
-      if not self.CS.main_on:
+      if not bool(self.CS.main_on):
         events.append(create_event('wrongCarMode', [ET.NO_ENTRY, ET.USER_DISABLE]))
       if self.CS.gear_shifter == 3:
         events.append(create_event('reverseGear', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
@@ -372,32 +377,36 @@ class CarInterface(CarInterfaceBase):
       if self.CS.park_brake:
         events.append(create_event('parkBrake', [ET.NO_ENTRY, ET.USER_DISABLE]))
       # disable on pedals rising edge or when brake is pressed and speed isn't zero
-      if (ret.gasPressed and not self.gas_pressed_prev) or \
-        (ret.brakePressed): # and (not self.brake_pressed_prev or ret.vEgo > 0.001)):
+      #if (ret.gasPressed and not self.gas_pressed_prev) or \
+      # (ret.brakePressed): # and (not self.brake_pressed_prev or ret.vEgo > 0.001)):
+      #  events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
+      if ret.brakePressed:
         events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
       if ret.gasPressed:
         events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
       if ret.cruiseState.standstill:
         events.append(create_event('resumeRequired', [ET.WARNING]))
-      if not self.CS.car_fingerprint in NO_ASCM_CARS:
-        if self.CS.pcm_acc_status == AccState.FAULTED:
-          events.append(create_event('controlsFailed', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
+      #if not self.CS.car_fingerprint in NO_ASCM_CARS:
+      #  if self.CS.pcm_acc_status == AccState.FAULTED:
+      #    events.append(create_event('controlsFailed', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
 
       # handle button presses
       for b in ret.buttonEvents:
         # do enable on both accel and decel buttons
         # The ECM will fault if resume triggers an enable while speed is set to 0
-        if b.type == ButtonType.accelCruise and c.hudControl.setSpeed > 0 and c.hudControl.setSpeed < 70 and not b.pressed:
-          events.append(create_event('buttonEnable', [ET.ENABLE]))
-        if b.type == ButtonType.decelCruise and not b.pressed:
-          events.append(create_event('buttonEnable', [ET.ENABLE]))
+        #if b.type == ButtonType.accelCruise and c.hudControl.setSpeed > 0 and c.hudControl.setSpeed < 70 and not b.pressed:
+        #  events.append(create_event('buttonEnable', [ET.ENABLE]))
+        #if b.type == ButtonType.decelCruise and not b.pressed:
+        #  events.append(create_event('buttonEnable', [ET.ENABLE]))
         # do disable on button down
-        if b.type == ButtonType.cancel and b.pressed:
-          events.append(create_event('buttonCancel', [ET.USER_DISABLE]))
+        #if b.type == ButtonType.cancel and b.pressed:
+        #  events.append(create_event('buttonCancel', [ET.USER_DISABLE]))
         # The ECM independently tracks a ‘speed is set’ state that is reset on main off.
         # To keep controlsd in sync with the ECM state, generate a RESET_V_CRUISE event on main cruise presses.
+        #if b.type == ButtonType.altButton3 and b.pressed:
+        #  events.append(create_event('buttonCancel', [ET.RESET_V_CRUISE, ET.USER_DISABLE]))
         if b.type == ButtonType.altButton3 and b.pressed:
-          events.append(create_event('buttonCancel', [ET.RESET_V_CRUISE, ET.USER_DISABLE]))
+          events.append(create_event('buttonEnable', [ET.ENABLE]))
 
     ret.events = events
 
@@ -418,7 +427,7 @@ class CarInterface(CarInterfaceBase):
 
     # For Openpilot, "enabled" includes pre-enable.
     # In GM, PCM faults out if ACC command overlaps user gas.
-    enabled = c.enabled and not self.CS.user_gas_pressed
+    enabled = c.enabled #and not self.CS.user_gas_pressed
 
     can_sends = self.CC.update(enabled, self.CS, self.frame, \
                                c.actuators,
