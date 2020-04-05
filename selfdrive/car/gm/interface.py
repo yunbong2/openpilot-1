@@ -132,7 +132,7 @@ class CarInterface(CarInterfaceBase):
 
     elif candidate == CAR.BOLT:
       # initial engage unkown - copied from Volt. Stop and go unknown.
-      ret.minEnableSpeed = 25 * CV.MPH_TO_MS
+      ret.minEnableSpeed = 8 * CV.MPH_TO_MS
       ret.mass = 1616. + STD_CARGO_KG
       ret.safetyModel = car.CarParams.SafetyModel.gm
       ret.wheelbase = 2.60096
@@ -405,7 +405,7 @@ class CarInterface(CarInterfaceBase):
         # To keep controlsd in sync with the ECM state, generate a RESET_V_CRUISE event on main cruise presses.
         #if b.type == ButtonType.altButton3 and b.pressed:
         #  events.append(create_event('buttonCancel', [ET.RESET_V_CRUISE, ET.USER_DISABLE]))
-        if b.type == ButtonType.altButton3 and b.pressed:
+        if b.type == ButtonType.altButton3 and not b.pressed:
           events.append(create_event('buttonEnable', [ET.ENABLE]))
 
     ret.events = events
