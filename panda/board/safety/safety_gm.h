@@ -43,7 +43,7 @@ AddrCheckStruct gm_rx_checks[] = {
 const int GM_RX_CHECK_LEN = sizeof(gm_rx_checks) / sizeof(gm_rx_checks[0]);
 
 int gm_brake_prev = 0;
-int gm_gas_prev = 0;
+//int gm_gas_prev = 0;
 bool gm_moving = false;
 int gm_rt_torque_last = 0;
 int gm_desired_torque_last = 0;
@@ -113,11 +113,12 @@ static int gm_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
       switch (button) {
         case 2:  // resume
         case 3:  // set
+        case 5:
           controls_allowed = 1;
           break;
-        case 6:  // cancel
-          controls_allowed = 0;
-          break;
+        //case 6:  // cancel
+        //  controls_allowed = 0;
+        //  break;
         default:
           break;  // any other button is irrelevant
       }
@@ -139,13 +140,13 @@ static int gm_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     }
 
     // exit controls on rising edge of gas press
-    if (addr == 417) {
-      int gas = GET_BYTE(to_push, 6);
-      if (gas && !gm_gas_prev) {
-        controls_allowed = 0;
-      }
-      gm_gas_prev = gas;
-    }
+    //if (addr == 417) {
+    //  int gas = GET_BYTE(to_push, 6);
+    //  if (gas && !gm_gas_prev) {
+    //    controls_allowed = 0;
+    //  }
+    //  gm_gas_prev = gas;
+    //}
 
     // exit controls on regen paddle
     if (addr == 189) {
@@ -188,8 +189,8 @@ static int gm_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
 
   // disallow actuator commands if gas or brake (with vehicle moving) are pressed
   // and the the latching controls_allowed flag is True
-  int pedal_pressed = gm_gas_prev || (gm_brake_prev && gm_moving);
-  bool current_controls_allowed = controls_allowed && !pedal_pressed;
+  //int pedal_pressed = gm_gas_prev || (gm_brake_prev && gm_moving);
+  bool current_controls_allowed = controls_allowed; //&& !pedal_pressed;
 
   // BRAKE: safety check
   if (addr == 789) {
@@ -304,8 +305,8 @@ static int gm_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
 
 
 static CAN_FIFOMailBox_TypeDef * gm_pump_hook(void) {
-  volatile int pedal_pressed = (volatile int)gm_gas_prev || ((volatile int)gm_brake_prev && (volatile int)gm_moving);
-  volatile bool current_controls_allowed = (volatile bool)controls_allowed && !(volatile int)pedal_pressed;
+  //volatile int pedal_pressed = (volatile int)gm_gas_prev || ((volatile int)gm_brake_prev && (volatile int)gm_moving);
+  volatile bool current_controls_allowed = (volatile bool)controls_allowed; //&& !(volatile int)pedal_pressed;
 
   if (!gm_ffc_detected) {
     //If we haven't seen lkas messages from CAN2, there is no passthrough, just use OP
