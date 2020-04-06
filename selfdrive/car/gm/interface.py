@@ -30,6 +30,7 @@ class CarInterface(CarInterfaceBase):
     self.gas_pressed_prev = False
     self.brake_pressed_prev = False
     self.acc_active_prev = 0
+    self.cruise_enabled_prev = False
 
     # *** init the major players ***
     canbus = CanBus()
@@ -141,7 +142,7 @@ class CarInterface(CarInterfaceBase):
       ret.centerToFront = ret.wheelbase * 0.4 # wild guess
       #PID tunning not to prevent oversteer
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.13], [0.01]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.13], [0.011]]
       ret.lateralTuning.pid.kf = 0.000045
 
     elif candidate == CAR.MALIBU:
@@ -305,31 +306,6 @@ class CarInterface(CarInterfaceBase):
       be.pressed = self.CS.right_blinker_on
       buttonEvents.append(be)
 
-    if self.CS.cruise_buttons != self.CS.prev_cruise_buttons: #and self.CS.prev_cruise_buttons != CruiseButtons.INIT:
-      be = car.CarState.ButtonEvent.new_message()
-      be.type = ButtonType.unknown
-      if self.CS.cruise_buttons != CruiseButtons.UNPRESS:
-        be.pressed = True
-        but = self.CS.cruise_buttons
-      else:
-        be.pressed = False
-        but = self.CS.prev_cruise_buttons
-      #if but == CruiseButtons.RES_ACCEL:
-        #if not (cruiseEnabled and self.CS.standstill):
-         # be.type = ButtonType.accelCruise # Suppress resume button if we're resuming from stop so we don't adjust speed.
-      #elif but == CruiseButtons.DECEL_SET:
-        #if not cruiseEnabled and not self.CS.lkMode:
-        #  self.lkMode = True
-        #be.type = ButtonType.decelCruise
-      #elif but == CruiseButtons.CANCEL:
-        #be.type = ButtonType.cancel
-      if but == CruiseButtons.MAIN:
-       if self.CS.cruise_buttons != CruiseButtons.INIT:
-         #if not cruiseEnabled and not self.CS.lkMode:
-         self.lkMode = True
-         be.type = ButtonType.altButton3
-      buttonEvents.append(be)
-
     ret.buttonEvents = buttonEvents
 
     if cruiseEnabled and self.CS.lka_button and self.CS.lka_button != self.CS.prev_lka_button:
@@ -377,6 +353,11 @@ class CarInterface(CarInterfaceBase):
         events.append(create_event('speedTooLow', [ET.NO_ENTRY]))
       if self.CS.park_brake:
         events.append(create_event('parkBrake', [ET.NO_ENTRY, ET.USER_DISABLE]))
+      if ret.cruiseState.enabled and not self.cruise_enabled_prev:
+        events.append(create_event('pcmEnable', [ET.ENABLE]))
+      elif not ret.cruiseState.enabled:
+        events.append(create_event('pcmDisable', [ET.USER_DISABLE]))
+
       # disable on pedals rising edge or when brake is pressed and speed isn't zero
       #if (ret.gasPressed and not self.gas_pressed_prev) or \
       # (ret.brakePressed): # and (not self.brake_pressed_prev or ret.vEgo > 0.001)):
@@ -392,7 +373,7 @@ class CarInterface(CarInterfaceBase):
       #    events.append(create_event('controlsFailed', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
 
       # handle button presses
-      for b in ret.buttonEvents:
+      #for b in ret.buttonEvents:
         # do enable on both accel and decel buttons
         # The ECM will fault if resume triggers an enable while speed is set to 0
         #if b.type == ButtonType.accelCruise and c.hudControl.setSpeed > 0 and c.hudControl.setSpeed < 70 and not b.pressed:
@@ -406,8 +387,8 @@ class CarInterface(CarInterfaceBase):
         # To keep controlsd in sync with the ECM state, generate a RESET_V_CRUISE event on main cruise presses.
         #if b.type == ButtonType.altButton3 and b.pressed:
         #  events.append(create_event('buttonCancel', [ET.RESET_V_CRUISE, ET.USER_DISABLE]))
-        if b.type == ButtonType.altButton3 and not b.pressed:
-          events.append(create_event('buttonEnable', [ET.ENABLE]))
+        #if b.type == ButtonType.altButton3 and not b.pressed:
+        #  events.append(create_event('buttonEnable', [ET.ENABLE]))
 
     ret.events = events
 
@@ -415,6 +396,7 @@ class CarInterface(CarInterfaceBase):
     self.acc_active_prev = self.CS.acc_active
     self.gas_pressed_prev = ret.gasPressed
     self.brake_pressed_prev = ret.brakePressed
+    self.cruise_enabled_prev = ret.cruiseState.enabled
 
     # cast to reader so it can't be modified
     return ret.as_reader()
