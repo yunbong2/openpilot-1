@@ -305,7 +305,7 @@ class CarInterface(CarInterfaceBase):
       be.pressed = self.CS.right_blinker_on
       buttonEvents.append(be)
 
-    if self.CS.cruise_buttons != self.CS.prev_cruise_buttons and self.CS.prev_cruise_buttons != CruiseButtons.INIT:
+    if self.CS.cruise_buttons != self.CS.prev_cruise_buttons: #and self.CS.prev_cruise_buttons != CruiseButtons.INIT:
       be = car.CarState.ButtonEvent.new_message()
       be.type = ButtonType.unknown
       if self.CS.cruise_buttons != CruiseButtons.UNPRESS:
@@ -314,19 +314,20 @@ class CarInterface(CarInterfaceBase):
       else:
         be.pressed = False
         but = self.CS.prev_cruise_buttons
-      if but == CruiseButtons.RES_ACCEL:
-        if not (cruiseEnabled and self.CS.standstill):
-          be.type = ButtonType.accelCruise # Suppress resume button if we're resuming from stop so we don't adjust speed.
-      elif but == CruiseButtons.DECEL_SET:
+      #if but == CruiseButtons.RES_ACCEL:
+        #if not (cruiseEnabled and self.CS.standstill):
+         # be.type = ButtonType.accelCruise # Suppress resume button if we're resuming from stop so we don't adjust speed.
+      #elif but == CruiseButtons.DECEL_SET:
         #if not cruiseEnabled and not self.CS.lkMode:
         #  self.lkMode = True
-        be.type = ButtonType.decelCruise
-      elif but == CruiseButtons.CANCEL:
-        be.type = ButtonType.cancel
-      elif but == CruiseButtons.MAIN:
-        if not cruiseEnabled and not self.CS.lkMode:
-          self.lkMode = True
-        be.type = ButtonType.altButton3
+        #be.type = ButtonType.decelCruise
+      #elif but == CruiseButtons.CANCEL:
+        #be.type = ButtonType.cancel
+      if but == CruiseButtons.MAIN:
+       if self.CS.cruise_buttons != CruiseButtons.INIT:
+         #if not cruiseEnabled and not self.CS.lkMode:
+         self.lkMode = True
+         be.type = ButtonType.altButton3
       buttonEvents.append(be)
 
     ret.buttonEvents = buttonEvents
