@@ -19,7 +19,7 @@
 
 #include "ui.hpp"
 #include "sound.hpp"
-#include "dashcam.h"
+// #include "dashcam.h"
 
 
 static int last_brightness = -1;
