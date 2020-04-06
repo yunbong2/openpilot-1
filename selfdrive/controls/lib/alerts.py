@@ -70,7 +70,7 @@ ALERTS = [
       "lkasButtonOff",
       "시동이 꺼졌습니다. 이온을 분리해주세요.",
       "",
-      AlertStatus.userPrompt, AlertSize.small,
+      AlertStatus.normal, AlertSize.small,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeReady, 5., 0., 5.),
 
   # Miscellaneous alerts
