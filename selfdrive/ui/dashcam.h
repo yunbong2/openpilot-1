@@ -232,7 +232,7 @@ void draw_lock_button(UIState *s) {
 
   if (!lock_image) {
     // Load the lock icon
-//    lock_image = nvgCreateImage(s->vg, "../assets/lock_icon.png", 1);
+    lock_image = nvgCreateImage(s->vg, "../assets/lock_icon.png", 1);
   }
 
   if (lock_current_video) {
@@ -260,7 +260,7 @@ static void screen_draw_button(UIState *s, int touch_x, int touch_y) {
   if (s->vision_connected){
 
     if (captureState == CAPTURE_STATE_CAPTURING) {
-//      draw_lock_button(s);
+      draw_lock_button(s);
     }
 
     int btn_w = 150;
