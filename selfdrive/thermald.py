@@ -18,8 +18,7 @@ from selfdrive.swaglog import cloudlog
 import cereal.messaging as messaging
 from selfdrive.loggerd.config import get_available_percent
 from selfdrive.pandad import get_expected_signature
-from pydub import AudioSegment
-from pydub.playback import play
+from playsound import playsound
 from selfdrive.kegman_conf import kegman_conf
 kegman = kegman_conf()
 
@@ -384,8 +383,8 @@ def thermald_thread():
 
       if msg.thermal.batteryStatus == "Discharging" and \
          started_seen and (sec_since_boot() - off_ts) > 5:
-        song = AudioSegment.from_wav("takeaway.wav")
-        play(song)
+        playsound('/data/openpilot/selfdrive/takeaway.wav')
+
 
       # shutdown if the battery gets lower than 3%, it's discharging, we aren't running for
       # more than a minute but we were running
