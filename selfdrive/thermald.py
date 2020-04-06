@@ -386,6 +386,7 @@ def thermald_thread():
          started_seen and (sec_since_boot() - off_ts) > 5:
         events = []
         events.append(create_event('lkasButtonOff', [ET.WARNING]))
+        ret.events = events
 
       # shutdown if the battery gets lower than 3%, it's discharging, we aren't running for
       # more than a minute but we were running
