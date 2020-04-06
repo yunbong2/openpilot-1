@@ -19,8 +19,6 @@ from selfdrive.swaglog import cloudlog
 import cereal.messaging as messaging
 from selfdrive.loggerd.config import get_available_percent
 from selfdrive.pandad import get_expected_signature
-from pydub import AudioSegment
-from pydub.playback import play
 from selfdrive.kegman_conf import kegman_conf
 kegman = kegman_conf()
 
@@ -382,12 +380,6 @@ def thermald_thread():
       if off_ts is None:
         off_ts = sec_since_boot()
         os.system('echo powersave > /sys/class/devfreq/soc:qcom,cpubw/governor')
-
-      if msg.thermal.batteryStatus == "Discharging" and \
-         started_seen and (sec_since_boot() - off_ts) > 5:
-        sound = AudioSegment.from_mp3('takeaway.mp3')
-        play(sound)
-
 
       # shutdown if the battery gets lower than 3%, it's discharging, we aren't running for
       # more than a minute but we were running
