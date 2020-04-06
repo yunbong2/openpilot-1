@@ -19,8 +19,7 @@ from selfdrive.swaglog import cloudlog
 import cereal.messaging as messaging
 from selfdrive.loggerd.config import get_available_percent
 from selfdrive.pandad import get_expected_signature
-import sounddevice as sd
-import soundfile as sf
+from pydub.playback import play
 from selfdrive.kegman_conf import kegman_conf
 kegman = kegman_conf()
 
@@ -385,11 +384,8 @@ def thermald_thread():
 
       if msg.thermal.batteryStatus == "Discharging" and \
          started_seen and (sec_since_boot() - off_ts) > 5:
-        filename = 'takeaway.wav'
-        # Extract data and sampling rate from file
-        data, fs = sf.read(filename, dtype='float32')  
-        sd.play(data, fs)
-        status = sd.wait()  # Wait until file is done playing
+        sound = AudioSegment.from_mp3('takeaway.mp3')
+        play(sound)
 
 
       # shutdown if the battery gets lower than 3%, it's discharging, we aren't running for
