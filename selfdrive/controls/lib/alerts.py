@@ -68,10 +68,10 @@ ALERTS = [
       Priority.HIGH, VisualAlert.none, AudibleAlert.none, 0., 0., .1),
   Alert(
       "lkasButtonOff",
-      "시동이 꺼졌습니다. 이온을 분리해주세요.",
+      "오픈파일럿 사용을 위해 차량의 LKAS 버튼을 눌러주세요",
       "",
       AlertStatus.userPrompt, AlertSize.small,
-      Priority.HIGH, VisualAlert.none, AudibleAlert.chimeReady, 5., 0., 5.),
+      Priority.HIGH, VisualAlert.none, AudibleAlert.none, 0., 0., .1),
 
   # Miscellaneous alerts
   Alert(
