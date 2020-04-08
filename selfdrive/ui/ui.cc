@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <assert.h>
+#include <time.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
 
@@ -19,6 +20,7 @@
 #include "ui.hpp"
 #include "sound.hpp"
 #include "dashcam.h"
+
 
 static int last_brightness = -1;
 static void set_brightness(UIState *s, int brightness) {
@@ -112,19 +114,21 @@ static void ui_init(UIState *s) {
   s->uilayout_sock = SubSocket::create(s->ctx, "uiLayoutState");
   s->livecalibration_sock = SubSocket::create(s->ctx, "liveCalibration");
   s->radarstate_sock = SubSocket::create(s->ctx, "radarState");
-  //s->thermal_sock = SubSocket::create(s->ctx, "thermal");
+  s->thermal_sock = SubSocket::create(s->ctx, "thermal");
   s->carstate_sock = SubSocket::create(s->ctx, "carState");
+  s->gpslocation_sock = SubSocket::create(s->ctx, "gpsLocation");
   s->gpslocationexternal_sock = SubSocket::create(s->ctx, "gpsLocationExternal");
-  s->livempc_sock= SubSocket::create(s->ctx, "liveMpc");
+  s->livempc_sock = SubSocket::create(s->ctx, "liveMpc");
 
   assert(s->model_sock != NULL);
   assert(s->controlsstate_sock != NULL);
   assert(s->uilayout_sock != NULL);
   assert(s->livecalibration_sock != NULL);
   assert(s->radarstate_sock != NULL);
-  //assert(s->thermal_sock != NULL);
+  assert(s->thermal_sock != NULL);
   assert(s->carstate_sock != NULL);
-  //assert(s->gpslocation_sock != NULL);
+  assert(s->gpslocation_sock != NULL);
+  assert(s->gpslocationexternal_sock != NULL);
   assert(s->livempc_sock != NULL);
 
   s->poller = Poller::create({
@@ -133,22 +137,12 @@ static void ui_init(UIState *s) {
                               s->uilayout_sock,
                               s->livecalibration_sock,
                               s->radarstate_sock,
-	                            s->carstate_sock,
+                              s->carstate_sock,
+                              s->livempc_sock,
+                              s->gpslocation_sock,
                               s->gpslocationexternal_sock,
-                              s->livempc_sock
+                              s->thermal_sock
                              });
-
-  /*
-  s->poller = Poller::create({
-                              s->model_sock,
-                              s->controlsstate_sock,
-                              s->uilayout_sock,
-                              s->livecalibration_sock,
-                              s->radarstate_sock,
-                              s->thermal_sock,
-	                            s->carstate_sock
-                             });
-  */
 
 
 #ifdef SHOW_SPEEDLIMIT
@@ -197,6 +191,7 @@ static void ui_init_vision(UIState *s, const VisionStreamBufs back_bufs,
       .front_box_height = ui_info.front_box_height,
       .world_objects_visible = false,  // Invisible until we receive a calibration message.
       .gps_planner_active = false,
+      .recording = false,
   };
 
   s->rgb_width = back_bufs.width;
@@ -303,13 +298,13 @@ void handle_message(UIState *s, Message * msg) {
     s->scene.v_cruise = datad.vCruise;
     s->scene.v_ego = datad.vEgo;
     s->scene.angleSteers = datad.angleSteers;
-    s->scene.steerOverride= datad.steerOverride;
-    s->scene.output_scale = pdata.output;
     s->scene.curvature = datad.curvature;
     s->scene.engaged = datad.enabled;
     s->scene.engageable = datad.engageable;
     s->scene.gps_planner_active = datad.gpsPlannerActive;
     s->scene.monitoring_active = datad.driverMonitoringOn;
+    s->scene.steerOverride = datad.steerOverride;
+    s->scene.output_scale = pdata.output;
 
     s->scene.frontview = datad.rearViewCam;
 
@@ -429,6 +424,35 @@ void handle_message(UIState *s, Message * msg) {
       s->scene.mpc_y[i] = capn_to_f32(capn_get32(y_list, i));
     }
     s->livempc_or_radarstate_changed = true;
+  } else if (eventd.which == cereal_Event_thermal) {
+    struct cereal_ThermalData datad;
+    cereal_read_ThermalData(&datad, eventd.thermal);
+
+    if (!datad.started) {
+      update_status(s, STATUS_STOPPED);
+    } else if (s->status == STATUS_STOPPED) {
+      // car is started but controls doesn't have fingerprint yet
+      update_status(s, STATUS_DISENGAGED);
+    }
+
+    s->scene.started_ts = datad.startedTs;
+    //BBB CPU TEMP
+    s->scene.maxCpuTemp = datad.cpu0;
+    if (s->scene.maxCpuTemp < datad.cpu1)
+    {
+      s->scene.maxCpuTemp = datad.cpu1;
+    }
+    else if (s->scene.maxCpuTemp < datad.cpu2)
+    {
+      s->scene.maxCpuTemp = datad.cpu2;
+    }
+    else if (s->scene.maxCpuTemp < datad.cpu3)
+    {
+      s->scene.maxCpuTemp = datad.cpu3;
+    }
+    s->scene.maxBatTemp = datad.bat;
+    s->scene.freeSpace = datad.freeSpace;
+    //BBB END CPU TEMP
   } else if (eventd.which == cereal_Event_uiLayoutState) {
     struct cereal_UiLayoutState datad;
     cereal_read_UiLayoutState(&datad, eventd.uiLayoutState);
@@ -455,42 +479,27 @@ void handle_message(UIState *s, Message * msg) {
     s->scene.speedlimitahead_valid = datad.speedLimitAheadValid;
     s->scene.speedlimitaheaddistance = datad.speedLimitAheadDistance;
     s->scene.speedlimit_valid = datad.speedLimitValid;
-  // getting thermal related data for dev ui
-  //} else if (eventd.which == cereal_Event_thermal) {
-  //  struct cereal_ThermalData datad;
-  //  cereal_read_ThermalData(&datad, eventd.thermal);
-
-  //  s->scene.pa0 = datad.pa0;
-  //  s->scene.freeSpace = datad.freeSpace;
-  //GPS from cell phone, not ublox.
-} else if (eventd.which == cereal_Event_gpsLocation) {
-    struct cereal_GpsLocationData datad;
-    cereal_read_GpsLocationData(&datad, eventd.gpsLocation);
-    s->scene.gpsAccuracyPhone = datad.accuracy;
-    s->scene.altitudePhone = datad.altitude;
-    s->scene.speedPhone = datad.speed;
-    s->scene.bearingPhone = datad.bearing;
-//Ublox
-} else if (eventd.which == cereal_Event_gpsLocationExternal) {
-    struct cereal_GpsLocationData datad;
-    cereal_read_GpsLocationData(&datad, eventd.gpsLocationExternal);
-    s->scene.gpsAccuracyUblox = datad.accuracy;
-    if (s->scene.gpsAccuracyUblox > 100)
-    {
-      s->scene.gpsAccuracyUblox = 99.99;
-    }
-    else if (s->scene.gpsAccuracyUblox == 0)
-    {
-      s->scene.gpsAccuracyUblox = 99.8;
-    }
-
-    s->scene.altitudeUblox = datad.altitude;
-    s->scene.speedUblox = datad.speed;
-    s->scene.bearingUblox = datad.bearing;
   } else if (eventd.which == cereal_Event_carState) {
     struct cereal_CarState datad;
     cereal_read_CarState(&datad, eventd.carState);
     s->scene.brakeLights = datad.brakeLights;
+    if(s->scene.leftBlinker!=datad.leftBlinker || s->scene.rightBlinker!=datad.rightBlinker)
+      s->scene.blinker_blinkingrate = 100;
+    s->scene.leftBlinker = datad.leftBlinker;
+    s->scene.rightBlinker = datad.rightBlinker;
+
+  } else if (eventd.which == cereal_Event_gpsLocationExternal) {
+    struct cereal_GpsLocationData datad;
+    cereal_read_GpsLocationData(&datad, eventd.gpsLocationExternal);
+    s->scene.gpsAccuracy = datad.accuracy;
+    if (s->scene.gpsAccuracy > 100)
+    {
+      s->scene.gpsAccuracy = 99.99;
+    }
+    else if (s->scene.gpsAccuracy == 0)
+    {
+      s->scene.gpsAccuracy = 99.8;
+    }
   }
   capn_free(&ctx);
 }
@@ -957,7 +966,6 @@ int main(int argc, char* argv[]) {
     if (touched == 1) {
       set_awake(s, true);
     }
-
 
     // manage wakefulness
     if (s->awake_timeout > 0) {
