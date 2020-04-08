@@ -327,7 +327,7 @@ class CarInterface(CarInterfaceBase):
         #be.type = ButtonType.cancel
       #elif but == CruiseButtons.MAIN:
         #be.type = ButtonType.altButton3
-      buttonEvents.append(be)
+      #buttonEvents.append(be)
 
     ret.buttonEvents = buttonEvents
 
