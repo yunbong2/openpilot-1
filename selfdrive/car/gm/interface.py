@@ -321,7 +321,7 @@ class CarInterface(CarInterfaceBase):
       if but == CruiseButtons.DECEL_SET:
         if cruiseEnabled and ret.cruiseState.speed == 0:
         #  self.lkMode = True
-          ret.cruiseState.speed = self.CS.cruise_set_speed
+          #ret.cruiseState.speed = self.CS.cruise_set_speed
         #be.type = ButtonType.decelCruise
       #elif but == CruiseButtons.CANCEL:
         #be.type = ButtonType.cancel
