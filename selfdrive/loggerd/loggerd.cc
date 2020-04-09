@@ -695,7 +695,7 @@ int main(int argc, char** argv) {
       std::lock_guard<std::mutex> guard(s.lock);
       s.rotate_last_frame_id = s.last_frame_id;
 
-      if (is_logging) {
+//      if (is_logging) {
         err = logger_next(&s.logger, LOG_ROOT, s.segment_path, sizeof(s.segment_path), &s.rotate_segment);
         assert(err == 0);
         LOGW("rotated to %s", s.segment_path);
