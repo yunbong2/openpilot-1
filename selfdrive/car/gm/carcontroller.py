@@ -101,6 +101,8 @@ class CarController():
 
     alert_out = process_hud_alert(hud_alert)
     steer = alert_out
+    
+    lka_active = enabled
 
     ### STEER ###
 
@@ -126,10 +128,10 @@ class CarController():
     if CS.left_blinker_on or CS.right_blinker_on:
       self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
     if self.turning_signal_timer and CS.v_ego < 16.666667:
-      lkas_active = 0
+      lka_active = 0
     if self.turning_signal_timer:
       self.turning_signal_timer -= 1
-    if not lkas_active:
+    if not lka_active:
       apply_steer = 0
 
     ### GAS/BRAKE ###
