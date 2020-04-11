@@ -78,6 +78,7 @@ class CarController():
     self.lka_icon_status_last = (False, False)
     self.steer_rate_limited = False
     self.fcw_count = 0
+    self.turning_signal_timer = 0
 
     # Setup detection helper. Routes commands to
     # an appropriate CAN bus number.
@@ -121,6 +122,15 @@ class CarController():
       else:
         can_sends.append(gmcan.create_steering_control(self.packer_pt,
           canbus.powertrain, apply_steer, idx, lkas_enabled))
+      
+    if CS.left_blinker_on or CS.right_blinker_on:
+      self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
+    if self.turning_signal_timer and CS.v_ego < 16.666667:
+      lkas_enabled = 0
+    if self.turning_signal_timer:
+      self.turning_signal_timer -= 1
+    if not lkas_enabled:
+      apply_steer = 0
 
     ### GAS/BRAKE ###
 

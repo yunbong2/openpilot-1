@@ -338,6 +338,7 @@ class CarInterface(CarInterfaceBase):
        self.CS.follow_level -= 1
        if self.CS.follow_level < 1:
          self.CS.follow_level = 3
+        self.turning_indicator_alert = True if self.CC.turning_signal_timer and self.CS.v_ego < 16.666667 else False
 
     events = []
 
@@ -380,6 +381,8 @@ class CarInterface(CarInterfaceBase):
         events.append(create_event('pcmEnable', [ET.ENABLE]))
       elif not ret.cruiseState.enabled:
         events.append(create_event('pcmDisable', [ET.USER_DISABLE]))
+      if self.turning_indicator_alert:
+      events.append(create_event('turningIndicatorOn', [ET.WARNING]))      
 
       # disable on pedals rising edge or when brake is pressed and speed isn't zero
       #if (ret.gasPressed and not self.gas_pressed_prev) or \
