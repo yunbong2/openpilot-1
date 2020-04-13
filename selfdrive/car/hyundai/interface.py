@@ -326,8 +326,34 @@ class CarInterface(CarInterfaceBase):
       buttonEvents.append(be)
       
     ret.buttonEvents = buttonEvents
-    ret.leftBlinker = bool(self.CS.left_blinker_on)
-    ret.rightBlinker = bool(self.CS.right_blinker_on)
+    
+    if self.CS.left_blinker_flash and self.CS.right_blinker_flash:
+      self.blinker_status = 3
+      self.blinker_timer = 50
+    elif self.CS.left_blinker_flash:
+      self.blinker_status = -1
+      self.blinker_timer = 50
+    elif self.CS.right_blinker_flash:
+      self.blinker_status = 1
+      self.blinker_timer = 50
+    elif not self.blinker_timer:
+      self.blinker_status = 0
+    
+    if self.blinker_status == 3:
+      ret.leftBlinker = bool(self.blinker_timer)
+      ret.rightBlinker = bool(self.blinker_timer)
+    elif self.blinker_status == 1:
+      ret.leftBlinker = False
+      ret.rightBlinker = bool(self.blinker_timer)
+    elif self.blinker_status == -1:
+      ret.leftBlinker = bool(self.blinker_timer)
+      ret.rightBlinker = False
+    else:
+      ret.leftBlinker = False
+      ret.rightBlinker = False
+      
+    #ret.leftBlinker = bool(self.CS.left_blinker_on)
+    #ret.rightBlinker = bool(self.CS.right_blinker_on)
 
     ret.doorOpen = not self.CS.door_all_closed
     ret.seatbeltUnlatched = not self.CS.seatbelt
