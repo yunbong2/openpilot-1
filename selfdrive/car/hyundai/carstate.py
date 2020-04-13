@@ -442,3 +442,20 @@ class CarState():
     self.clu11 = cp.vl["CLU11"]
     self.scc12 = cp_scc.vl["SCC12"]
     self.mdps12 = cp_mdps.vl["MDPS12"]
+    
+    # blinker process
+    blinker_status = 0
+    if self.left_blinker_flash and self.right_blinker_flash:
+      blinker_status = 3
+    elif self.left_blinker_flash:
+      blinker_status = 2
+    elif self.right_blinker_flash:
+      blinker_status = 1
+      
+    if blinker_status:
+      self.blinker_status = blinker_status
+      self.blinker_timer = 200
+    elif self.blinker_timer:
+      self.blinker_timer -= 1
+    else:
+      self.blinker_status = 0
