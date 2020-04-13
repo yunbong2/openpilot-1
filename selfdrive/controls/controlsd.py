@@ -531,13 +531,20 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
   internet_needed = params.get("Offroad_ConnectivityNeeded", encoding='utf8') is not None
 
   prof = Profiler(False)  # off by default
-
+  
+  hyundai_lkas = read_only
   while True:
     start_time = sec_since_boot()
     prof.checkpoint("Ratekeeper", ignore=True)
 
     # Sample data and compute car events
     CS, events, cal_perc, mismatch_counter, can_error_counter = data_sample(CI, CC, sm, can_sock, state, mismatch_counter, can_error_counter, params)
+    
+    if read_only:
+      hyundai_lkas = read_only
+    elif CS.cruiseState.enabled:
+      hyundai_lkas = False
+
     prof.checkpoint("Sample")
 
     # Create alerts
