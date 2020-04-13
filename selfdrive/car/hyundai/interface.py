@@ -326,12 +326,12 @@ class CarInterface(CarInterfaceBase):
     if self.blinker_status == 3:
       ret.leftBlinker = bool(self.blinker_timer)
       ret.rightBlinker = bool(self.blinker_timer)
+    elif self.blinker_status == 2:
+      ret.rightBlinker = False
+      ret.leftBlinker = bool(self.blinker_timer)
     elif self.blinker_status == 1:
       ret.leftBlinker = False
       ret.rightBlinker = bool(self.blinker_timer)
-    elif self.blinker_status == 2:
-      ret.leftBlinker = bool(self.blinker_timer)
-      ret.rightBlinker = False
     else:
       ret.leftBlinker = False
       ret.rightBlinker = False
