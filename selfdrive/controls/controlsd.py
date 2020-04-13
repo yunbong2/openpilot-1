@@ -542,7 +542,8 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     
     if read_only:
       hyundai_lkas = read_only
-    elif CS.cruiseState.enabled:
+#    elif CS.cruiseState.enabled:
+    elif state == State.enabled:
       hyundai_lkas = False
 
     prof.checkpoint("Sample")
@@ -601,7 +602,8 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
     rk.monitor_time()
     prof.display()
     
-    if not CS.cruiseState.enabled:
+#    if not CS.cruiseState.enabled:
+    if state == State.disabled:
       hyundai_lkas = True
 
 
