@@ -33,6 +33,9 @@ class CarInterface(CarInterfaceBase):
     if CarController is not None:
       self.CC = CarController(self.cp.dbc_name, CP.carFingerprint)
     
+    self.blinker_status = 0
+    self.blinker_timer = 0
+    
 
   @staticmethod
   def compute_gb(accel, speed):
@@ -304,14 +307,21 @@ class CarInterface(CarInterfaceBase):
     ret.cruiseState.standstill = False
     
     # Some HKG cars only have blinker flash signal
-#    if self.CP.carFingerprint in [CAR.K5, CAR.K5_HYBRID, CAR.GRANDEUR_HYBRID, CAR.KONA_EV, CAR.STINGER, CAR.SONATA_TURBO, CAR.IONIQ_EV, CAR.SORENTO, CAR.GRANDEUR, CAR.K7, CAR.K7_HYBRID, CAR.NEXO]:
-#      self.CS.left_blinker_on = self.CS.left_blinker_flash or self.CS.prev_left_blinker_on and self.CC.turning_signal_timer
-#      self.CS.right_blinker_on = self.CS.right_blinker_flash or self.CS.prev_right_blinker_on and self.CC.turning_signal_timer
+    if self.CP.carFingerprint in [CAR.K5, CAR.K5_HYBRID, CAR.GRANDEUR_HYBRID, CAR.KONA_EV, CAR.STINGER, CAR.SONATA_TURBO, CAR.IONIQ_EV, CAR.SORENTO, CAR.GRANDEUR, CAR.K7, CAR.K7_HYBRID, CAR.NEXO]:
+      self.CS.left_blinker_on = self.CS.left_blinker_flash or self.CS.prev_left_blinker_on and self.CC.turning_signal_timer
+      self.CS.right_blinker_on = self.CS.right_blinker_flash or self.CS.prev_right_blinker_on and self.CC.turning_signal_timer
 
-    blinker_status = 0
-    if self.CS.left_blinker_flash or self.CS.right_blinker_flash:
-      blinker_status = self.CS.blinker_status
+    if self.CS.left_blinker_flash and self.CS.right_blinker_flash:
+      self.blinker_status = 3
       self.blinker_timer = 50
+    elif self.CS.left_blinker_flash:
+      self.blinker_status = 2
+      self.blinker_timer = 50
+    elif self.CS.right_blinker_flash:
+      self.blinker_status = 1
+      self.blinker_timer = 50
+    elif not self.blinker_timer:
+      self.blinker_status = 0
     
     if self.blinker_status == 3:
       ret.leftBlinker = bool(self.blinker_timer)
