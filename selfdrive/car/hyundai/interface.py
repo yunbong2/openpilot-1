@@ -32,6 +32,8 @@ class CarInterface(CarInterfaceBase):
     self.CC = None
     if CarController is not None:
       self.CC = CarController(self.cp.dbc_name, CP.carFingerprint)
+    
+    self.blinker_timer = 0
 
   @staticmethod
   def compute_gb(accel, speed):
