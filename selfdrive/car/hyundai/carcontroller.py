@@ -111,12 +111,12 @@ class CarController():
       lkas_active = enabled
 
     # Fix for sharp turns mdps fault and Genesis hard fault at low speed
-    if CS.v_ego < 15.5 and self.car_fingerprint == CAR.GENESIS and not CS.mdps_bus:
-      self.turning_signal_timer = 100
+#    if CS.v_ego < 15.5 and self.car_fingerprint == CAR.GENESIS and not CS.mdps_bus:
+#      self.turning_signal_timer = 100
       
     # Disable steering while turning blinker on and speed below 60 kph
     if CS.left_blinker_on or CS.right_blinker_on:
-      if self.car_fingerprint not in [CAR.K5, CAR.K5_HYBRID, CAR.GRANDEUR_HYBRID, CAR.KONA_EV, CAR.STINGER, CAR.SONATA_TURBO, CAR.IONIQ_EV, CAR.SORENTO, CAR.GRANDEUR, CAR.K7, CAR.K7_HYBRID, CAR.NEXO, CAR.NIRO, CAR.NIRO_EV, CAR.SANTAFE]:
+      if self.car_fingerprint not in [CAR.K5, CAR.K5_HYBRID, CAR.GRANDEUR_HYBRID, CAR.KONA_EV, CAR.STINGER, CAR.SONATA_TURBO, CAR.IONIQ_EV, CAR.SORENTO, CAR.GRANDEUR, CAR.K7, CAR.K7_HYBRID, CAR.NEXO, CAR.NIRO, CAR.NIRO_EV, CAR.SANTAFE, CAR.GENESIS]:
         self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
       elif CS.left_blinker_flash or CS.right_blinker_flash:
         self.turning_signal_timer = 100
