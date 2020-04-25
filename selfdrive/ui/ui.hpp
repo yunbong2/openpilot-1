@@ -98,8 +98,16 @@ typedef struct UIScene {
   bool decel_for_model;
 
   float speedlimit;
+  float angleSteers;
+  float speedlimitaheaddistance;
+  bool speedlimitahead_valid;
   bool speedlimit_valid;
   bool map_valid;
+  bool brakeLights;
+
+  bool leftBlinker;
+  bool rightBlinker;
+  int blinker_blinkingrate;
 
   float curvature;
   int engaged;
@@ -126,8 +134,22 @@ typedef struct UIScene {
 
   float awareness_status;
 
+  // pathcoloring
+  float output_scale;
+  bool steerOverride;
+
   // Used to show gps planner status
   bool gps_planner_active;
+
+  // dev ui
+  uint16_t maxCpuTemp;
+  uint32_t maxBatTemp;
+  uint64_t started_ts;
+  float angleSteersDes;
+  float pa0;
+  float freeSpace;
+  float gpsAccuracy;
+
 } UIScene;
 
 typedef struct {
@@ -165,6 +187,7 @@ typedef struct UIState {
   int img_turn;
   int img_face;
   int img_map;
+  int img_brake;
 
   // sockets
   Context *ctx;
@@ -174,6 +197,10 @@ typedef struct UIState {
   SubSocket *radarstate_sock;
   SubSocket *map_data_sock;
   SubSocket *uilayout_sock;
+  SubSocket *carstate_sock;
+  SubSocket *gpslocation_sock;
+  SubSocket *gpslocationexternal_sock;
+  SubSocket *livempc_sock;
   Poller * poller;
 
   int active_app;
@@ -247,6 +274,9 @@ typedef struct UIState {
   model_path_vertices_data model_path_vertices[MODEL_LANE_PATH_CNT * 2];
 
   track_vertices_data track_vertices[2];
+
+  // dev ui
+  SubSocket *thermal_sock;
 } UIState;
 
 // API

@@ -50,9 +50,9 @@ def process_hud_alert(enabled, button_on, fingerprint, visual_alert, left_line,
   left_lane_warning = 0
   right_lane_warning = 0
   if left_lane_depart:
-    left_lane_warning = 1 if fingerprint in [CAR.GENESIS , CAR.GENESIS_G90, CAR.GENESIS_G80] else 2
+    left_lane_warning = 1 if fingerprint in [CAR.GENESIS, CAR.GENESIS_G90, CAR.GENESIS_G80] else 2
   if right_lane_depart:
-    right_lane_warning = 1 if fingerprint in [CAR.GENESIS , CAR.GENESIS_G90, CAR.GENESIS_G80] else 2
+    right_lane_warning = 1 if fingerprint in [CAR.GENESIS, CAR.GENESIS_G90, CAR.GENESIS_G80] else 2
 
   return hud_alert, lane_visible, left_lane_warning, right_lane_warning
 
@@ -90,25 +90,28 @@ class CarController():
     self.steer_rate_limited = new_steer != apply_steer
 
     ### LKAS button to temporarily disable steering
-    if not CS.lkas_error:
-      if CS.lkas_button_on != self.lkas_button_last:
-        self.lkas_button = not self.lkas_button
-      self.lkas_button_last = CS.lkas_button_on
+#    if not CS.lkas_error:
+#      if CS.lkas_button_on != self.lkas_button_last:
+#        self.lkas_button = not self.lkas_button
+#      self.lkas_button_last = CS.lkas_button_on
 
     # disable if steer angle reach 90 deg, otherwise mdps fault in some models
-    lkas_active = enabled and abs(CS.angle_steers) < 90. and self.lkas_button
+    if self.car_fingerprint == CAR.GENESIS:
+      lkas_active = enabled and abs(CS.angle_steers) < 90. and self.lkas_button
+    else:
+      lkas_active = enabled
 
     # fix for Genesis hard fault at low speed
-    if CS.v_ego < 16.7 and self.car_fingerprint == CAR.GENESIS and not CS.mdps_bus:
+    if CS.v_ego < 16.666667 and self.car_fingerprint == CAR.GENESIS and not CS.mdps_bus:
       lkas_active = 0
 
     # Disable steering while turning blinker on and speed below 60 kph
     if CS.left_blinker_on or CS.right_blinker_on:
-      if self.car_fingerprint not in [CAR.KIA_OPTIMA, CAR.KIA_OPTIMA_H]:
+      if self.car_fingerprint in [CAR.IONIQ, CAR.KONA]:
         self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
-      elif CS.left_blinker_flash or CS.right_blinker_flash: # Optima has blinker flash signal only
+      elif CS.left_blinker_flash or CS.right_blinker_flash:
         self.turning_signal_timer = 100
-    if self.turning_signal_timer and CS.v_ego < 16.7:
+    if self.turning_signal_timer and CS.v_ego < 16.666667:
       lkas_active = 0
     if self.turning_signal_timer:
       self.turning_signal_timer -= 1
