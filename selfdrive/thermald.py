@@ -9,7 +9,7 @@ from smbus2 import SMBus
 from cereal import log
 from common.android import ANDROID, get_network_type
 from common.basedir import BASEDIR
-from common.params import Params, put_nonblocking
+from common.params import Params
 from common.realtime import sec_since_boot, DT_TRML
 from common.numpy_fast import clip, interp
 from common.filter_simple import FirstOrderFilter
@@ -20,9 +20,6 @@ from selfdrive.loggerd.config import get_available_percent
 from selfdrive.pandad import get_expected_signature
 
 FW_SIGNATURE = get_expected_signature()
-
-import re
-import time
 
 ThermalStatus = log.ThermalData.ThermalStatus
 NetworkType = log.ThermalData.NetworkType
@@ -204,13 +201,6 @@ def thermald_thread():
 
   params = Params()
 
-  # ip addr
-  ts_last_ip = None
-  ts_last_update_vars = 0
-  ts_last_charging_ctrl = None
-  dp_last_modified = None
-  ip_addr = '255.255.255.255'
-  
   # sound trigger
   sound_trigger = 1
 
@@ -218,7 +208,6 @@ def thermald_thread():
   env['LD_LIBRARY_PATH'] = mediaplayer
 
   while 1:
-    ts = sec_since_boot()
     health = messaging.recv_sock(health_sock, wait=True)
     location = messaging.recv_sock(location_sock)
     location = location.gpsLocation if location else None
@@ -262,17 +251,6 @@ def thermald_thread():
     if is_uno:
       msg.thermal.batteryPercent = 100
       msg.thermal.batteryStatus = "Charging"
-
-    # update ip every 10 seconds
-    ts = sec_since_boot()
-    if ts_last_ip is None or ts - ts_last_ip >= 10.:
-      try:
-        result = subprocess.check_output(["ifconfig", "wlan0"], encoding='utf8')  # pylint: disable=unexpected-keyword-arg
-        ip_addr = re.findall(r"inet addr:((\d+\.){3}\d+)", result)[0][0]
-      except:
-        ip_addr = 'N/A'
-      ts_last_ip = ts
-    msg.thermal.ipAddr = ip_addr
 
     current_filter.update(msg.thermal.batteryCurrent / 1e6)
 
