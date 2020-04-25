@@ -1,4 +1,4 @@
-# This Python file uses the following encoding: utf-8
+ï»¿# This Python file uses the following encoding: utf-8
 # -*- coding: utf-8 -*-
 from cereal import car, log
 
@@ -62,13 +62,13 @@ class Alert():
 ALERTS = [
   Alert(
       "turningIndicatorOn",
-      "ÅÏ ½Ã±×³Î ÀÛµ¿ Áß ÇÚµéÀ» Àâ¾ÆÁÖ¼¼¿ä",
+      "í„´ ì‹œê·¸ë„ ì‘ë™ ì¤‘ í•¸ë“¤ì„ ì¡ì•„ì£¼ì„¸ìš”",
       "",
       AlertStatus.userPrompt, AlertSize.small,
       Priority.HIGH, VisualAlert.none, AudibleAlert.none, 0., 0., .1),
   Alert(
       "lkasButtonOff",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ëÀ» À§ÇØ Â÷·®ÀÇ LKAS ¹öÆ°À» ´­·¯ÁÖ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš©ì„ ìœ„í•´ ì°¨ëŸ‰ì˜ LKAS ë²„íŠ¼ì„ ëˆŒëŸ¬ì£¼ì„¸ìš”",
       "",
       AlertStatus.userPrompt, AlertSize.small,
       Priority.HIGH, VisualAlert.none, AudibleAlert.none, 0., 0., .1),
@@ -90,155 +90,155 @@ ALERTS = [
 
   Alert(
       "fcw",
-      "ºê·¹ÀÌÅ©!",
-      "Ãßµ¹ À§Çè",
+      "ë¸Œë ˆì´í¬!",
+      "ì¶”ëŒ ìœ„í—˜",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.fcw, AudibleAlert.chimeWarningRepeat, 1., 2., 2.),
 
   Alert(
       "fcwStock",
-      "ºê·¹ÀÌÅ©!",
-      "Ãßµ¹ À§Çè",
+      "ë¸Œë ˆì´í¬!",
+      "ì¶”ëŒ ìœ„í—˜",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.fcw, AudibleAlert.none, 1., 2., 2.),  # no EON chime for stock FCW
 
   Alert(
       "steerSaturated",
-      "ÇÚµéÀ» Àâ¾ÆÁÖ¼¼¿ä",
-      "½ºÆ¼¾î¸µ ÅäÅ©°¡ ³ô½À´Ï´Ù",
+      "í•¸ë“¤ì„ ì¡ì•„ì£¼ì„¸ìš”",
+      "ìŠ¤í‹°ì–´ë§ í† í¬ê°€ ë†’ìŠµë‹ˆë‹¤",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 1., 2., 3.),
 
   Alert(
       "steerTempUnavailable",
-      "ÇÚµéÀ» Àâ¾ÆÁÖ¼¼¿ä",
-      "Á¶ÇâÁ¦¾î°¡ ÀÏ½ÃÀûÀ¸·Î ºñÈ°¼ºÈ­ µÇ¾ú½À´Ï´Ù",
+      "í•¸ë“¤ì„ ì¡ì•„ì£¼ì„¸ìš”",
+      "ì¡°í–¥ì œì–´ê°€ ì¼ì‹œì ìœ¼ë¡œ ë¹„í™œì„±í™” ë˜ì—ˆìŠµë‹ˆë‹¤",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeWarning1, .4, 2., 3.),
 
   Alert(
       "steerTempUnavailableMute",
-      "ÇÚµéÀ» Àâ¾ÆÁÖ¼¼¿ä",
-      "Á¶ÇâÁ¦¾î°¡ ÀÏ½ÃÀûÀ¸·Î ºñÈ°¼ºÈ­ µÇ¾ú½À´Ï´Ù",
+      "í•¸ë“¤ì„ ì¡ì•„ì£¼ì„¸ìš”",
+      "ì¡°í–¥ì œì–´ê°€ ì¼ì‹œì ìœ¼ë¡œ ë¹„í™œì„±í™” ë˜ì—ˆìŠµë‹ˆë‹¤",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2, .2, .2),
 
   Alert(
       "preDriverDistracted",
-      "µµ·Î»óÈ²¿¡ ÁÖÀÇ¸¦ ±â¿ïÀÌ¼¼¿ä : ÁÖÇà »ê¸¸",
+      "ë„ë¡œìƒí™©ì— ì£¼ì˜ë¥¼ ê¸°ìš¸ì´ì„¸ìš” : ì£¼í–‰ ì‚°ë§Œ",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
 
   Alert(
       "promptDriverDistracted",
-      "µµ·Î»óÈ²¿¡ ÁÖÀÇÇÏ¼¼¿ä",
-      "ÁÖÇà »ê¸¸",
+      "ë„ë¡œìƒí™©ì— ì£¼ì˜í•˜ì„¸ìš”",
+      "ì£¼í–‰ ì‚°ë§Œ",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeRoadWarning, 4., .1, .1),
 
   Alert(
       "driverDistracted",
-      "°æ°í: Á¶ÇâÁ¦¾î°¡ Áï½Ã ÇØÁ¦µË´Ï´Ù",
-      "ÁÖÇà »ê¸¸",
+      "ê²½ê³ : ì¡°í–¥ì œì–´ê°€ ì¦‰ì‹œ í•´ì œë©ë‹ˆë‹¤",
+      "ì£¼í–‰ ì‚°ë§Œ",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
 
   Alert(
       "preDriverUnresponsive",
-      "ÇÚµéÀ» ÅÍÄ¡ÇÏ¼¼¿ä: ¸ğ´ÏÅÍ¸µ ¾øÀ½",
+      "í•¸ë“¤ì„ í„°ì¹˜í•˜ì„¸ìš”: ëª¨ë‹ˆí„°ë§ ì—†ìŒ",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
 
   Alert(
       "promptDriverUnresponsive",
-      "ÇÚµéÀ» ÅÍÄ¡ÇÏ¼¼¿ä",
-      "¿îÀüÀÚ ¸ğ´ÏÅÍ¸µ ¾øÀ½",
+      "í•¸ë“¤ì„ í„°ì¹˜í•˜ì„¸ìš”",
+      "ìš´ì „ì ëª¨ë‹ˆí„°ë§ ì—†ìŒ",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2, .1, .1, .1),
 
   Alert(
       "driverUnresponsive",
-      "°æ°í: Á¶ÇâÁ¦¾î°¡ Áï½Ã ÇØÁ¦µË´Ï´Ù",
-      "¿îÀüÀÚ ¸ğ´ÏÅÍ¸µ ¾øÀ½",
+      "ê²½ê³ : ì¡°í–¥ì œì–´ê°€ ì¦‰ì‹œ í•´ì œë©ë‹ˆë‹¤",
+      "ìš´ì „ì ëª¨ë‹ˆí„°ë§ ì—†ìŒ",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
 
   Alert(
       "driverMonitorLowAcc",
-      "¿îÀüÀÚ ¾ó±¼ È®ÀÎ Áß",
-      "¿îÀüÀÚ ¾ó±¼ ÀÎ½ÄÀÌ ¾î·Æ½À´Ï´Ù",
+      "ìš´ì „ì ì–¼êµ´ í™•ì¸ ì¤‘",
+      "ìš´ì „ì ì–¼êµ´ ì¸ì‹ì´ ì–´ë µìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .4, 0., 1.),
 
   Alert(
       "geofence",
-      "ÇØÁ¦ ÇÊ¿ä",
-      "Áö¿À Ææ½º ¿µ¿ª¿¡ ÀÖÁö ¾ÊÀ½",
+      "í•´ì œ í•„ìš”",
+      "ì§€ì˜¤ íœìŠ¤ ì˜ì—­ì— ìˆì§€ ì•ŠìŒ",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
 
   Alert(
       "startup",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ëÁØºñ°¡ µÇ¾ú½À´Ï´Ù",
-      "¾ÈÀü¿îÀüÀ» À§ÇØ Ç×»ó ÇÚµéÀ» Àâ°í µµ·Î±³Åë »óÈ²À» ÁÖ½ÃÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš©ì¤€ë¹„ê°€ ë˜ì—ˆìŠµë‹ˆë‹¤",
+      "ì•ˆì „ìš´ì „ì„ ìœ„í•´ í•­ìƒ í•¸ë“¤ì„ ì¡ê³  ë„ë¡œêµí†µ ìƒí™©ì„ ì£¼ì‹œí•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.chimeReady, 5., 0., 5.),
 
   Alert(
       "startupMaster",
-      "°æ°í: ÀÌ ºê·£Ä¡´Â Å×½ºÆ®µÇÁö ¾Ê¾Ò½À´Ï´Ù",
-      "¾ÈÀü¿îÀüÀ» À§ÇØ Ç×»ó ÇÚµéÀ» Àâ°í µµ·Î±³Åë »óÈ²À» ÁÖ½ÃÇÏ¼¼¿ä",
+      "ê²½ê³ : ì´ ë¸Œëœì¹˜ëŠ” í…ŒìŠ¤íŠ¸ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤",
+      "ì•ˆì „ìš´ì „ì„ ìœ„í•´ í•­ìƒ í•¸ë“¤ì„ ì¡ê³  ë„ë¡œêµí†µ ìƒí™©ì„ ì£¼ì‹œí•˜ì„¸ìš”",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
 
   Alert(
       "startupNoControl",
-      "±â·Ï ¸ğµå(´ë½ÃÄ· ¸ğµå)",
-      "¾ÈÀü¿îÀüÀ» À§ÇØ Ç×»ó ÇÚµéÀ» Àâ°í µµ·Î±³Åë »óÈ²À» ÁÖ½ÃÇÏ¼¼¿ä",
+      "ê¸°ë¡ ëª¨ë“œ(ëŒ€ì‹œìº  ëª¨ë“œ)",
+      "ì•ˆì „ìš´ì „ì„ ìœ„í•´ í•­ìƒ í•¸ë“¤ì„ ì¡ê³  ë„ë¡œêµí†µ ìƒí™©ì„ ì£¼ì‹œí•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
 
   Alert(
       "startupNoCar",
-      "±â·Ï¸ğµå(Áö¿øµÇÁö ¾Ê´Â Â÷·®)",
-      "¾ÈÀü¿îÀüÀ» À§ÇØ Ç×»ó ÇÚµéÀ» Àâ°í µµ·Î±³Åë »óÈ²À» ÁÖ½ÃÇÏ¼¼¿ä",
+      "ê¸°ë¡ëª¨ë“œ(ì§€ì›ë˜ì§€ ì•ŠëŠ” ì°¨ëŸ‰)",
+      "ì•ˆì „ìš´ì „ì„ ìœ„í•´ í•­ìƒ í•¸ë“¤ì„ ì¡ê³  ë„ë¡œêµí†µ ìƒí™©ì„ ì£¼ì‹œí•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
 
   Alert(
       "ethicalDilemma",
-      "°æ°í: ÇÚµéÀ» Áï½Ã Àâ¾ÆÁÖ¼¼¿ä",
-      "À±¸®Àû µô·¹¸¶°¡ ¹ß°ßµÇ¾ú½À´Ï´Ù",
+      "ê²½ê³ : í•¸ë“¤ì„ ì¦‰ì‹œ ì¡ì•„ì£¼ì„¸ìš”",
+      "ìœ¤ë¦¬ì  ë”œë ˆë§ˆê°€ ë°œê²¬ë˜ì—ˆìŠµë‹ˆë‹¤",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 3.),
 
   Alert(
       "steerTempUnavailableNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Á¶Çâ Á¦¾î°¡ ÀÏ½ÃÀûÀ¸·Î ºñÈ°¼ºÈ­ µÇ¾ú½À´Ï´Ù.",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì¡°í–¥ ì œì–´ê°€ ì¼ì‹œì ìœ¼ë¡œ ë¹„í™œì„±í™” ë˜ì—ˆìŠµë‹ˆë‹¤.",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 0., 3.),
 
   Alert(
       "manualRestart",
-      "ÇÚµéÀ» Àâ¾ÆÁÖ¼¼¿ä",
-      "¼öµ¿À¸·Î ¿îÀüÀ» Àç°³ÇÏ¼¼¿ä",
+      "í•¸ë“¤ì„ ì¡ì•„ì£¼ì„¸ìš”",
+      "ìˆ˜ë™ìœ¼ë¡œ ìš´ì „ì„ ì¬ê°œí•˜ì„¸ìš”",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "resumeRequired",
-      "¸ØÃã",
-      "°è¼ÓÇÏ·Á¸é RES¸¦ ´©¸£¼¼¿ä",
+      "ë©ˆì¶¤",
+      "ê³„ì†í•˜ë ¤ë©´ RESë¥¼ ëˆ„ë¥´ì„¸ìš”",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "belowSteerSpeed",
-      "ÇÚµéÀ» Àâ¾ÆÁÖ¼¼¿ä",
-      "Â÷·®¼Óµµ°¡ ³·¾Æ Á¶ÇâÁ¦¾î°¡ ÀÏ½ÃÀûÀ¸·Î ºñÈ°¼ºÈ­ µÇ¾ú½À´Ï´Ù",
+      "í•¸ë“¤ì„ ì¡ì•„ì£¼ì„¸ìš”",
+      "ì°¨ëŸ‰ì†ë„ê°€ ë‚®ì•„ ì¡°í–¥ì œì–´ê°€ ì¼ì‹œì ìœ¼ë¡œ ë¹„í™œì„±í™” ë˜ì—ˆìŠµë‹ˆë‹¤",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.none, 0., 0.4, .3),
 
@@ -250,561 +250,561 @@ ALERTS = [
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .1, .1, .1),
   Alert(
       "preLaneChangeLeft",
-      "Â÷¼± º¯°æÀ» À§ÇØ ÇÚµéÀ» ÁÂÃøÀ¸·Î »ìÂ¦ µ¹¸®¼¼¿ä",
-      "´Ù¸¥ Â÷·®¿¡ ÁÖÀÇÇÏ¼¼¿ä",
+      "ì°¨ì„  ë³€ê²½ì„ ìœ„í•´ í•¸ë“¤ì„ ì¢Œì¸¡ìœ¼ë¡œ ì‚´ì§ ëŒë¦¬ì„¸ìš”",
+      "ë‹¤ë¥¸ ì°¨ëŸ‰ì— ì£¼ì˜í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
 
   Alert(
       "preLaneChangeRight",
-      "Â÷¼± º¯°æÀ» À§ÇØ ÇÚµéÀ» ¿ìÃøÀ¸·Î »ìÂ¦ µ¹¸®¼¼¿ä",
-      "´Ù¸¥ Â÷·®¿¡ ÁÖÀÇÇÏ¼¼¿ä",
+      "ì°¨ì„  ë³€ê²½ì„ ìœ„í•´ í•¸ë“¤ì„ ìš°ì¸¡ìœ¼ë¡œ ì‚´ì§ ëŒë¦¬ì„¸ìš”",
+      "ë‹¤ë¥¸ ì°¨ëŸ‰ì— ì£¼ì˜í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
 
   Alert(
       "laneChange",
-      "Â÷¼± º¯°æ Áß",
-      "´Ù¸¥ Â÷·®¿¡ ÁÖÀÇÇÏ¼¼¿ä",
+      "ì°¨ì„  ë³€ê²½ ì¤‘",
+      "ë‹¤ë¥¸ ì°¨ëŸ‰ì— ì£¼ì˜í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1),
   
     Alert(
       "rightLCAbsm",
-      "¿ìÃø¿¡ Â÷·® Á¢±Ù Áß",
-      "Â÷¼± º¯°æÀ» À§ÇØ Àá½Ã ´ë±âÇÕ´Ï´Ù",
+      "ìš°ì¸¡ì— ì°¨ëŸ‰ ì ‘ê·¼ ì¤‘",
+      "ì°¨ì„  ë³€ê²½ì„ ìœ„í•´ ì ì‹œ ëŒ€ê¸°í•©ë‹ˆë‹¤",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.none, 0., 0.4, .3),
   
   Alert(
       "leftLCAbsm",
-      "ÁÂÃø¿¡ Â÷·® Á¢±Ù Áß",
-      "Â÷¼± º¯°æÀ» À§ÇØ Àá½Ã ´ë±âÇÕ´Ï´Ù",
+      "ì¢Œì¸¡ì— ì°¨ëŸ‰ ì ‘ê·¼ ì¤‘",
+      "ì°¨ì„  ë³€ê²½ì„ ìœ„í•´ ì ì‹œ ëŒ€ê¸°í•©ë‹ˆë‹¤",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.none, 0., 0.4, .3),
   
   Alert(
       "preventLCA",
-      "ÇÚµéÀ» Àâ¾ÆÁÖ¼¼¿ä",
-      "µµ·Î »óÈ² ºÒ¾ÈÀ¸·Î Â÷¼±º¯°æÀÌ Ãë¼ÒµÇ¾ú½À´Ï´Ù",
+      "í•¸ë“¤ì„ ì¡ì•„ì£¼ì„¸ìš”",
+      "ë„ë¡œ ìƒí™© ë¶ˆì•ˆìœ¼ë¡œ ì°¨ì„ ë³€ê²½ì´ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeWarningRepeat, .4, 3., 3.,),
 
 
   Alert(
       "posenetInvalid",
-      "ÇÚµéÀ» Àâ¾ÆÁÖ¼¼¿ä",
-      "Àü¹æ ¿µ»ó ÀÎ½ÄÀÌ ºÒ¾ÈÇÕ´Ï´Ù",
+      "í•¸ë“¤ì„ ì¡ì•„ì£¼ì„¸ìš”",
+      "ì „ë°© ì˜ìƒ ì¸ì‹ì´ ë¶ˆì•ˆí•©ë‹ˆë‹¤",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeViewUncertain, 6., 2., 3.),
 
   # Non-entry only alerts
   Alert(
       "wrongCarModeNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "ÁÖ Àü¿ø ²¨Áü",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì£¼ ì „ì› êº¼ì§",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 0., 3.),
 
   Alert(
       "dataNeededNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Ä¶¸®ºê·¹ÀÌ¼ÇÀ» À§ÇÑ µ¥ÀÌÅÍ ÇÊ¿ä, ÀÚ·á¸¦ ¾÷·Îµå ÇÏ½Ã°í ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ìº˜ë¦¬ë¸Œë ˆì´ì…˜ì„ ìœ„í•œ ë°ì´í„° í•„ìš”, ìë£Œë¥¼ ì—…ë¡œë“œ í•˜ì‹œê³  ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 0., 3.),
 
   Alert(
       "outOfSpaceNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "ÀúÀå °ø°£ÀÌ ºÎÁ·ÇÕ´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì €ì¥ ê³µê°„ì´ ë¶€ì¡±í•©ë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 0., 3.),
 
   Alert(
       "pedalPressedNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "ºê·¹ÀÌÅ© Æä´Ş ¹âÀ½",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ë¸Œë ˆì´í¬ í˜ë‹¬ ë°ŸìŒ",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, "brakePressed", AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "speedTooLowNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Â÷·® ¼Óµµ°¡ ³Ê¹« ´À¸³´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì°¨ëŸ‰ ì†ë„ê°€ ë„ˆë¬´ ëŠë¦½ë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "brakeHoldNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "ºê·¹ÀÌÅ© ÇØÁ¦ ÇÊ¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ë¸Œë ˆì´í¬ í•´ì œ í•„ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "parkBrakeNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "ÁÖÂ÷ ºê·¹ÀÌÅ© ÇØÁ¦ ÇÊ¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì£¼ì°¨ ë¸Œë ˆì´í¬ í•´ì œ í•„ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "lowSpeedLockoutNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Å©·çÁî ±â´É ¿À·ù: ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "í¬ë£¨ì¦ˆ ê¸°ëŠ¥ ì˜¤ë¥˜: ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "lowBatteryNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "¹èÅÍ¸® ºÎÁ·",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ë°°í„°ë¦¬ ë¶€ì¡±",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "sensorDataInvalidNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "EON ¼¾¼­·ÎºÎÅÍ µ¥ÀÌÅÍ¸¦ ¹ŞÁö ¸øÇß½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "EON ì„¼ì„œë¡œë¶€í„° ë°ì´í„°ë¥¼ ë°›ì§€ ëª»í–ˆìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "soundsUnavailableNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "»ç¿îµå ÀåÄ¡¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì‚¬ìš´ë“œ ì¥ì¹˜ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "tooDistractedNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "°úµµÇÑ ¿îÀü »ê¸¸",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ê³¼ë„í•œ ìš´ì „ ì‚°ë§Œ",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   # Cancellation alerts causing soft disabling
   Alert(
       "overheat",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "½Ã½ºÅÛÀÌ °ú¿­µÇ¾ú½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ì‹œìŠ¤í…œì´ ê³¼ì—´ë˜ì—ˆìŠµë‹ˆë‹¤",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "wrongGear",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "±â¾î°¡ µå¶óÀÌºê »óÅÂ°¡ ¾Æ´Õ´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ê¸°ì–´ê°€ ë“œë¼ì´ë¸Œ ìƒíƒœê°€ ì•„ë‹™ë‹ˆë‹¤",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeGearDrive, 4., 2., 2.),
 
   Alert(
       "calibrationInvalid",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "Ä¶¸®ºê·¹ÀÌ¼Ç ¿À·ù: EONÀ» Àç ÀåÂøÇÏ°í ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ìº˜ë¦¬ë¸Œë ˆì´ì…˜ ì˜¤ë¥˜: EONì„ ì¬ ì¥ì°©í•˜ê³  ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "calibrationIncomplete",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "Ä¶¸®ºê·¹ÀÌ¼Ç ÁøÇà Áß...",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ìº˜ë¦¬ë¸Œë ˆì´ì…˜ ì§„í–‰ ì¤‘...",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "doorOpen",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "µµ¾î°¡ ¿­·ÁÀÖ½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ë„ì–´ê°€ ì—´ë ¤ìˆìŠµë‹ˆë‹¤",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeDoorOpen, .1, 2., 2.),
 
   Alert(
       "seatbeltNotLatched",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "¾ÈÀüº§Æ® ¹ÌÃ¼°á",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ì•ˆì „ë²¨íŠ¸ ë¯¸ì²´ê²°",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeSeatBelt, .1, 2., 2.),
 
   Alert(
       "espDisabled",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "ESP ¿ÀÇÁ",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ESP ì˜¤í”„",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "lowBattery",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "¹èÅÍ¸® ºÎÁ·",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ë°°í„°ë¦¬ ë¶€ì¡±",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "commIssue",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "ÇÁ·Î¼¼½º °£ Åë½Å ¿À·ù°¡ ÀÖ½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "í”„ë¡œì„¸ìŠ¤ ê°„ í†µì‹  ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "radarCommIssue",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "·¹ÀÌ´õ Åë½Å ¿À·ù°¡ ÀÖ½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ë ˆì´ë” í†µì‹  ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "radarCanError",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "·¹ÀÌ´õ Åë½Å ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ë ˆì´ë” í†µì‹  ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "radarFault",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "·¹ÀÌ´õ Åë½Å ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ë ˆì´ë” í†µì‹  ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
 
   Alert(
       "lowMemory",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "¸Ş¸ğ¸® ºÎÁ·: EONÀ» Àç½ÃÀÛ ÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ë©”ëª¨ë¦¬ ë¶€ì¡±: EONì„ ì¬ì‹œì‘ í•˜ì„¸ìš”",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   # Cancellation alerts causing immediate disabling
   Alert(
       "controlsFailed",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "Â÷·® Á¦¾î ºÒ°¡",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ì°¨ëŸ‰ ì œì–´ ë¶ˆê°€",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
 
   Alert(
       "controlsMismatch",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "Â÷·® Á¦¾î ºÒ°¡",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ì°¨ëŸ‰ ì œì–´ ë¶ˆê°€",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
 
   Alert(
       "canError",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "CANÅë½Å ¿À·ù: ¹è¼±À» È®ÀÎÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "CANí†µì‹  ì˜¤ë¥˜: ë°°ì„ ì„ í™•ì¸í•˜ì„¸ìš”",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
 
   Alert(
       "steerUnavailable",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "LKAS ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "LKAS ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
 
   Alert(
       "brakeUnavailable",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "Å©·çÁî ½Ã½ºÅÛ ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "í¬ë£¨ì¦ˆ ì‹œìŠ¤í…œ ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
 
   Alert(
       "gasUnavailable",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "°¡¼ÓÆä´Ş ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ê°€ì†í˜ë‹¬ ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
 
   Alert(
       "reverseGear",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "±â¾î°¡ ÈÄÁø»óÅÂ¿¡ ÀÖ½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ê¸°ì–´ê°€ í›„ì§„ìƒíƒœì— ìˆìŠµë‹ˆë‹¤",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
 
   Alert(
       "cruiseDisabled",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "Å©·çÁî ±â´É ²¨Áü",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "í¬ë£¨ì¦ˆ ê¸°ëŠ¥ êº¼ì§",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
 
   Alert(
       "plannerError",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë °æ°í",
-      "Á¶Çâ Ã³¸®¿¡ ¿À·ù°¡ ÀÖ½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ê²½ê³ ",
+      "ì¡°í–¥ ì²˜ë¦¬ì— ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
 
   # not loud cancellations (user is in control)
   Alert(
       "noTarget",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "¼±Çà Â÷·®ÀÌ °¨ÁöµÇÁö ¾Ê¾Ò½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì„ í–‰ ì°¨ëŸ‰ì´ ê°ì§€ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   Alert(
       "speedTooLow",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Â÷·® ¼Óµµ°¡ ³Ê¹« ´À¸³´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì°¨ëŸ‰ ì†ë„ê°€ ë„ˆë¬´ ëŠë¦½ë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   # Cancellation alerts causing non-entry
   Alert(
       "overheatNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "½Ã½ºÅÛÀÌ °ú¿­µÇ¾ú½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì‹œìŠ¤í…œì´ ê³¼ì—´ë˜ì—ˆìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "wrongGearNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "±â¾î°¡ µå¶óÀÌºê »óÅÂ°¡ ¾Æ´Õ´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ê¸°ì–´ê°€ ë“œë¼ì´ë¸Œ ìƒíƒœê°€ ì•„ë‹™ë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeGearDrive, 4., 2., 3.),
 
   Alert(
       "calibrationInvalidNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Ä¶¸®ºê·¹ÀÌ¼Ç ¿À·ù: EONÀ» Àç ÀåÂøÇÏ°í ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ìº˜ë¦¬ë¸Œë ˆì´ì…˜ ì˜¤ë¥˜: EONì„ ì¬ ì¥ì°©í•˜ê³  ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "calibrationIncompleteNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ÀÏ½Ã ºÒ°¡",
-      "Ä¶¸®ºê·¹ÀÌ¼Ç ÁøÇà Áß...",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ì¼ì‹œ ë¶ˆê°€",
+      "ìº˜ë¦¬ë¸Œë ˆì´ì…˜ ì§„í–‰ ì¤‘...",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "doorOpenNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "µµ¾î°¡ ¿­·ÁÀÖ½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ë„ì–´ê°€ ì—´ë ¤ìˆìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDoorOpen, 3., 2., 3.),
 
   Alert(
       "seatbeltNotLatchedNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "¾ÈÀüº§Æ®¸¦ Ã¼°á ÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì•ˆì „ë²¨íŠ¸ë¥¼ ì²´ê²° í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeSeatBelt, 4., 2., 3.),
 
   Alert(
       "espDisabledNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "ESP ²¨Áü",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ESP êº¼ì§",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "geofenceNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Áö¿À Ææ½º ¿µ¿ª¿¡ ÀÖÁö ¾ÊÀ½",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì§€ì˜¤ íœìŠ¤ ì˜ì—­ì— ìˆì§€ ì•ŠìŒ",
       AlertStatus.normal, AlertSize.mid,
       Priority.MID, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "radarCanErrorNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "·¹ÀÌ´õ Åë½Å ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ë ˆì´ë” í†µì‹  ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "radarFaultNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "·¹ÀÌ´õ Åë½Å ¿À·ù: Â÷¸¦ ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ë ˆì´ë” í†µì‹  ì˜¤ë¥˜: ì°¨ë¥¼ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "posenetInvalidNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Àü¹æ ¿µ»ó ÀÎ½ÄÀÌ ºÒ¾ÈÇÕ´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì „ë°© ì˜ìƒ ì¸ì‹ì´ ë¶ˆì•ˆí•©ë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "controlsFailedNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Â÷·® Á¦¾î ºÒ°¡",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì°¨ëŸ‰ ì œì–´ ë¶ˆê°€",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "canErrorNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "CANÅë½Å ¿À·ù: ¹è¼±À» ´Ù½Ã È®ÀÎÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "CANí†µì‹  ì˜¤ë¥˜: ë°°ì„ ì„ ë‹¤ì‹œ í™•ì¸í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "steerUnavailableNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "LKAS ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "LKAS ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "brakeUnavailableNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Å©·çÁî ½Ã½ºÅÛ ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "í¬ë£¨ì¦ˆ ì‹œìŠ¤í…œ ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "gasUnavailableNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "°¡¼ÓÆä´Ş ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ê°€ì†í˜ë‹¬ ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "reverseGearNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "±â¾î°¡ ÈÄÁø»óÅÂ¿¡ ÀÖ½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ê¸°ì–´ê°€ í›„ì§„ìƒíƒœì— ìˆìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "cruiseDisabledNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Å©·çÁî ±â´É ²¨Áü",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "í¬ë£¨ì¦ˆ ê¸°ëŠ¥ êº¼ì§",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "noTargetNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "¼±Çà Â÷·®ÀÌ °¨ÁöµÇÁö ¾Ê¾Ò½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì„ í–‰ ì°¨ëŸ‰ì´ ê°ì§€ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "plannerErrorNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "Á¶Çâ Ã³¸®¿¡ ¿À·ù°¡ ÀÖ½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì¡°í–¥ ì²˜ë¦¬ì— ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "commIssueNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "ÇÁ·Î¼¼½º °£ Åë½Å ¿À·ù°¡ ÀÖ½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "í”„ë¡œì„¸ìŠ¤ ê°„ í†µì‹  ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   Alert(
       "radarCommIssueNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "·¹ÀÌ´õ Åë½Å ¿À·ù°¡ ÀÖ½À´Ï´Ù",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ë ˆì´ë” í†µì‹  ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   Alert(
       "internetConnectivityNeededNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "ÀÎÅÍ³İ¿¡ ¿¬°áÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ì¸í„°ë„·ì— ì—°ê²°í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   Alert(
       "lowMemoryNoEntry",
-      "¿ÀÇÂÆÄÀÏ·µ »ç¿ë ºÒ°¡",
-      "¸Ş¸ğ¸® ºÎÁ·: EONÀ» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì˜¤í”ˆíŒŒì¼ëŸ¿ ì‚¬ìš© ë¶ˆê°€",
+      "ë©”ëª¨ë¦¬ ë¶€ì¡±: EONì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   # permanent alerts
   Alert(
       "steerUnavailablePermanent",
-      "LKAS ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "LKAS ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "brakeUnavailablePermanent",
-      "Å©·çÁî ½Ã½ºÅÛ ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "í¬ë£¨ì¦ˆ ì‹œìŠ¤í…œ ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "lowSpeedLockoutPermanent",
-      "Å©·çÁî ½Ã½ºÅÛ ¿À·ù: Â÷·®À» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "í¬ë£¨ì¦ˆ ì‹œìŠ¤í…œ ì˜¤ë¥˜: ì°¨ëŸ‰ì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "calibrationIncompletePermanent",
-      "Ä¶¸®ºê·¹ÀÌ¼Ç ÁøÇà Áß: ",
-      "Â÷·®ÀÇ ¼Óµµ¸¦ ³ôÀÌ¼¼¿ä > ",
+      "ìº˜ë¦¬ë¸Œë ˆì´ì…˜ ì§„í–‰ ì¤‘: ",
+      "ì°¨ëŸ‰ì˜ ì†ë„ë¥¼ ë†’ì´ì„¸ìš” > ",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "invalidGiraffeToyotaPermanent",
-      "Áö¿øµÇÁö ¾Ê´Â Áö¶óÇÁ ¼³Á¤",
-      "comma.ai/tg ÂüÁ¶",
+      "ì§€ì›ë˜ì§€ ì•ŠëŠ” ì§€ë¼í”„ ì„¤ì •",
+      "comma.ai/tg ì°¸ì¡°",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "internetConnectivityNeededPermanent",
-      "ÀÎÅÍ³İ¿¡ ¿¬°áÇÏ¼¼¿ä",
-      "È°¼ºÈ­¸¦ À§ÇØ ¾÷µ¥ÀÌÆ®¸¦ È®ÀÎÇØ¾ß ÇÕ´Ï´Ù",
+      "ì¸í„°ë„·ì— ì—°ê²°í•˜ì„¸ìš”",
+      "í™œì„±í™”ë¥¼ ìœ„í•´ ì—…ë°ì´íŠ¸ë¥¼ í™•ì¸í•´ì•¼ í•©ë‹ˆë‹¤",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "communityFeatureDisallowedPermanent",
-      "Ä¿¹Â´ÏÆ¼ ±â´É °¨Áö",
+      "ì»¤ë®¤ë‹ˆí‹° ê¸°ëŠ¥ ê°ì§€",
       "Enable Community Features in Developer Settings",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),  # LOW priority to overcome Cruise Error
 
   Alert(
       "sensorDataInvalidPermanent",
-      "EON ¼¾¼­·ÎºÎÅÍ µ¥ÀÌÅÍ¸¦ ¹ŞÁö ¸øÇß½À´Ï´Ù",
-      "EONÀ» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "EON ì„¼ì„œë¡œë¶€í„° ë°ì´í„°ë¥¼ ë°›ì§€ ëª»í–ˆìŠµë‹ˆë‹¤",
+      "EONì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "soundsUnavailablePermanent",
-      "»ç¿îµå ÀåÄ¡¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù",
-      "EONÀ» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ì‚¬ìš´ë“œ ì¥ì¹˜ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤",
+      "EONì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "lowMemoryPermanent",
-      "¸Ş¸ğ¸® ºÎÁ· ½É°¢",
-      "EONÀ» ´Ù½Ã ½ÃÀÛÇÏ¼¼¿ä",
+      "ë©”ëª¨ë¦¬ ë¶€ì¡± ì‹¬ê°",
+      "EONì„ ë‹¤ì‹œ ì‹œì‘í•˜ì„¸ìš”",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "carUnrecognizedPermanent",
-      "±â·Ï ¸ğµå",
-      "ÀÎ½ÄµÇÁö ¾ÊÀº Â÷·® ¸ğµ¨",
+      "ê¸°ë¡ ëª¨ë“œ",
+      "ì¸ì‹ë˜ì§€ ì•Šì€ ì°¨ëŸ‰ ëª¨ë¸",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "vehicleModelInvalid",
-      "Â÷·® ¸Å°³º¯¼ö ÀÎ½Ä ½ÇÆĞ",
+      "ì°¨ëŸ‰ ë§¤ê°œë³€ìˆ˜ ì¸ì‹ ì‹¤íŒ¨",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOWEST, VisualAlert.steerRequired, AudibleAlert.none, .0, .0, .1),
@@ -812,8 +812,8 @@ ALERTS = [
   # offroad alerts
   Alert(
       "ldwPermanent",
-      "ÇÚµéÀ» Àâ¾ÆÁÖ¼¼¿ä",
-      "Â÷¼± ÀÌÅ» °¨Áö",
+      "í•¸ë“¤ì„ ì¡ì•„ì£¼ì„¸ìš”",
+      "ì°¨ì„  ì´íƒˆ ê°ì§€",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeLaneDeparture, 5., 2., 3.),
 ]
