@@ -253,14 +253,14 @@ ALERTS = [
       "차선 변경을 위해 핸들을 좌측으로 살짝 돌리세요",
       "다른 차량에 주의하세요",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
 
   Alert(
       "preLaneChangeRight",
       "차선 변경을 위해 핸들을 우측으로 살짝 돌리세요",
       "다른 차량에 주의하세요",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
 
   Alert(
       "laneChange",
@@ -524,7 +524,7 @@ ALERTS = [
       "오픈파일럿 사용 경고",
       "기어가 후진상태에 있습니다",
       AlertStatus.critical, AlertSize.full,
-      Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
+      Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.none, 2.2, 3., 4.),
 
   Alert(
       "cruiseDisabled",
