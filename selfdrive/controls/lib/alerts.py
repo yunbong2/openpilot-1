@@ -114,7 +114,7 @@ ALERTS = [
       "핸들을 잡아주세요",
       "조향제어가 일시적으로 비활성화 되었습니다",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeWarning1, .4, 2., 3.),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .4, 2., 3.),
 
   Alert(
       "steerTempUnavailableMute",
