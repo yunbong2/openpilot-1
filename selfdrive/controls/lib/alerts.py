@@ -113,7 +113,7 @@ ALERTS = [
       "핸들을 잡아주세요",
       "조향제어가 일시적으로 비활성화 되었습니다",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeWarning1, .4, 2., 3.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .4, 2., 3.),
 
   Alert(
       "steerTempUnavailableMute",
@@ -169,7 +169,7 @@ ALERTS = [
       "핸들을 터치하세요",
       "운전자 모니터링 없음",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2, .1, .1, .1),
+      Priority.MID, VisualAlert.steerRequired, AudibleAlert.none, .1, .1, .1),
 
   Alert(
       "driverUnresponsive",
@@ -190,7 +190,7 @@ ALERTS = [
       "해제 필요",
       "지오 펜스 영역에 있지 않음",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
+      Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.none, .1, .1, .1),
 
   Alert(
       "startup",
