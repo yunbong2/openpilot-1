@@ -107,7 +107,7 @@ ALERTS = [
       "핸들을 잡아주세요",
       "스티어링 토크가 높습니다",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, 1., 2., 3.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, 1., 2., 3.),
 
   Alert(
       "steerTempUnavailable",
