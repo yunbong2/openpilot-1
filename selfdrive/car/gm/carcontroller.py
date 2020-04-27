@@ -19,8 +19,8 @@ class CarControllerParams():
       self.STEER_DELTA_DOWN = 5        # 0.3s from peak torque to zero
       self.MIN_STEER_SPEED = -1.       # can steer down to zero
     else:
-      self.STEER_MAX = 200
-      self.STEER_STEP = 0.5              # how often we update the steer cmd
+      self.STEER_MAX = 230
+      self.STEER_STEP = 2              # how often we update the steer cmd
       self.STEER_DELTA_UP = 4           # ~0.75s time to peak torque (255/50hz/0.75s)
       self.STEER_DELTA_DOWN = 12       # ~0.3s from peak torque to zero
       self.MIN_STEER_SPEED = -1.
