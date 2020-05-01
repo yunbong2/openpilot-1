@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.7
 import os
-import sys
 import json
 import copy
 import datetime
@@ -10,7 +9,7 @@ from smbus2 import SMBus
 from cereal import log
 from common.android import ANDROID, get_network_type
 from common.basedir import BASEDIR
-from common.params import Params
+from common.params import Params, put_nonblocking
 from common.realtime import sec_since_boot, DT_TRML
 from common.numpy_fast import clip, interp
 from common.filter_simple import FirstOrderFilter
@@ -24,12 +23,17 @@ kegman = kegman_conf()
 
 FW_SIGNATURE = get_expected_signature()
 
+import subprocess
+import re
+import time
+
 ThermalStatus = log.ThermalData.ThermalStatus
 NetworkType = log.ThermalData.NetworkType
 CURRENT_TAU = 15.   # 15s time constant
 DAYS_NO_CONNECTIVITY_MAX = 7  # do not allow to engage after a week without internet
 DAYS_NO_CONNECTIVITY_PROMPT = 4  # send an offroad prompt after 4 days with no internet
 
+mediaplayer = '/data/openpilot/selfdrive/kyd/mediaplayer/'
 
 with open(BASEDIR + "/selfdrive/controls/lib/alerts_offroad.json") as json_file:
   OFFROAD_ALERTS = json.load(json_file)
@@ -202,6 +206,12 @@ def thermald_thread():
     handle_fan = handle_fan_eon
 
   params = Params()
+
+  # sound trigger
+  sound_trigger = 1
+
+  env = dict(os.environ)
+  env['LD_LIBRARY_PATH'] = mediaplayer
 
   while 1:
     health = messaging.recv_sock(health_sock, wait=True)
@@ -379,12 +389,17 @@ def thermald_thread():
       started_ts = None
       if off_ts is None:
         off_ts = sec_since_boot()
+        sound_trigger = 1
         os.system('echo powersave > /sys/class/devfreq/soc:qcom,cpubw/governor')
+
+      if sound_trigger == 1 and msg.thermal.batteryStatus == "Discharging" and started_seen and (sec_since_boot() - off_ts) > 2:
+        subprocess.Popen([mediaplayer + 'mediaplayer', '/data/openpilot/selfdrive/assets/sounds/eondetach.wav'], shell = False, stdin=None, stdout=None, stderr=None, env = env, close_fds=True)
+        sound_trigger = 0
 
       # shutdown if the battery gets lower than 3%, it's discharging, we aren't running for
       # more than a minute but we were running
       if msg.thermal.batteryPercent < BATT_PERC_OFF and msg.thermal.batteryStatus == "Discharging" and \
-         started_seen and (sec_since_boot() - off_ts) > 60:
+         started_seen and (sec_since_boot() - off_ts) > 38:
         os.system('LD_LIBRARY_PATH="" svc power shutdown')
 
     charging_disabled = check_car_battery_voltage(should_start, health, charging_disabled, msg)
