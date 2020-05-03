@@ -32,10 +32,10 @@ class CarInterface(CarInterfaceBase):
     self.CC = None
     if CarController is not None:
       self.CC = CarController(self.cp.dbc_name, CP.carFingerprint)
-    
+
     self.blinker_status = 0
     self.blinker_timer = 0
-    
+
 
   @staticmethod
   def compute_gb(accel, speed):
@@ -52,7 +52,7 @@ class CarInterface(CarInterfaceBase):
     ret.safetyModel = car.CarParams.SafetyModel.hyundai
     ret.enableCruise = True  # stock acc
 
-    ret.steerActuatorDelay = 0.15  # Default delay
+    ret.steerActuatorDelay = 0.1  # Default delay
     ret.steerRateCost = 0.45
     ret.steerLimitTimer = 0.8
     tire_stiffness_factor = 0.75
@@ -158,7 +158,7 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
     elif candidate == CAR.NIRO:
-      ret.lateralTuning.pid.kf = 0.00006
+      ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 1425. + STD_CARGO_KG
       ret.wheelbase = 2.7
       ret.steerRatio = 13.73   #Spec
@@ -166,7 +166,7 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
     elif candidate == CAR.NIRO_EV:
-      ret.lateralTuning.pid.kf = 0.00006
+      ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 1425. + STD_CARGO_KG
       ret.wheelbase = 2.7
       ret.steerRatio = 13.73   #Spec
@@ -307,7 +307,7 @@ class CarInterface(CarInterfaceBase):
     ret.cruiseState.standstill = False
     
     # Some HKG cars only have blinker flash signal
-    if self.CP.carFingerprint in [CAR.K5, CAR.K5_HYBRID, CAR.GRANDEUR_HYBRID, CAR.KONA_EV, CAR.STINGER, CAR.SONATA_TURBO, CAR.IONIQ_EV, CAR.SORENTO, CAR.GRANDEUR, CAR.K7, CAR.K7_HYBRID, CAR.NEXO]:
+    if self.CP.carFingerprint not in [CAR.IONIQ, CAR.KONA]:
       self.CS.left_blinker_on = self.CS.left_blinker_flash or self.CS.prev_left_blinker_on and self.CC.turning_signal_timer
       self.CS.right_blinker_on = self.CS.right_blinker_flash or self.CS.prev_right_blinker_on and self.CC.turning_signal_timer
 
@@ -361,8 +361,6 @@ class CarInterface(CarInterfaceBase):
       buttonEvents.append(be)
       
     ret.buttonEvents = buttonEvents
-    
-
 
     ret.doorOpen = not self.CS.door_all_closed
     ret.seatbeltUnlatched = not self.CS.seatbelt

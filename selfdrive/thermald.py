@@ -205,6 +205,9 @@ def thermald_thread():
     setup_eon_fan()
     handle_fan = handle_fan_eon
 
+  ts_last_ip = None
+  ip_addr = '255.255.255.255'
+  
   params = Params()
 
   # sound trigger
@@ -256,6 +259,17 @@ def thermald_thread():
     if is_uno:
       msg.thermal.batteryPercent = 100
       msg.thermal.batteryStatus = "Charging"
+
+    # update ip every 10 seconds
+    ts = sec_since_boot()
+    if ts_last_ip is None or ts - ts_last_ip >= 10.:
+      try:
+        result = subprocess.check_output(["ifconfig", "wlan0"], encoding='utf8')  # pylint: disable=unexpected-keyword-arg
+        ip_addr = re.findall(r"inet addr:((\d+\.){3}\d+)", result)[0][0]
+      except:
+        ip_addr = 'N/A'
+      ts_last_ip = ts
+    msg.thermal.ipAddr = ip_addr
 
     current_filter.update(msg.thermal.batteryCurrent / 1e6)
 
