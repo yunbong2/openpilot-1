@@ -12,7 +12,6 @@ from selfdrive.kegman_conf import kegman_conf
 from selfdrive.config import Conversions as CV
 from common.params import Params
 from common.numpy_fast import interp
-from cereal import log
 
 import cereal.messaging as messaging
 
