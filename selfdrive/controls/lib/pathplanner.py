@@ -327,6 +327,7 @@ class PathPlanner():
 
     pm.send('pathPlan', plan_send)
 
+    if LOG_MPC:
       dat = messaging.new_message()
       dat.init('liveMpc')
       dat.liveMpc.x = list(self.mpc_solution[0].x)
