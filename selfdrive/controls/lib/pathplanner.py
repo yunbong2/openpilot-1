@@ -1,7 +1,5 @@
 import os
 import math
-import common.log as trace1
-
 
 from common.realtime import sec_since_boot, DT_MDL
 from selfdrive.swaglog import cloudlog
