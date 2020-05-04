@@ -112,7 +112,7 @@ class CarController():
       
     # Disable steering while turning blinker on and speed below 60 kph
     if CS.left_blinker_on or CS.right_blinker_on:
-      if self.car_fingerprint not in [CAR.KONA, CAR.IONIQ]:
+      if self.car_fingerprint in [CAR.KONA, CAR.IONIQ]:
         self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
       elif CS.left_blinker_flash or CS.right_blinker_flash:
         self.turning_signal_timer = 100
