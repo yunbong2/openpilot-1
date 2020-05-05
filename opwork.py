@@ -87,4 +87,4 @@ elif (char == "3"):
     os.system("cd /data/openpilot; git pull")
 
 elif (char == "4"):
-    os.system("cd /data; curopdir=`ls -aldrt /data/openpilot_* | awk -F '/' '{print $3}' | tail -n 1`; echo $curopdir")
+    os.system("cd /data; curopdir=`ls -aldrt /data/openpilot_* | awk -F '/' '{print $3}' | tail -n 1`; mv $curopdir openpilot2")
