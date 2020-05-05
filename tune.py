@@ -261,19 +261,19 @@ while True:
   if float(kegman.conf['sR_time']) < 0.1:
     kegman.conf['sR_time'] = "0.1"
 
-  if int(kegman.conf['steerMax']) < 1:
+  if float(kegman.conf['steerMax']) < 1:
     kegman.conf['steerMax'] = "1"
-  if int(kegman.conf['steerMax']) > 409:
+  if float(kegman.conf['steerMax']) > 409:
     kegman.conf['steerMax'] = "409"
 
-  if int(kegman.conf['deltaUp']) < 1:
+  if float(kegman.conf['deltaUp']) < 1:
     kegman.conf['deltaUp'] = "1"
-  if int(kegman.conf['deltaUp']) > 3:
+  if float(kegman.conf['deltaUp']) > 3:
     kegman.conf['deltaUp'] = "3"
 
-  if int(kegman.conf['deltaDown']) < 1:
+  if float(kegman.conf['deltaDown']) < 1:
     kegman.conf['deltaDown'] = "1"
-  if int(kegman.conf['deltaDown']) > 7:
+  if float(kegman.conf['deltaDown']) > 7:
     kegman.conf['deltaDown'] = "7"
 
   #if float(kegman.conf['Kf']) < 0.00001:
