@@ -29,7 +29,7 @@ print ("4. OPRESTORE  - restore openpilot with current OP directory referring ti
 print ("5. CHBRANCH   - branch change")
 print ("6. SEEBRANCH  - confirm current branch")
 print ("7. SEEFORK    - confirm current fork")
-print ("z. EXIT)
+print ("z. EXIT")
 
 
 char  = getch()
