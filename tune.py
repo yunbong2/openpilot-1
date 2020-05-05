@@ -292,7 +292,7 @@ while True:
     kegman.conf['laneChangeSpeed'] = "1"
   if float(kegman.conf['laneChangeSpeed']) >= 1 and float(kegman.conf['laneChangeSpeed']) <= 160:
     kegman.conf['laneChangeSpeed'] = str(round(float(kegman.conf['laneChangeSpeed'])))
-  if float(kegman.conf['laneChangeSpeed']) < 160:
+  if float(kegman.conf['laneChangeSpeed']) > 160:
     kegman.conf['laneChangeSpeed'] = "160"
 
   #if float(kegman.conf['Kf']) < 0.00001:
