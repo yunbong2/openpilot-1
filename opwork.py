@@ -40,6 +40,5 @@ if (char == "1"):
 
 elif (char == "z"):
     process.kill()
-    break
 
 time.sleep(button_delay)
