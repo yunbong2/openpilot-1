@@ -34,7 +34,7 @@ char  = getch()
 
 if (char == "1"):
     ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
-    print ("Copying openpilot to openpilot_"ct)
+    print ("Copying openpilot to openpilot_timestamp")
     os.system("cp -rf /data/openpilot /data/openpilot_" + ct)
 
 elif (char == "z"):
