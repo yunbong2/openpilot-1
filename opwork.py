@@ -34,7 +34,7 @@ char  = getch()
 
 if (char == "1"):
     ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
-    os.system('LD_LIBRARY_PATH="" copy -rf /data/openpilot /data/openpilot_%ct')
+    os.system('LD_LIBRARY_PATH="" cp -rf /data/openpilot /data/openpilot_%ct')
 
 elif (char == "z"):
     ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
