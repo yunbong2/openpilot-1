@@ -57,44 +57,34 @@ elif (char == "2"):
     if (char2 == "1"):    
         ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         os.system("mv /data/openpilot /data/openpilot_" + ct)
-        os.system("cd /data")
-        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.3")
+        os.system("cd /data; git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.3")
     elif (char2 == "2"):    
         ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         os.system("mv /data/openpilot /data/openpilot_" + ct)
-        os.system("cd /data")
-        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.4")
+        os.system("cd /data; git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.4")
     elif (char2 == "3"):    
         ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         os.system("mv /data/openpilot /data/openpilot_" + ct)
-        os.system("cd /data")
-        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.5")
+        os.system("cd /data; git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.5")
     elif (char2 == "4"):    
         ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         os.system("mv /data/openpilot /data/openpilot_" + ct)
-        os.system("cd /data")
-        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.3_BOLT")
+        os.system("cd /data; git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.3_BOLT")
     elif (char2 == "5"):    
         ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         os.system("mv /data/openpilot /data/openpilot_" + ct)
-        os.system("cd /data")
-        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.4_NIRO")
+        os.system("cd /data; git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.4_NIRO")
     elif (char2 == "6"):    
         ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         os.system("mv /data/openpilot /data/openpilot_" + ct)
-        os.system("cd /data")
-        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.4_GENESIS")
+        os.system("cd /data; git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.4_GENESIS")
     elif (char2 == "7"):    
         ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         os.system("mv /data/openpilot /data/openpilot_" + ct)
-        os.system("cd /data")
-        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.3_HKG_community")
+        os.system("cd /data; git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.3_HKG_community")
 
 elif (char == "3"):
-    os.system("cd /data/openpilot")
-    os.system("git pull")
+    os.system("cd /data/openpilot; git pull")
 
 elif (char == "4"):
-    os.system("cd /data")
-    os.system("curopdir=`ls -aldrt /data/openpilot_* | awk -F '/' '{print $3}' | tail -n 1`")
-    os.system("echo $curopdir")
+    os.system("cd /data; curopdir=`ls -aldrt /data/openpilot_* | awk -F '/' '{print $3}' | tail -n 1`; echo $curopdir")
