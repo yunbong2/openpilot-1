@@ -97,4 +97,4 @@ elif (char == "3"):
 elif (char == "4"):
     os.system("cd /data")
     os.system("curopdir=`ls -aldrt /data/openpilot_* | awk -F '/' '{print $3}' | tail -n 1`")
-    os.system("mv $curopdir openpilot2")
+    os.system("echo $curopdir")
