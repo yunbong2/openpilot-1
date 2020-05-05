@@ -1,7 +1,6 @@
 from selfdrive.kegman_conf import kegman_conf
 import subprocess
 import os
-import math
 BASEDIR = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../"))
 
 letters = { "a":[ "###", "# #", "###", "# #", "# #"], "b":[ "###", "# #", "###", "# #", "###"], "c":[ "###", "#", "#", "#", "###"], "d":[ "##", "# #", "# #", "# #", "##"], "e":[ "###", "#", "###", "#", "###"], "f":[ "###", "#", "###", "#", "#"], "g":[ "###", "# #", "###", "  #", "###"], "h":[ "# #", "# #", "###", "# #", "# #"], "i":[ "###", " #", " #", " #", "###"], "j":[ "###", " #", " #", " #", "##"], "k":[ "# #", "##", "#", "##", "# #"], "l":[ "#", "#", "#", "#", "###"], "m":[ "# #", "###", "###", "# #", "# #"], "n":[ "###", "# #", "# #", "# #", "# #"], "o":[ "###", "# #", "# #", "# #", "###"], "p":[ "###", "# #", "###", "#", "#"], "q":[ "###", "# #", "###", "  #", "  #"], "r":[ "###", "# #", "##", "# #", "# #"], "s":[ "###", "#", "###", "  #", "###"], "t":[ "###", " #", " #", " #", " #"], "u":[ "# #", "# #", "# #", "# #", "###"], "v":[ "# #", "# #", "# #", "# #", " #"], "w":[ "# #", "# #", "# #", "###", "###"], "x":[ "# #", " #", " #", " #", "# #"], "y":[ "# #", "# #", "###", "  #", "###"], "z":[ "###", "  #", " #", "#", "###"], " ":[ " "], "1":[ " #", "##", " #", " #", "###"], "2":[ "###", "  #", "###", "#", "###"], "3":[ "###", "  #", "###", "  #", "###"], "4":[ "#", "#", "# #", "###", "  #"], "5":[ "###", "#", "###", "  #", "###"], "6":[ "###", "#", "###", "# #", "###"], "7":[ "###", "  # ", " #", " #", "#"], "8":[ "###", "# #", "###", "# #", "###"], "9":[ "###", "# #", "###", "  #", "###"], "0":[ "###", "# #", "# #", "# #", "###"], "!":[ " # ", " # ", " # ", "   ", " # "], "?":[ "###", "  #", " ##", "   ", " # "], ".":[ "   ", "   ", "   ", "   ", " # "], "]":[ "   ", "   ", "   ", "  #", " # "], "/":[ "  #", "  #", " # ", "# ", "# "], ":":[ "   ", " # ", "   ", " # ", "   "], "@":[ "###", "# #", "## ", "#  ", "###"], "'":[ " # ", " # ", "   ", "   ", "   "], "#":[ " # ", "###", " # ", "###", " # "], "-":[ "  ", "  ","###","   ","   "] }
@@ -271,28 +270,28 @@ while True:
   if float(kegman.conf['steerMax']) < 1:
     kegman.conf['steerMax'] = "1"
   if float(kegman.conf['steerMax']) >= 1 and float(kegman.conf['steerMax']) <= 409:
-    kegman.conf['steerMax'] = math.trunc(kegman.conf['steerMax'])
+    kegman.conf['steerMax'] = str(round(kegman.conf['steerMax']))
   if float(kegman.conf['steerMax']) > 409:
     kegman.conf['steerMax'] = "409"
 
   if float(kegman.conf['deltaUp']) < 1:
     kegman.conf['deltaUp'] = "1"
   if float(kegman.conf['deltaUp']) >= 1 and float(kegman.conf['deltaUp']) <= 3:
-    kegman.conf['deltaUp'] = math.trunc(kegman.conf['deltaUp'])
+    kegman.conf['deltaUp'] = str(round(kegman.conf['deltaUp']))
   if float(kegman.conf['deltaUp']) > 3:
     kegman.conf['deltaUp'] = "3"
 
   if float(kegman.conf['deltaDown']) < 1:
     kegman.conf['deltaDown'] = "1"
   if float(kegman.conf['deltaDown']) >= 1 and float(kegman.conf['deltaDown']) <= 7:
-    kegman.conf['deltaDown'] = math.trunc(kegman.conf['deltaDown'])
+    kegman.conf['deltaDown'] = str(round(kegman.conf['deltaDown']))
   if float(kegman.conf['deltaDown']) > 7:
     kegman.conf['deltaDown'] = "7"
 
   if float(kegman.conf['laneChangeSpeed']) < 1:
     kegman.conf['laneChangeSpeed'] = "1"
   if float(kegman.conf['laneChangeSpeed']) >= 1 and float(kegman.conf['laneChangeSpeed']) <= 160:
-    kegman.conf['laneChangeSpeed'] = math.trunc(kegman.conf['laneChangeSpeed'])
+    kegman.conf['laneChangeSpeed'] = str(round(kegman.conf['laneChangeSpeed']))
   if float(kegman.conf['laneChangeSpeed']) < 160:
     kegman.conf['laneChangeSpeed'] = "160"
 
