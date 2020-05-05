@@ -18,8 +18,6 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
-button_delay = 0.2
-
 print ("Please select job what you want(number).")
 print ("")
 print ("1. OPBACKUP   - copy your openpilot directory to openpilot_(datetimestamp) and still remain openpilot dir")
@@ -39,6 +37,3 @@ if (char == "1"):
     os.system('LD_LIBRARY_PATH="" copy -rf /data/openpilot /data/openpilot_%ct')
 
 elif (char == "z"):
-
-
-time.sleep(button_delay)
