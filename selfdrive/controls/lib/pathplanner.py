@@ -11,6 +11,7 @@ from common.params import Params
 from common.numpy_fast import interp
 import cereal.messaging as messaging
 from cereal import log
+kegman = kegman_conf()
 
 LaneChangeState = log.PathPlan.LaneChangeState
 LaneChangeDirection = log.PathPlan.LaneChangeDirection
@@ -155,7 +156,7 @@ class PathPlanner():
 
     # Lane change logic
     one_blinker = sm['carState'].leftBlinker != sm['carState'].rightBlinker
-    below_lane_change_speed = v_ego < 60 * CV.KPH_TO_MS
+    below_lane_change_speed = v_ego < int(float(kegman.conf['laneChangeSpeed'])) * CV.KPH_TO_MS
 
     if sm['carState'].leftBlinker:
       self.lane_change_direction = LaneChangeDirection.left

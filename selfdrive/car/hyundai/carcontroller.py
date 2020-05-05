@@ -11,9 +11,9 @@ kegman = kegman_conf()
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 class SteerLimitParams:
-  STEER_MAX = int(kegman.conf['steerMax'])   # 409 is the max, 255 is stock
-  STEER_DELTA_UP = int(kegman.conf['deltaUp'])
-  STEER_DELTA_DOWN = int(kegman.conf['deltaDown'])
+  STEER_MAX = int(float(kegman.conf['steerMax']))   # 409 is the max, 255 is stock
+  STEER_DELTA_UP = int(float(kegman.conf['deltaUp']))
+  STEER_DELTA_DOWN = int(float(kegman.conf['deltaDown']))
   STEER_DRIVER_ALLOWANCE = 50
   STEER_DRIVER_MULTIPLIER = 2
   STEER_DRIVER_FACTOR = 1
