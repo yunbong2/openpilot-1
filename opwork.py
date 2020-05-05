@@ -37,3 +37,4 @@ if (char == "1"):
     os.system('LD_LIBRARY_PATH="" copy -rf /data/openpilot /data/openpilot_%ct')
 
 elif (char == "z"):
+    ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
