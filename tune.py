@@ -137,7 +137,12 @@ while True:
       j = len(param) - 1
 
   elif (char == "p"):
-    os.system('LD_LIBRARY_PATH="" svc power reboot')
+    print ("system will reboot. continue?(y/n)")
+    char2 = getch()
+    if (char2 == "y"):
+      os.system('LD_LIBRARY_PATH="" svc power reboot')
+    else:
+      process.kill()
 
   elif (char == "z"):
     process.kill()
