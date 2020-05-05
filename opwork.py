@@ -36,9 +36,9 @@ char  = getch()
 
 if (char == "1"):
     ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
-    print (ct)
+    os.system('LD_LIBRARY_PATH="" copy -rf /data/openpilot /data/openpilot_%ct')
 
 elif (char == "z"):
-    process.kill()
+
 
 time.sleep(button_delay)
