@@ -269,6 +269,8 @@ while True:
 
   if float(kegman.conf['steerMax']) < 1:
     kegman.conf['steerMax'] = "1"
+  if float(kegman.conf['steerMax']) >= 1 and float(kegman.conf['steerMax']) <= 409:
+    kegman.conf['steerMax'] = int(kegman.conf['steerMax'])
   if float(kegman.conf['steerMax']) > 409:
     kegman.conf['steerMax'] = "409"
 
