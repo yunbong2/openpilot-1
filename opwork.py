@@ -18,12 +18,12 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
-print ("Please select job what you want(number).")
+print ("Please select job what you want(number)")
 print ("")
-print ("1. OPBACKUP   - copy your openpilot directory to openpilot_(datetimestamp) and still remain openpilot dir")
-print ("2. OPINSTALL  - install the openpilot directory. if exist OP direcoty, rename openpilot to openpilot_(datetimestamp")
+print ("1. OPBACKUP   - copy your OP directory to openpilot_(datetimestamp)")
+print ("2. OPINSTALL  - install OP. if exist OP direcoty, rename openpilot to openpilot_(datetimestamp")
 print ("3. OPUPDATE   - run 'git pull' command to update OP latest")
-print ("4. OPRESTORE  - restore openpilot with current OP directory referring timestamp")
+print ("4. OPRESTORE  - restore OP with current OP directory referring timestamp")
 print ("5. CHBRANCH   - branch change")
 print ("6. SEEBRANCH  - confirm current branch")
 print ("7. SEEFORK    - confirm current fork")
@@ -34,8 +34,67 @@ char  = getch()
 
 if (char == "1"):
     ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
-    print ("Copying openpilot to openpilot_timestamp")
-    os.system("cp -rf /data/openpilot /data/openpilot_" + ct)
+    print ("Copying openpilot to openpilot_(timestamp)...")
+    os.system("cp -rp /data/openpilot /data/openpilot_" + ct)
+    os.system("cp -f /data/kegman.json /data/kegman.json_" + ct)
+    os.system("ls -altr /data")
 
-elif (char == "z"):
-    ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+elif (char == "2"):
+    os.system("clear")
+    print ("Select Branch you want install(number)")
+    print ("")
+    print ("1. OPKR_0.7.3")
+    print ("2. OPKR_0.7.4")
+    print ("3. OPKR_0.7.5")
+    print ("4. OPKR_0.7.3_BOLT")
+    print ("5. OPKR_0.7.4_NIRO")
+    print ("6. OPKR_0.7.4_GENESIS")
+    print ("7. OPKR_0.7.3_HKG_community")
+    print ("z. EXIT")
+    
+    char2  = getch()
+
+    if (char2 == "1"):    
+        ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+        os.system("mv /data/openpilot /data/openpilot_" + ct)
+        os.system("cd /data")
+        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.3")
+    elif (char2 == "2"):    
+        ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+        os.system("mv /data/openpilot /data/openpilot_" + ct)
+        os.system("cd /data")
+        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.4")
+    elif (char2 == "3"):    
+        ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+        os.system("mv /data/openpilot /data/openpilot_" + ct)
+        os.system("cd /data")
+        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.5")
+    elif (char2 == "4"):    
+        ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+        os.system("mv /data/openpilot /data/openpilot_" + ct)
+        os.system("cd /data")
+        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.3_BOLT")
+    elif (char2 == "5"):    
+        ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+        os.system("mv /data/openpilot /data/openpilot_" + ct)
+        os.system("cd /data")
+        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.4_NIRO")
+    elif (char2 == "6"):    
+        ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+        os.system("mv /data/openpilot /data/openpilot_" + ct)
+        os.system("cd /data")
+        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.4_GENESIS")
+    elif (char2 == "7"):    
+        ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+        os.system("mv /data/openpilot /data/openpilot_" + ct)
+        os.system("cd /data")
+        os.system("git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.3_HKG_community")
+
+elif (char == "3"):
+    os.system("cd /data/openpilot")
+    os.system("git pull")
+
+elif (char == "4"):
+    os.system("cd /data")
+    os.system("curopdir=`ls -aldrt /data/openpilot* | awk -F '/' '{print $3}' | tail -n 1`")
+    os.system("mv $curopdir openpilot2")
