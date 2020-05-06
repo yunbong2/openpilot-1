@@ -42,7 +42,7 @@ kegman = kegman_conf()
 kegman.conf['tuneGernby'] = "1"
 #kegman.write_config(kegman.conf)
 param = ["cameraOffset", "Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
-         "sR_BP1", "sR_time", "steerRateCost", "steerMax", "deltaUp", "deltaDown"]
+         "sR_BP1", "sR_time", "steerRateCost"]
 #param = ["Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
 #         "sR_BP1", "sR_time", "steerRateCost", "deadzone", "slowOnCurves", \
 #         "1barBP0", "1barBP1", "1barMax", "2barBP0", "2barBP1", \
