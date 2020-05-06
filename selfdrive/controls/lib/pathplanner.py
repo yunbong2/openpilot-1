@@ -11,7 +11,6 @@ from common.params import Params
 from common.numpy_fast import interp
 import cereal.messaging as messaging
 from cereal import log
-kegman = kegman_conf()
 
 LaneChangeState = log.PathPlan.LaneChangeState
 LaneChangeDirection = log.PathPlan.LaneChangeDirection
