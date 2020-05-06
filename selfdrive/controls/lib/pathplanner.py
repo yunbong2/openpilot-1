@@ -156,7 +156,7 @@ class PathPlanner():
     # Lane change logic
     kegman = kegman_conf()
     one_blinker = sm['carState'].leftBlinker != sm['carState'].rightBlinker
-    self.below_lane_change_speed = v_ego < (int(float(kegman.conf['laneChangeSpeed'])) * CV.KPH_TO_MS)
+    below_lane_change_speed = v_ego < (int(float(kegman.conf['laneChangeSpeed'])) * CV.KPH_TO_MS)
 
     if sm['carState'].leftBlinker:
       self.lane_change_direction = LaneChangeDirection.left
