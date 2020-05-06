@@ -6,7 +6,6 @@ from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, \
                                              create_scc12, create_mdps12
 from selfdrive.car.hyundai.values import Buttons, CAR
 from opendbc.can.packer import CANPacker
-from selfdrive.kegman_conf import kegman_conf
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
@@ -122,8 +121,7 @@ class CarController():
         self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
       elif CS.left_blinker_flash or CS.right_blinker_flash:
         self.turning_signal_timer = 100
-    kegman = kegman_conf()
-    if self.turning_signal_timer and CS.v_ego < (int(float(kegman.conf['laneChangeSpeed'])) * CV.KPH_TO_MS):
+    if self.turning_signal_timer and CS.v_ego < (60 * CV.KPH_TO_MS):
       lkas_active = 0
     if self.turning_signal_timer:
       self.turning_signal_timer -= 1

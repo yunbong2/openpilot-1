@@ -130,16 +130,6 @@ class kegman_conf():
         self.config.update({"CruiseEnableMin":"0"})
         self.element_updated = True
 
-      if "steerMax" not in self.config:
-        self.config.update({"steerMax":"255"})
-        self.config.update({"deltaUp":"3"})
-        self.config.update({"deltaDown":"5"})
-        self.element_updated = True
-
-      if "laneChangeSpeed" not in self.config:
-        self.config.update({"laneChangeSpeed":"60"})
-        self.element_updated = True
-
       if self.element_updated:
         print("updated")
         self.write_config(self.config)
@@ -155,8 +145,7 @@ class kegman_conf():
                      "steerRatio":"-1", "steerRateCost":"-1", "slowOnCurves":"0", "Kf":"-1", \
                      "sR_boost":"0", "sR_BP0":"0", "sR_BP1":"0", "sR_time":"0.2", \
                      "ALCnudgeLess":"1", "ALCminSpeed":"16.666667", "ALCtimer":"1.0", "CruiseDelta":"8", \
-                     "CruiseEnableMin":"0", \
-                     "steerMax":"255", "deltaUp":"3", "deltaDown":"5", "laneChangeSpeed":"60"}
+                     "CruiseEnableMin":"0"}
 
 
       self.write_config(self.config)
