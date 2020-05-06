@@ -7,14 +7,13 @@ from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, \
 from selfdrive.car.hyundai.values import Buttons, CAR
 from opendbc.can.packer import CANPacker
 from selfdrive.kegman_conf import kegman_conf
-kegman = kegman_conf()
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 class SteerLimitParams:
-  STEER_MAX = int(float(kegman.conf['steerMax']))   # 409 is the max, 255 is stock
-  STEER_DELTA_UP = int(float(kegman.conf['deltaUp']))
-  STEER_DELTA_DOWN = int(float(kegman.conf['deltaDown']))
+  STEER_MAX = 350   # 409 is the max, 255 is stock
+  STEER_DELTA_UP = 3
+  STEER_DELTA_DOWN = 4
   STEER_DRIVER_ALLOWANCE = 50
   STEER_DRIVER_MULTIPLIER = 2
   STEER_DRIVER_FACTOR = 1
