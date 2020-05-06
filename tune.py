@@ -42,7 +42,7 @@ kegman = kegman_conf()
 kegman.conf['tuneGernby'] = "1"
 #kegman.write_config(kegman.conf)
 param = ["cameraOffset", "Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
-         "sR_BP1", "sR_time", "steerRateCost", "steerMax", "deltaUp", "deltaDown", "laneChangeSpeed"]
+         "sR_BP1", "sR_time", "steerRateCost", "steerMax", "deltaUp", "deltaDown"]
 #param = ["Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
 #         "sR_BP1", "sR_time", "steerRateCost", "deadzone", "slowOnCurves", \
 #         "1barBP0", "1barBP1", "1barMax", "2barBP0", "2barBP1", \
@@ -266,34 +266,6 @@ while True:
     
   if float(kegman.conf['sR_time']) < 0.1:
     kegman.conf['sR_time'] = "0.1"
-
-  if float(kegman.conf['steerMax']) < 1:
-    kegman.conf['steerMax'] = "1"
-  if float(kegman.conf['steerMax']) >= 1 and float(kegman.conf['steerMax']) <= 409:
-    kegman.conf['steerMax'] = str(round(float(kegman.conf['steerMax'])))
-  if float(kegman.conf['steerMax']) > 409:
-    kegman.conf['steerMax'] = "409"
-
-  if float(kegman.conf['deltaUp']) < 1:
-    kegman.conf['deltaUp'] = "1"
-  if float(kegman.conf['deltaUp']) >= 1 and float(kegman.conf['deltaUp']) <= 3:
-    kegman.conf['deltaUp'] = str(round(float(kegman.conf['deltaUp'])))
-  if float(kegman.conf['deltaUp']) > 3:
-    kegman.conf['deltaUp'] = "3"
-
-  if float(kegman.conf['deltaDown']) < 1:
-    kegman.conf['deltaDown'] = "1"
-  if float(kegman.conf['deltaDown']) >= 1 and float(kegman.conf['deltaDown']) <= 7:
-    kegman.conf['deltaDown'] = str(round(float(kegman.conf['deltaDown'])))
-  if float(kegman.conf['deltaDown']) > 7:
-    kegman.conf['deltaDown'] = "7"
-
-  if float(kegman.conf['laneChangeSpeed']) < 1:
-    kegman.conf['laneChangeSpeed'] = "1"
-  if float(kegman.conf['laneChangeSpeed']) >= 1 and float(kegman.conf['laneChangeSpeed']) <= 160:
-    kegman.conf['laneChangeSpeed'] = str(round(float(kegman.conf['laneChangeSpeed'])))
-  if float(kegman.conf['laneChangeSpeed']) > 160:
-    kegman.conf['laneChangeSpeed'] = "160"
 
   #if float(kegman.conf['Kf']) < 0.00001:
   kegman.conf['Kf'] = str("{:.5f}".format(float(kegman.conf['Kf'])))
