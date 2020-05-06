@@ -11,7 +11,7 @@ from selfdrive.kegman_conf import kegman_conf
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 class SteerLimitParams:
-  STEER_MAX = 350   # 409 is the max, 255 is stock
+  STEER_MAX = 330   # 409 is the max, 255 is stock
   STEER_DELTA_UP = 3
   STEER_DELTA_DOWN = 4
   STEER_DRIVER_ALLOWANCE = 50
