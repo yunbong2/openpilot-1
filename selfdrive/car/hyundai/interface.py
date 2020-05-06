@@ -7,6 +7,7 @@ from selfdrive.car.hyundai.carstate import CarState, get_can_parser, get_can2_pa
 from selfdrive.car.hyundai.values import Ecu, ECU_FINGERPRINT, CAR, FINGERPRINTS
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, is_ecu_disconnected, gen_empty_fingerprint
 from selfdrive.car.interfaces import CarInterfaceBase
+from selfdrive.kegman_conf import kegman_conf
 
 GearShifter = car.CarState.GearShifter
 ButtonType = car.CarState.ButtonEvent.Type
@@ -372,6 +373,7 @@ class CarInterface(CarInterfaceBase):
       self.low_speed_alert = False
 
     # turning indicator alert hysteresis logic
+    kegman = kegman_conf()
     self.turning_indicator_alert = True if self.CC.turning_signal_timer and self.CS.v_ego < (int(float(kegman.conf['laneChangeSpeed'])) * CV.KPH_TO_MS) else False
     # LKAS button alert logic
 #    if self.CP.carFingerprint in [CAR.K5, CAR.K5_HYBRID, CAR.SORENTO, CAR.GRANDEUR, CAR.IONIQ_EV, CAR.KONA_EV]:
