@@ -6,6 +6,8 @@ from selfdrive.controls.lib.lateral_mpc import libmpc_py
 from selfdrive.controls.lib.drive_helpers import MPC_COST_LAT
 from selfdrive.controls.lib.lane_planner import LanePlanner
 from selfdrive.kegman_conf import kegman_conf
+from selfdrive.config import Conversions as CV
+from common.params import Params
 from common.numpy_fast import interp
 import cereal.messaging as messaging
 from cereal import log
@@ -51,6 +53,7 @@ class PathPlanner():
 
     self.setup_mpc()
     self.solution_invalid_cnt = 0
+    self.lane_change_enabled = Params().get('LaneChangeEnabled') == b'1'
     self.path_offset_i = 0.0
 
     self.mpc_frame = 0
@@ -155,7 +158,8 @@ class PathPlanner():
     lane_change_direction = LaneChangeDirection.none
     one_blinker = sm['carState'].leftBlinker != sm['carState'].rightBlinker
 
-    if not active or self.lane_change_timer > 10.0:
+    #if not active or self.lane_change_timer > 10.0:
+    if not active or self.lane_change_timer > 10.0 or not self.lane_change_enabled:
       self.lane_change_state = LaneChangeState.off
       self.pre_lane_change_timer = 0.0
     else:
