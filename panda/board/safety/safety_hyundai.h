@@ -38,6 +38,12 @@ static uint8_t hyundai_get_counter(CAN_FIFOMailBox_TypeDef *to_push) {
   return cnt;
 }
 
+int hyundai_rt_torque_last = 0;
+int hyundai_desired_torque_last = 0;
+int hyundai_cruise_engaged_last = 0;
+int hyundai_speed = 0;
+uint32_t hyundai_ts_last = 0;
+struct sample_t hyundai_torque_driver;         // last few driver torques measured
 bool hyundai_has_scc = false;
 int OP_LKAS_live = 0;
 int OP_MDPS_live = 0;
