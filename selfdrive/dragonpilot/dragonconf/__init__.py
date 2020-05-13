@@ -75,7 +75,7 @@ default_conf = {
   'DragonLocale': 'en-US',
   'DragonUIScreenOffReversing': '0',
   'DragonEnableSRLearner': '1',
-  'DragonEnableSteerBoost': '0',
+  'DragonEnableSteerBoost': '1',
   'DragonSteerBoostMin': '10', # percentage
   'DragonSteerBoostMax': '30', # percentage
   'DragonSteerBoostMinAt': '7.0',

@@ -19,6 +19,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
   immediateDisable @6 :Bool;
   preEnable @7 :Bool;
   permanent @8 :Bool;
+  resetVCruise @9 :Bool;
 
   enum EventName @0xbaa8c5d505f727de {
     # TODO: copy from error list
@@ -156,6 +157,8 @@ struct CarState {
   leftBlinker @20 :Bool;
   rightBlinker @21 :Bool;
   genericToggle @23 :Bool;
+  distanceToggle @33 :Float32;
+  laneDepartureToggle @34 :Bool;
 
   # lock info
   doorOpen @24 :Bool;
@@ -165,12 +168,15 @@ struct CarState {
   # clutch (manual transmission only)
   clutchPressed @28 :Bool;
 
+  lcaLeft @39 :Bool;
+  lcaRight @40 :Bool;
+
   # which packets this state came from
   canMonoTimes @12: List(UInt64);
 
   # blindspot sensors
-  leftBlindspot @33 :Bool; # Is there something blocking the left lane change
-  rightBlindspot @34 :Bool; # Is there something blocking the right lane change
+  leftBlindspot @37 :Bool; # Is there something blocking the left lane change
+  rightBlindspot @38 :Bool; # Is there something blocking the right lane change
 
   struct WheelSpeeds {
     # optional wheel speeds
@@ -326,6 +332,14 @@ struct CarControl {
       chimeWarningRepeat @6;
       chimePrompt @7;
       chimeWarning2Repeat @8;
+      chimeReady @9;
+      chimeDoorOpen @10;
+      chimeGearDrive @11;
+      chimeLaneChange @12;
+      chimeLaneDeparture @13;
+      chimeRoadWarning @14;
+      chimeSeatBelt @15;
+      chimeViewUncertain @16;
     }
   }
 }
@@ -397,6 +411,10 @@ struct CarParams {
   communityFeature @46: Bool;  # true if a community maintained feature is detected
   fingerprintSource @49: FingerprintSource;
   networkLocation @50 :NetworkLocation;  # Where Panda/C2 is integrated into the car's CAN network
+  mdpsBus @51: Int8;
+  sasBus @52: Int8;
+  sccBus @53: Int8;
+  autoLcaEnabled @54: Int8;
 
   struct LateralParams {
     torqueBP @0 :List(Int32);
