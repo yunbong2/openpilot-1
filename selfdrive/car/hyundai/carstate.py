@@ -52,8 +52,8 @@ class CarState(CarStateBase):
     ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr + ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
 
-    ret.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
-    ret.vEgo = ret.clu_Vanz * CV.KPH_TO_MS
+    self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
+    self.vEgo = self.clu_Vanz * CV.KPH_TO_MS
 
     ret.standstill = ret.vEgoRaw < 0.1
 
