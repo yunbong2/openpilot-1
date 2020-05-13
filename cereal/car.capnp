@@ -98,14 +98,19 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     relayMalfunction @72;
     gasPressed @73;
     stockFcw @74;
+    lkasButtonOff @75;
+    rightLCAbsm @76;
+    leftLCAbsm @77;
+    preventLCA @78;
+    turningIndicatorOn @79;
     # dp
-    preLaneChangeLeftALC @75;
-    preLaneChangeRightALC @76;
-    laneChangeALC @77;
-    manualSteeringRequired @78;
-    manualSteeringRequiredBlinkersOn @79;
-    leadCarMoving @80;
-    leadCarDetected @81;
+    preLaneChangeLeftALC @80;
+    preLaneChangeRightALC @81;
+    laneChangeALC @82;
+    manualSteeringRequired @83;
+    manualSteeringRequiredBlinkersOn @84;
+    leadCarMoving @85;
+    leadCarDetected @86;
   }
 }
 
