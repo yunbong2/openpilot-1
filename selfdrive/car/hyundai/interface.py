@@ -249,9 +249,9 @@ class CarInterface(CarInterfaceBase):
     # most HKG cars has no long control, it is safer and easier to engage by main on
     ret.cruiseState.enabled = ret.cruiseState.available if not self.CC.longcontrol else ret.cruiseState.enabled
 
-    if self.CS.left_blinker_flash or self.CS.prev_left_blinker and self.CC.turning_signal_timer
+    if self.CS.left_blinker_flash or self.CS.prev_left_blinker and self.CC.turning_signal_timer:
       ret.leftBlinker = True
-    if self.CS.right_blinker_flash or self.CS.prev_right_blinker and self.CC.turning_signal_timer
+    if self.CS.right_blinker_flash or self.CS.prev_right_blinker and self.CC.turning_signal_timer:
       ret.rightBlinker = True
 
     # turning indicator alert logic
