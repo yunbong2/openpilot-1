@@ -3,7 +3,7 @@ from common import android
 from common.params import put_nonblocking
 is_android = android.ANDROID
 locale_dir = '/data/openpilot/selfdrive/assets/locales'
-supported_language = ['en-US', 'zh-TW', 'zh-CN', 'ko-KR']
+supported_language = ['en-US', 'zh-TW', 'zh-CN']
 locale = android.getprop("persist.sys.locale") if is_android else 'en-US'
 
 def alerts():
