@@ -187,6 +187,8 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
 
+    ret.minEnableSpeed = -1.   # enable is done by stock ACC, so ignore this
+
     ret.centerToFront = ret.wheelbase * 0.4
 
     # TODO: get actual value, for now starting with reasonable value for
@@ -247,8 +249,8 @@ class CarInterface(CarInterfaceBase):
     # most HKG cars has no long control, it is safer and easier to engage by main on
     ret.cruiseState.enabled = ret.cruiseState.available if not self.CC.longcontrol else ret.cruiseState.enabled
 
-    ret.leftBlinker = self.CS.left_blinker_flash or self.CS.prev_left_blinker and self.CC.turning_signal_timer
-    ret.rightBlinker = self.CS.right_blinker_flash or self.CS.prev_right_blinker and self.CC.turning_signal_timer
+    ret.leftBlinker = True if ( self.CS.left_blinker_flash or self.CS.prev_left_blinker and self.CC.turning_signal_timer )
+    ret.rightBlinker = True if (self.CS.right_blinker_flash or self.CS.prev_right_blinker and self.CC.turning_signal_timer )
 
     # turning indicator alert logic
     if (ret.leftBlinker or ret.rightBlinker or self.CC.turning_signal_timer) and ret.vEgo < 20.1168:
@@ -318,3 +320,4 @@ class CarInterface(CarInterfaceBase):
                                c.hudControl.rightLaneVisible, c.hudControl.leftLaneDepart, c.hudControl.rightLaneDepart)
     self.frame += 1
     return can_sends
+

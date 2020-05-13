@@ -19,10 +19,6 @@ class CarState(CarStateBase):
     self.leftBlinker = False
     self.rightBlinker = False
     self.lkas_button_on = True
-    self.left_blinker_on = False
-    self.right_blinker_on = False
-    self.left_blinker_flash = False
-    self.right_blinker_flash = False
 
   def update(self, cp, cp2, cp_cam):
     cp_mdps = cp2 if self.mdps_bus else cp
@@ -31,12 +27,7 @@ class CarState(CarStateBase):
 
     self.prev_left_blinker = self.leftBlinker
     self.prev_right_blinker = self.rightBlinker
-    self.prev_left_blinker_on = self.left_blinker_on
-    self.prev_right_blinker_on = self.right_blinker_on
-    self.prev_left_blinker_flash = self.left_blinker_flash
-    self.prev_right_blinker_flash = self.right_blinker_flash
     self.prev_lkas_button_on = self.lkas_button_on
-    
 
     ret = car.CarState.new_message()
 
@@ -52,9 +43,6 @@ class CarState(CarStateBase):
     ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr + ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
 
-    self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
-    self.vEgo = self.clu_Vanz * CV.KPH_TO_MS
-
     ret.standstill = ret.vEgoRaw < 0.1
 
     ret.steeringAngle = cp_sas.vl["SAS11"]['SAS_Angle']
@@ -65,7 +53,6 @@ class CarState(CarStateBase):
     ret.steeringTorque = cp_mdps.vl["MDPS12"]['CR_Mdps_StrColTq']
     ret.steeringTorqueEps = cp_mdps.vl["MDPS12"]['CR_Mdps_OutTq']
     ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD
-    ret.steerWarning = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0
 
     # cruise state
     ret.cruiseState.enabled = (cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
@@ -150,6 +137,7 @@ class CarState(CarStateBase):
     self.mdps12 = cp_mdps.vl["MDPS12"]
     self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
     self.steer_state = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiActive'] #0 NOT ACTIVE, 1 ACTIVE
+    self.steer_warning = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail']
     self.lead_distance = cp_scc.vl["SCC11"]['ACC_ObjDist'] if not self.no_radar else 0
     self.lkas_error = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsSysState"] == 7
     if not self.lkas_error:
@@ -206,8 +194,10 @@ class CarState(CarStateBase):
       ("CF_Clu_AliveCnt1", "CLU11", 0),
 
       ("ACCEnable", "TCS13", 0),
+      ("ACC_REQ", "TCS13", 0),
       ("BrakeLight", "TCS13", 0),
       ("DriverBraking", "TCS13", 0),
+      ("DriverOverride", "TCS13", 0),
 
       ("ESC_Off_Step", "TCS15", 0),
 
@@ -220,15 +210,12 @@ class CarState(CarStateBase):
 
     checks = [
       # address, frequency
-      ("TCS13", 50),
       ("TCS15", 10),
       ("CLU11", 50),
       ("ESP12", 100),
       ("CGW1", 10),
       ("CGW4", 5),
       ("WHL_SPD11", 50),
-      ("EMS12", 100),
-      ("EMS16", 100),
     ]
     if not CP.mdpsBus:
       signals += [
@@ -443,3 +430,4 @@ class CarState(CarStateBase):
         ("SCC12", 50),
       ]
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 2)
+
