@@ -79,6 +79,7 @@ class CarController():
     self.steer_rate_limited = False
     self.fcw_count = 0
     self.turning_signal_timer = 0
+    self.steer_max = 0
 
     # Setup detection helper. Routes commands to
     # an appropriate CAN bus number.
@@ -109,7 +110,18 @@ class CarController():
     if (frame % P.STEER_STEP) == 0:
       lkas_enabled = enabled and not CS.steer_not_allowed and CS.lkMode and CS.v_ego > P.MIN_STEER_SPEED #and not CS.left_blinker_on and not CS.right_blinker_on
       if lkas_enabled:
-        new_steer = actuators.steer * P.STEER_MAX
+        if CS.v_ego < 7:
+          self.steer_max = P.STEER_MAX * 0.7
+        elif CS.v_ego < 11:
+          self.steer_max = P.STEER_MAX * 0.8
+        elif CS.v_ego < 22:
+          self.steer_max = P.STEER_MAX * 0.85
+        elif CS.v_ego < 27:
+          self.steer_max = P.STEER_MAX * 0.9
+        else:
+          self.steer_max = P.STEER_MAX * 1.0
+        new_steer = actuators.steer * self.steer_max
+        #new_steer = actuators.steer * P.STEER_MAX
         apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.steer_torque_driver, P)
         self.steer_rate_limited = new_steer != apply_steer
       else:
