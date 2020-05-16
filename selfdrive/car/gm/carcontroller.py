@@ -110,13 +110,9 @@ class CarController():
     if (frame % P.STEER_STEP) == 0:
       lkas_enabled = enabled and not CS.steer_not_allowed and CS.lkMode and CS.v_ego > P.MIN_STEER_SPEED #and not CS.left_blinker_on and not CS.right_blinker_on
       if lkas_enabled:
-        if CS.v_ego < 7:
-          self.steer_max = P.STEER_MAX * 0.7
-        elif CS.v_ego < 11:
+        if CS.v_ego < 11:
           self.steer_max = P.STEER_MAX * 0.8
         elif CS.v_ego < 22:
-          self.steer_max = P.STEER_MAX * 0.85
-        elif CS.v_ego < 27:
           self.steer_max = P.STEER_MAX * 0.9
         else:
           self.steer_max = P.STEER_MAX * 1.0
