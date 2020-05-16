@@ -17,8 +17,8 @@ typedef struct {
   uint32_t rolling_counter;
 } gm_dual_buffer;
 
-const int GM_MAX_STEER = 270;
-const int GM_MAX_RT_DELTA = 80;          // max delta torque allowed for real time checks
+const int GM_MAX_STEER = 300;
+const int GM_MAX_RT_DELTA = 64;          // max delta torque allowed for real time checks
 const uint32_t GM_RT_INTERVAL = 250000;    // 250ms between real time checks
 const int GM_MAX_RATE_UP = 7;
 const int GM_MAX_RATE_DOWN = 17;
