@@ -133,17 +133,14 @@ class CarInterface(CarInterfaceBase):
 
     elif candidate == CAR.BOLT:
       # initial engage unkown - copied from Volt. Stop and go unknown.
-      ret.minEnableSpeed = -1
+      ret.minEnableSpeed = -1.
       ret.mass = 1616. + STD_CARGO_KG
       ret.safetyModel = car.CarParams.SafetyModel.gm
       ret.wheelbase = 2.60096
-      ret.steerRatio = 16.5
+      ret.steerRatio = 16.5  #Bolt EV has a 16.8 in the spec, but with this value I can see oversteer at sharp corner during openpilot engage.
       ret.steerRatioRear = 0.
       ret.centerToFront = ret.wheelbase * 0.4 # wild guess
-      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.,7.0,11.0,22.0,27.0], [0.,7.0,11.0,22.0,27.0]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.05,0.12,0.18,0.2,0.23], [0.005,0.01,0.014,0.016,0.018]]
-      ret.lateralTuning.pid.kf = 0.000024
-      tire_stiffness_factor = 0.5
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.1], [0.01]]
 
     elif candidate == CAR.MALIBU:
       # supports stop and go, but initial engage must be above 18mph (which include conservatism)
