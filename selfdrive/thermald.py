@@ -23,29 +23,18 @@ kegman = kegman_conf()
 
 FW_SIGNATURE = get_expected_signature()
 
-import subprocess
-import re
-import time
-
 ThermalStatus = log.ThermalData.ThermalStatus
 NetworkType = log.ThermalData.NetworkType
 CURRENT_TAU = 15.   # 15s time constant
 DAYS_NO_CONNECTIVITY_MAX = 7  # do not allow to engage after a week without internet
 DAYS_NO_CONNECTIVITY_PROMPT = 4  # send an offroad prompt after 4 days with no internet
 
-LEON = False
-last_eon_fan_val = None
-
 mediaplayer = '/data/openpilot/selfdrive/kyd/mediaplayer/'
 
 with open(BASEDIR + "/selfdrive/controls/lib/alerts_offroad.json") as json_file:
   OFFROAD_ALERTS = json.load(json_file)
 
-
 def read_tz(x, clip=True):
-  if not ANDROID:
-    # we don't monitor thermal on PC
-    return 0
   try:
     with open("/sys/devices/virtual/thermal/thermal_zone%d/temp" % x) as f:
       ret = int(f.read())
@@ -55,7 +44,6 @@ def read_tz(x, clip=True):
     return 0
 
   return ret
-
 
 def read_thermal():
   dat = messaging.new_message()
@@ -70,7 +58,7 @@ def read_thermal():
   dat.thermal.pa0 = read_tz(25)
   return dat
 
-
+LEON = False
 def setup_eon_fan():
   global LEON
 
@@ -84,10 +72,11 @@ def setup_eon_fan():
     bus.write_byte_data(0x21, 0x04, 0x4)   # manual override source
   except IOError:
     print("LEON detected")
+    #os.system("echo 1 > /sys/devices/soc/6a00000.ssusb/power_supply/usb/usb_otg")
     LEON = True
   bus.close()
 
-
+last_eon_fan_val = None
 def set_eon_fan(val):
   global LEON, last_eon_fan_val
 
@@ -112,7 +101,6 @@ def set_eon_fan(val):
       bus.write_byte_data(0x21, 0x04, 0x4)
     bus.close()
     last_eon_fan_val = val
-
 
 # temp thresholds to control fan speed - high hysteresis
 _TEMP_THRS_H = [50., 65., 80., 10000]
@@ -139,7 +127,7 @@ def handle_fan_eon(max_cpu_temp, bat_temp, fan_speed, ignition):
     # no max fan speed unless battery is hot
     fan_speed = min(fan_speed, _FAN_SPEEDS[-2])
 
-  set_eon_fan(fan_speed // 16384)
+  set_eon_fan(fan_speed//16384)
 
   return fan_speed
 
@@ -205,20 +193,21 @@ def thermald_thread():
   charging_disabled = False
   time_valid_prev = True
   should_start_prev = False
-  handle_fan = None
-  is_uno = False
-
   ts_last_ip = None
   ip_addr = '255.255.255.255'
-  
-  params = Params()
-  pm = PowerMonitoring()
-
   # sound trigger
   sound_trigger = 1
-
   env = dict(os.environ)
   env['LD_LIBRARY_PATH'] = mediaplayer
+
+  is_uno = (read_tz(29, clip=False) < -1000)
+  if is_uno or not ANDROID:
+    handle_fan = handle_fan_uno
+  else:
+    setup_eon_fan()
+    handle_fan = handle_fan_eon
+
+  params = Params()
 
   while 1:
     health = messaging.recv_sock(health_sock, wait=True)
@@ -226,28 +215,13 @@ def thermald_thread():
     location = location.gpsLocation if location else None
     msg = read_thermal()
 
+    # clear car params when panda gets disconnected
+    if health is None and health_prev is not None:
+      params.panda_disconnect()
+    health_prev = health
+
     if health is not None:
       usb_power = health.health.usbPowerMode != log.HealthData.UsbPowerMode.client
-      ignition = health.health.ignitionLine or health.health.ignitionCan
-
-      # Setup fan handler on first connect to panda
-      if handle_fan is None and health.health.hwType != log.HealthData.HwType.unknown:
-        is_uno = health.health.hwType == log.HealthData.HwType.uno
-
-        if is_uno or not ANDROID:
-          cloudlog.info("Setting up UNO fan handler")
-          handle_fan = handle_fan_uno
-        else:
-          cloudlog.info("Setting up EON fan handler")
-          setup_eon_fan()
-          handle_fan = handle_fan_eon
-
-      # Handle disconnect
-      if health_prev is not None:
-        if health.health.hwType == log.HealthData.HwType.unknown and \
-          health_prev.health.hwType != log.HealthData.HwType.unknown:
-          params.panda_disconnect()
-      health_prev = health
 
     # get_network_type is an expensive call. update every 10s
     if (count % int(10. / DT_TRML)) == 0:
@@ -297,17 +271,16 @@ def thermald_thread():
     max_cpu_temp = max(msg.thermal.cpu0, msg.thermal.cpu1,
                        msg.thermal.cpu2, msg.thermal.cpu3) / 10.0
     max_comp_temp = max(max_cpu_temp, msg.thermal.mem / 10., msg.thermal.gpu / 10.)
-    bat_temp = msg.thermal.bat / 1000.
+    bat_temp = msg.thermal.bat/1000.
 
-    if handle_fan is not None:
-      fan_speed = handle_fan(max_cpu_temp, bat_temp, fan_speed, ignition)
-      msg.thermal.fanSpeed = fan_speed
+    fan_speed = handle_fan(max_cpu_temp, bat_temp, fan_speed, ignition)
+    msg.thermal.fanSpeed = fan_speed
 
     # thermal logic with hysterisis
     if max_cpu_temp > 107. or bat_temp >= 63.:
       # onroad not allowed
       thermal_status = ThermalStatus.danger
-    elif max_comp_temp > 92.5 or bat_temp > 60.:  # CPU throttling starts around ~90C
+    elif max_comp_temp > 92.5 or bat_temp > 60.: # CPU throttling starts around ~90C
       # hysteresis between onroad not allowed and engage not allowed
       thermal_status = clip(thermal_status, ThermalStatus.red, ThermalStatus.danger)
     elif max_cpu_temp > 87.5:
@@ -329,12 +302,12 @@ def thermald_thread():
     now = datetime.datetime.now()
 
     # show invalid date/time alert
-    time_valid = now.year >= 2019
-    if time_valid and not time_valid_prev:
-      params.delete("Offroad_InvalidTime")
-    if not time_valid and time_valid_prev:
-      params.put("Offroad_InvalidTime", json.dumps(OFFROAD_ALERTS["Offroad_InvalidTime"]))
-    time_valid_prev = time_valid
+#    time_valid = now.year >= 2019
+#    if time_valid and not time_valid_prev:
+#      params.delete("Offroad_InvalidTime")
+#    if not time_valid and time_valid_prev:
+#      params.put("Offroad_InvalidTime", json.dumps(OFFROAD_ALERTS["Offroad_InvalidTime"]))
+#    time_valid_prev = time_valid
 
     # Show update prompt
 #    try:
@@ -363,6 +336,9 @@ def thermald_thread():
 #      current_connectivity_alert = None
 #      params.delete("Offroad_ConnectivityNeeded")
 #      params.delete("Offroad_ConnectivityNeededPrompt")
+
+    # start constellation of processes when the car starts
+    ignition = health is not None and (health.health.ignitionLine or health.health.ignitionCan)
 
     do_uninstall = params.get("DoUninstall") == b"1"
     accepted_terms = params.get("HasAcceptedTerms") == terms_version
@@ -441,6 +417,7 @@ def thermald_thread():
     else:
       msg.thermal.batteryStatus = "Charging"
 
+    
     msg.thermal.chargingDisabled = charging_disabled
     msg.thermal.chargingError = current_filter.x > 0. and msg.thermal.batteryPercent < 90  # if current is positive, then battery is being discharged
     msg.thermal.started = started_ts is not None
