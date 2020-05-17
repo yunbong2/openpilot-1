@@ -107,14 +107,13 @@ class CarController():
         self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
       elif CS.left_blinker_flash or CS.right_blinker_flash:
         self.turning_signal_timer = 100
-        new_steer = actuators.steer * self.steer_max
     
     if self.turning_signal_timer and CS.v_ego < 16.666667:
       lkas_active = 0
     
-    if CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash and CS.v_ego > 27.777778:  # above 100km/h
+    if CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > 27.777778:  # above 100km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.5
-    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash and CS.v_ego > 16.666667:  # btw 100km/h ~ 60km/h
+    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > 16.666667:  # btw 100km/h ~ 60km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.75
     else:
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX
