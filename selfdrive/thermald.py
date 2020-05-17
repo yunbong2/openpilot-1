@@ -9,7 +9,7 @@ from smbus2 import SMBus
 from cereal import log
 from common.android import ANDROID, get_network_type
 from common.basedir import BASEDIR
-from common.params import Params, put_nonblocking
+from common.params import Params
 from common.realtime import sec_since_boot, DT_TRML
 from common.numpy_fast import clip, interp
 from common.filter_simple import FirstOrderFilter
@@ -22,10 +22,6 @@ from selfdrive.kegman_conf import kegman_conf
 kegman = kegman_conf()
 
 FW_SIGNATURE = get_expected_signature()
-
-import subprocess
-import re
-import time
 
 ThermalStatus = log.ThermalData.ThermalStatus
 NetworkType = log.ThermalData.NetworkType
@@ -207,14 +203,12 @@ def thermald_thread():
 
   ts_last_ip = None
   ip_addr = '255.255.255.255'
-  
-  params = Params()
-
   # sound trigger
   sound_trigger = 1
-
   env = dict(os.environ)
   env['LD_LIBRARY_PATH'] = mediaplayer
+  
+  params = Params()
 
   while 1:
     health = messaging.recv_sock(health_sock, wait=True)
@@ -413,7 +407,7 @@ def thermald_thread():
       # shutdown if the battery gets lower than 3%, it's discharging, we aren't running for
       # more than a minute but we were running
       if msg.thermal.batteryPercent < BATT_PERC_OFF and msg.thermal.batteryStatus == "Discharging" and \
-         started_seen and (sec_since_boot() - off_ts) > 38:
+         started_seen and (sec_since_boot() - off_ts) > 60:
         os.system('LD_LIBRARY_PATH="" svc power shutdown')
 
     charging_disabled = check_car_battery_voltage(should_start, health, charging_disabled, msg)
