@@ -93,34 +93,26 @@ class CarController():
     apply_accel, self.accel_steady = accel_hysteresis(apply_accel, self.accel_steady)
     apply_accel = clip(apply_accel * ACCEL_SCALE, ACCEL_MIN, ACCEL_MAX)
 
-    ### Steering Torque
-    new_steer = actuators.steer * SteerLimitParams.STEER_MAX
-    apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.steer_torque_driver, SteerLimitParams)
-    self.steer_rate_limited = new_steer != apply_steer
+    lkas_active = enabled
 
-    ### LKAS button to temporarily disable steering
-#    if not CS.lkas_error:
-#      if CS.lkas_button_on != self.lkas_button_last:
-#        self.lkas_button = not self.lkas_button
-#      self.lkas_button_last = CS.lkas_button_on
-
-    # disable if steer angle reach 90 deg, otherwise mdps fault in some models
-    if self.car_fingerprint == CAR.GENESIS:
-      lkas_active = enabled and abs(CS.angle_steers) < 90. and self.lkas_button
-    else:
-#     lkas_active = enabled and self.lkas_button
-      lkas_active = enabled
-
-    # Fix for sharp turns mdps fault and Genesis hard fault at low speed
-    if CS.v_ego < 15.5 and self.car_fingerprint == CAR.GENESIS and not CS.mdps_bus:
-      self.turning_signal_timer = 100
-      
     # Disable steering while turning blinker on and speed below 60 kph
     if CS.left_blinker_on or CS.right_blinker_on:
       if self.car_fingerprint in [CAR.KONA, CAR.IONIQ]:
         self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
       elif CS.left_blinker_flash or CS.right_blinker_flash:
         self.turning_signal_timer = 100
+
+    if CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (100 * CV.KPH_TO_MS)::  # above 100km/h
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.5
+    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (60 * CV.KPH_TO_MS)::  # btw 100km/h ~ 60km/h
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.75
+    else:
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX
+
+    ### Steering Torque
+    apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.steer_torque_driver, SteerLimitParams)
+    self.steer_rate_limited = new_steer != apply_steer
+
     if self.turning_signal_timer and CS.v_ego < (60 * CV.KPH_TO_MS):
       lkas_active = 0
     if self.turning_signal_timer:
