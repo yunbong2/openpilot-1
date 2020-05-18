@@ -5,6 +5,8 @@ import copy
 import datetime
 import psutil
 import subprocess
+import re
+import time
 from smbus2 import SMBus
 from cereal import log
 from common.android import ANDROID, get_network_type
