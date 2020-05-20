@@ -139,7 +139,7 @@ class CarController():
       lka_active = 0
     if self.turning_signal_timer:
       self.turning_signal_timer -= 1
-    if not lka_active:
+    if lka_active == 0:
       apply_steer = 0
 
     ### GAS/BRAKE ###
