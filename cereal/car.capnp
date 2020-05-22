@@ -19,7 +19,6 @@ struct CarEvent @0x9b1657f34caf3ad3 {
   immediateDisable @6 :Bool;
   preEnable @7 :Bool;
   permanent @8 :Bool;
-  resetVCruise @9 :Bool;
 
   enum EventName @0xbaa8c5d505f727de {
     # TODO: copy from error list
@@ -92,17 +91,17 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     carUnrecognized @66;
     radarCommIssue @67;
     driverMonitorLowAcc @68;
-    manualSteeringRequired @69;
-    manualSteeringRequiredBlinkersOn @70;
-	  turningIndicatorOn @71;
-    lkasButtonOff @72;
-    rightLCAbsm @73;
-    leftLCAbsm @74;
-    preventLCA @75;
-    invalidLkasSetting @76;
-    speedTooHigh @77;
-    laneChangeBlocked @78;
-    relayMalfunction @79;
+    invalidLkasSetting @69;
+    speedTooHigh @70;
+    laneChangeBlocked @71;
+    relayMalfunction @72;
+    gasPressed @73;
+    stockFcw @74;
+    lkasButtonOff @75;
+    rightLCAbsm @76;
+    leftLCAbsm @77;
+    preventLCA @78;
+    turningIndicatorOn @79;
   }
 }
 
@@ -131,12 +130,14 @@ struct CarState {
   brakeLights @19 :Bool;
 
   # steering wheel
-  steeringAngle @7 :Float32;   # deg
-  steeringRate @15 :Float32;   # deg/s
-  steeringTorque @8 :Float32;  # TODO: standardize units
+  steeringAngle @7 :Float32;       # deg
+  steeringRate @15 :Float32;       # deg/s
+  steeringTorque @8 :Float32;      # TODO: standardize units
   steeringTorqueEps @27 :Float32;  # TODO: standardize units
-  steeringPressed @9 :Bool;    # if the user is using the steering wheel
-  steeringRateLimited @29 :Bool;    # if the torque is limited by the rate limiter
+  steeringPressed @9 :Bool;        # if the user is using the steering wheel
+  steeringRateLimited @29 :Bool;   # if the torque is limited by the rate limiter
+  steerWarning @35 :Bool;          # temporary steer unavailble
+  steerError @36 :Bool;            # permanent steer error
   stockAeb @30 :Bool;
   stockFcw @31 :Bool;
   espDisabled @32 :Bool;
@@ -152,32 +153,21 @@ struct CarState {
   leftBlinker @20 :Bool;
   rightBlinker @21 :Bool;
   genericToggle @23 :Bool;
-  distanceToggle @33 :Float32;
-  laneDepartureToggle @34 :Bool;
 
   # lock info
   doorOpen @24 :Bool;
   seatbeltUnlatched @25 :Bool;
   canValid @26 :Bool;
 
-
   # clutch (manual transmission only)
   clutchPressed @28 :Bool;
-
-  readdistancelines @36 :Float32;
-  lkMode @35 :Bool;
   
-  lcaLeft @39 :Bool;
-  lcaRight @40 :Bool;
-
-
-
   # which packets this state came from
   canMonoTimes @12: List(UInt64);
 
   # blindspot sensors
-  leftBlindspot @37 :Bool; # Is there something blocking the left lane change
-  rightBlindspot @38 :Bool; # Is there something blocking the right lane change
+  leftBlindspot @33 :Bool; # Is there something blocking the left lane change
+  rightBlindspot @34 :Bool; # Is there something blocking the right lane change
 
   struct WheelSpeeds {
     # optional wheel speeds
@@ -332,14 +322,7 @@ struct CarControl {
       chimeWarning2 @5;
       chimeWarningRepeat @6;
       chimePrompt @7;
-      chimeReady @8;
-      chimeDoorOpen @9;
-      chimeGearDrive @10;
-      chimeLaneChange @11;
-      chimeLaneDeparture @12;
-      chimeRoadWarning @13;
-      chimeSeatBelt @14;
-      chimeViewUncertain @15;
+      chimeWarning2Repeat @8;
     }
   }
 }
@@ -414,7 +397,7 @@ struct CarParams {
   mdpsBus @51: Int8;
   sasBus @52: Int8;
   sccBus @53: Int8;
-  autoLcaEnabled @54: Int8;
+  autoLcaEnabled @54: Bool;
 
   struct LateralParams {
     torqueBP @0 :List(Int32);

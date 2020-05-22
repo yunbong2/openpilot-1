@@ -129,6 +129,8 @@ struct FrameData {
   gainFrac @15 :Float32;
   focusVal @16 :List(Int16);
   focusConf @17 :List(UInt8);
+  sharpnessScore @18 :List(UInt16);
+
   frameType @7 :FrameType;
   timestampSof @8 :UInt64;
   transform @10 :List(Float32);
@@ -295,8 +297,6 @@ struct ThermalData {
   memUsedPercent @19 :Int8;
   cpuPerc @20 :Int8;
 
-  ipAddr @25 :Text;
-  
   enum ThermalStatus {
     green @0;   # all processes run
     yellow @1;  # critical processes run (kill uploader), engage still allowed
@@ -823,54 +823,15 @@ struct PathPlan {
     right @2;
   }
   enum LaneChangeBSM {
-
-						   
-
-								   
-																		   
-
-								
-									
-								
-							   
-								  
-									 
-
-
-													
-															  
-								   
-								  
-										 
-
-																		  
-											
-
-										   
-							
-									   
-										   
-											  
-
-					 
-							 
-					 
-								 
-
-			   
     off @0;
     left @1;
     right @2;
-   
-
-					  
-							 
-						   
   }
 }
 
 struct LiveLocationKalman {
 
+  # More info on reference frames:
   # https://github.com/commaai/openpilot/tree/master/common/transformations
 
   positionECEF @0 : Measurement;
