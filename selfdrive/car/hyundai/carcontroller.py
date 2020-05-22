@@ -81,6 +81,8 @@ class CarController():
     self.lkas_button = 1
     self.lkas_button_last = 0
     self.longcontrol = 0 #TODO: make auto
+    self.steer_torque_over_timer = 0
+    self.steer_torque_over = False
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
               left_line, right_line, left_lane_depart, right_lane_depart):
@@ -92,6 +94,8 @@ class CarController():
 
     apply_accel, self.accel_steady = accel_hysteresis(apply_accel, self.accel_steady)
     apply_accel = clip(apply_accel * ACCEL_SCALE, ACCEL_MIN, ACCEL_MAX)
+
+    v_ego_kph = CS.v_ego * CV.MS_TO_KPH
 
     lkas_active = enabled
 
@@ -119,10 +123,22 @@ class CarController():
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.steer_torque_driver, SteerLimitParams)
     self.steer_rate_limited = new_steer != apply_steer
 
+    if abs( CS.steer_torque_driver ) > 200 and v_ego_kph < 60:
+      self.steer_torque_over_timer += 1
+      if self.steer_torque_over_timer > 50:
+        self.steer_torque_over = True
+        self.steer_torque_over_timer = 100
+    elif self.steer_torque_over_timer:
+      self.steer_torque_over_timer -= 1
+    else:
+      self.steer_torque_over = False
+
     if self.turning_signal_timer and CS.v_ego < (60 * CV.KPH_TO_MS):
       lkas_active = 0
     if self.turning_signal_timer:
       self.turning_signal_timer -= 1
+    if self.steer_torque_over:
+      lkas_active = 0
     if not lkas_active:
       apply_steer = 0
       
