@@ -225,10 +225,6 @@ class PathPlanner():
           self.lane_change_state = LaneChangeState.preLaneChange
         else:
           self.lane_change_state = LaneChangeState.off
-        # finishing2
-      elif self.lane_change_state == LaneChangeState.laneChangeFinishing and lane_change_prob < 0.9:
-        if one_blinker or angle_steers > 5:
-          self.lane_change_state = LaneChangeState.preLaneChange
 
     if self.lane_change_state in [LaneChangeState.off, LaneChangeState.preLaneChange]:
       self.lane_change_timer = 0.0
