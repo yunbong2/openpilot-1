@@ -381,6 +381,9 @@ class CarInterface(CarInterfaceBase):
 #    if self.CP.carFingerprint in [CAR.GRANDEUR_HYBRID, CAR.K7_HYBRID]:
 #      self.lkas_button_alert = False
 
+    # on steer by driver
+    self.steer_torque_over_alert = True if self.CC.steer_torque_over_timer and self.CS.v_ego < (60 * CV.KPH_TO_MS) else False
+
     events = []
     if not ret.gearShifter == GearShifter.drive:
       events.append(create_event('wrongGear', [ET.NO_ENTRY, ET.USER_DISABLE]))
@@ -415,7 +418,7 @@ class CarInterface(CarInterfaceBase):
       events.append(create_event('belowSteerSpeed', [ET.WARNING]))
     if self.turning_indicator_alert:
       events.append(create_event('turningIndicatorOn', [ET.WARNING]))
-    if self.CC.steer_torque_over:
+    if self.steer_torque_over_alert:
       events.append(create_event('steerTorqueOver', [ET.WARNING])) 
 #    if self.lkas_button_alert:
 #      events.append(create_event('lkasButtonOff', [ET.WARNING]))
