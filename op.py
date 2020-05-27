@@ -20,8 +20,8 @@ def getch():
 
 print ("Please select job what you want(number)")
 print ("")
-print ("1. OPBACKUP   - copy your OP directory to openpilot_(timestamp) and back up the kegman.json file")
-print ("2. OPINSTALL  - install OP. if exist OP direcoty, rename openpilot to openpilot_(timestamp")
+print ("1. OPBACKUP   - copy your OP directory to openpilot_timestamp and back up the kegman.json file")
+print ("2. OPINSTALL  - install OP. if exist OP direcoty, will be renamed to openpilot_timestamp then install new one")
 print ("3. OPUPDATE   - run 'git pull' command to update OP latest")
 print ("4. OPRESTORE  - replace OP with current OP latest bak directory referring timestamp")
 print ("5. SEEBRANCH  - confirm current branch")
