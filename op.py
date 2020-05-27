@@ -40,11 +40,12 @@ if (char == "1"):
     os.system("cp -f /data/kegman.json /data/kegman.json_" + ct)
     os.system("ls -altr /data")
     print ("")
-    print ("")
-    print ("")
-    print ("")
-    print ("")
-    os.system("cd /system/comma/home; ./op.sh")
+    print ("Your backup dir is above")
+    print ("Press r key to move first menu")
+
+    char1  = getch()
+    if (char1 == "r"):
+        os.system("cd /system/comma/home; ./op.sh")
 
 
 elif (char == "2"):
@@ -90,11 +91,22 @@ elif (char == "2"):
         os.system("cd /system/comma/home; ./op.sh")
 
 elif (char == "3"):
+    print ("")
     os.system("cd /data/openpilot; git pull")
+    print ("")
+    print ("Press r key to move first menu")
+
+    char3  = getch()
+
+    if (char3 == "r"):
+        os.system("cd /system/comma/home; ./op.sh")
 
 elif (char == "4"):
     os.system("clear")
+    print ("Your last backup dir is here.")
+    print ("")
     os.system("cd /data; ls -aldrt /data/openpilot_*")
+    print ("")
     print ("")
     print ("This will remove your openpilot directory")
     print ("And replace the openpilot dir with current bak dir")
@@ -104,10 +116,34 @@ elif (char == "4"):
     char4  = getch()
 
     if (char4 == "y"):
-        os.system("cd /data; rm -rf openpilot; curopdir=`ls -aldrt /data/openpilot_* | awk -F '/' '{print $3}' | tail -n 1`; mv $curopdir openpilot; reboot")
+        os.system("cd /data; rm -rf openpilot; curopdir=`ls -aldrt /data/openpilot_* | awk -F '/' '{print $3}' | tail -n 1`; mv $curopdir openpilot")
+        print ("Following is the result")
+        os.system("cd /data; ls -aldrt /data/openpilot*")
+        print ("")
+        print ("Do yo want to reboot?(y/n)")
+
+        char41  = getch()
+
+        if (char41 == "y"):
+            os.system("reboot")
+        elif (char41 == "n"):
+            os.system("cd /system/comma/home; ./op.sh")
+
+    elif (char4 == "n"):
+        os.system("cd /system/comma/home; ./op.sh")
+
+
 
 elif (char == "5"):
+    print ("")
     os.system("cd /data/openpilot; git branch")
+    print ("")
+    print ("Press r key to move first menu")
+
+    char5  = getch()
+
+    if (char5 == "r"):
+        os.system("cd /system/comma/home; ./op.sh")
 
 elif (char == "6"):
     os.system("clear")
