@@ -10,7 +10,7 @@ from opendbc.can.packer import CANPacker
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 class SteerLimitParams:
-  STEER_MAX = 330   # 409 is the max, 255 is stock
+  STEER_MAX = 255   # 409 is the max, 255 is stock
   STEER_DELTA_UP = 3
   STEER_DELTA_DOWN = 4
   STEER_DRIVER_ALLOWANCE = 50
@@ -59,9 +59,9 @@ def process_hud_alert(enabled, button_on, fingerprint, visual_alert, left_line,
   left_lane_warning = 0
   right_lane_warning = 0
   if left_lane_depart:
-    left_lane_warning = 1 if fingerprint in [CAR.GENESIS , CAR.GENESIS_G90, CAR.GENESIS_G80] else 2
+    left_lane_warning = 1 if fingerprint in [CAR.GENESIS] else 2
   if right_lane_depart:
-    right_lane_warning = 1 if fingerprint in [CAR.GENESIS , CAR.GENESIS_G90, CAR.GENESIS_G80] else 2
+    right_lane_warning = 1 if fingerprint in [CAR.GENESIS] else 2
 
   return hud_alert, lane_visible, left_lane_warning, right_lane_warning
 
@@ -97,7 +97,7 @@ class CarController():
 
     # Disable steering while turning blinker on and speed below 60 kph
     if CS.left_blinker_on or CS.right_blinker_on:
-      if self.car_fingerprint in [CAR.KONA, CAR.IONIQ]:
+      if self.car_fingerprint in [CAR.KONA, CAR.KONA_HEV, CAR.IONIQ_HEV]:
         self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
       elif CS.left_blinker_flash or CS.right_blinker_flash:
         self.turning_signal_timer = 100

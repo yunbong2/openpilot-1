@@ -57,7 +57,7 @@ class CarInterface(CarInterfaceBase):
     ret.steerLimitTimer = 0.8
     tire_stiffness_factor = 0.75
 
-    if candidate in [CAR.SANTAFE, CAR.SANTAFE_1]:
+    if candidate == CAR.SANTAFE:
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 1830. + STD_CARGO_KG
       ret.wheelbase = 2.765
@@ -72,25 +72,11 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 14.4 * 1.15
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
-    elif candidate in [CAR.AVANTE, CAR.I30]:
-      ret.lateralTuning.pid.kf = 0.00006
-      ret.mass = 1275. + STD_CARGO_KG
-      ret.wheelbase = 2.7
-      ret.steerRatio = 13.73   #Spec
-      tire_stiffness_factor = 0.385
-      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
     elif candidate == CAR.GENESIS:
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 2060. + STD_CARGO_KG
       ret.wheelbase = 3.01
       ret.steerRatio = 16.5
-      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.16], [0.01]]
-    elif candidate in [CAR.GENESIS_G90, CAR.GENESIS_G80]:
-      ret.mass = 2200
-      ret.wheelbase = 3.15
-      ret.steerRatio = 12.069
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.16], [0.01]]
     elif candidate in [CAR.K5, CAR.SONATA]:
@@ -108,7 +94,7 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 14.4 * 1.15   # 15% higher at the center seems reasonable
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
-    elif candidate in [CAR.K5_HYBRID, CAR.SONATA_HYBRID]:
+    elif candidate == CAR.K5_HEV:
       ret.lateralTuning.pid.kf = 0.00006
       ret.mass = 1595. + STD_CARGO_KG
       ret.wheelbase = 2.80
@@ -124,7 +110,7 @@ class CarInterface(CarInterfaceBase):
       ret.steerRateCost = 0.4
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
-    elif candidate in [CAR.GRANDEUR_HYBRID, CAR.K7_HYBRID]:
+    elif candidate in [CAR.GRANDEUR_HEV, CAR.K7_HEV]:
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 1675. + STD_CARGO_KG
       ret.wheelbase = 2.885
@@ -148,6 +134,15 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.385
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
+    elif candidate == CAR.KONA_HEV:
+      ret.lateralTuning.pid.kf = 0.00005
+      ret.mass = 1330. + STD_CARGO_KG
+      ret.wheelbase = 2.6
+      ret.steerRatio = 13.5   #Spec
+      ret.steerRateCost = 0.4
+      tire_stiffness_factor = 0.385
+      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
     elif candidate == CAR.KONA_EV:
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 1330. + STD_CARGO_KG
@@ -157,7 +152,7 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.385
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
-    elif candidate == CAR.NIRO:
+    elif candidate == CAR.NIRO_HEV:
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 1425. + STD_CARGO_KG
       ret.wheelbase = 2.7
@@ -173,7 +168,7 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.385
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
-    elif candidate == CAR.IONIQ:
+    elif candidate == CAR.IONIQ_HEV:
       ret.lateralTuning.pid.kf = 0.00006
       ret.mass = 1275. + STD_CARGO_KG
       ret.wheelbase = 2.7
@@ -187,14 +182,6 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 2.7
       ret.steerRatio = 13.25   #Spec
       ret.steerRateCost = 0.4
-      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
-    elif candidate == CAR.K3:
-      ret.lateralTuning.pid.kf = 0.00005
-      ret.mass = 3558. * CV.LB_TO_KG
-      ret.wheelbase = 2.80
-      ret.steerRatio = 13.75
-      tire_stiffness_factor = 0.5
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
     elif candidate == CAR.NEXO:
@@ -307,7 +294,7 @@ class CarInterface(CarInterfaceBase):
     ret.cruiseState.standstill = False
     
     # Some HKG cars only have blinker flash signal
-    if self.CP.carFingerprint not in [CAR.IONIQ, CAR.KONA]:
+    if self.CP.carFingerprint not in [CAR.IONIQ_HEV, CAR.KONA, CAR.KONA_HEV]:
       self.CS.left_blinker_on = self.CS.left_blinker_flash or self.CS.prev_left_blinker_on and self.CC.turning_signal_timer
       self.CS.right_blinker_on = self.CS.right_blinker_flash or self.CS.prev_right_blinker_on and self.CC.turning_signal_timer
 
@@ -399,7 +386,6 @@ class CarInterface(CarInterfaceBase):
 
     if ret.cruiseState.enabled and not self.cruise_enabled_prev:
       events.append(create_event('pcmEnable', [ET.ENABLE]))
-      
     elif not ret.cruiseState.enabled:
       events.append(create_event('pcmDisable', [ET.USER_DISABLE]))
 
@@ -424,7 +410,7 @@ class CarInterface(CarInterfaceBase):
       events.append(create_event('leftLCAbsm', [ET.WARNING]))
 
     ret.events = events
- 
+
     self.gas_pressed_prev = ret.gasPressed
     self.brake_pressed_prev = ret.brakePressed
     self.cruise_enabled_prev = ret.cruiseState.enabled
