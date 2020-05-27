@@ -1,2 +1,1 @@
-cd /data/openpilot
-python3 opwork.py
+python3 op.py
