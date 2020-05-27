@@ -5,7 +5,7 @@ if [ ! -f /data/no_ota_updates ]; then
 fi
 
 if [ -f /data/openpilot/op.py ]; then
-    DIFF1=$(diff /data/openpilot/op.py /system/comma/home/op.py)
+    DIFF=$(diff /data/openpilot/op.py /system/comma/home/op.py)
     if [ "$DIFF" != "" ] ; then
     sleep 3
     mount -o remount,rw /system
