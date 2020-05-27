@@ -12,7 +12,7 @@ VisualAlert = car.CarControl.HUDControl.VisualAlert
 class SteerLimitParams:
   STEER_MAX = 330   # 409 is the max, 255 is stock
   STEER_DELTA_UP = 3
-  STEER_DELTA_DOWN = 4
+  STEER_DELTA_DOWN = 5
   STEER_DRIVER_ALLOWANCE = 50
   STEER_DRIVER_MULTIPLIER = 2
   STEER_DRIVER_FACTOR = 1
@@ -122,11 +122,8 @@ class CarController():
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.steer_torque_driver, SteerLimitParams)
     self.steer_rate_limited = new_steer != apply_steer
 
-    if abs( CS.steer_torque_driver ) > 200:
-      self.steer_torque_over_timer = 100
-    
-    if self.steer_torque_over_timer > 1 and abs( CS.steer_torque_driver ) > 100:
-      self.steer_torque_over_timer = 100
+    if abs( CS.steer_torque_driver ) > 180:
+      self.steer_torque_over_timer = 200
 
     if self.turning_signal_timer or self.steer_torque_over_timer and CS.v_ego < (60 * CV.KPH_TO_MS):
       lkas_active = 0
