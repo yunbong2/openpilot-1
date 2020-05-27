@@ -20,7 +20,7 @@ def getch():
 
 os.system("clear")
 print ("1. OPBACKUP   - OP backup as openpilot_timestamp with kegman.json file")
-print ("2. OPINSTALL  - install OP new. if exist OP direcoty, will be renamed")
+print ("2. OPINSTALL  - install OP new. if exist OP directory, will be renamed")
 print ("3. OPUPDATE   - run 'git pull' command to update OP latest")
 print ("4. OPRESTORE  - replace OP with last OP backup directory")
 print ("5. SEEBRANCH  - confirm current branch")
