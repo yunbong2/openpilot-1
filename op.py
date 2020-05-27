@@ -163,34 +163,34 @@ elif (char == "6"):
     char6 = getch()
 
     if (char6 == "1"):
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("cd /data/openpilot; git checkout OPKR_0.7.3")
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("reboot")
     elif (char6 == "2"):
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("cd /data/openpilot; git checkout OPKR_0.7.4")
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("reboot")
     elif (char6 == "3"):
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("cd /data/openpilot; git checkout OPKR_0.7.5")
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("reboot")
     elif (char6 == "4"):
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("cd /data/openpilot; git checkout OPKR_0.7.3_BOLT")
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("reboot")
     elif (char6 == "5"):
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("cd /data/openpilot; git checkout OPKR_0.7.3_HKG_community")
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("reboot")
     elif (char6 == "6"):
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("cd /data/openpilot; git checkout OPKR_0.7.3_ATOM")
-        os.system("cd /data/openpiot; git pull")
+        os.system("cd /data/openpilot; git pull")
         os.system("reboot")
     elif (char6 == "r"):
         os.system("cd /system/comma/home; ./op.sh")
