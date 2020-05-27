@@ -136,6 +136,7 @@ elif (char == "4"):
 
 elif (char == "5"):
     print ("")
+    print ("Your current branch is")
     os.system("cd /data/openpilot; git branch")
     print ("")
     print ("Press r key to move first menu")
