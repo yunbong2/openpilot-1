@@ -103,14 +103,14 @@ elif (char == "3"):
 
 elif (char == "4"):
     os.system("clear")
-    print ("Your last backup dir is here.")
+    print ("Your last backup dir is here. check if it is")
     print ("")
     os.system("cd /data; ls -aldrt /data/openpilot_*")
     print ("")
     print ("")
     print ("This will remove your openpilot directory")
     print ("And replace the openpilot dir with current bak dir")
-    print ("Please confirm current openpilot backup directory above")
+    print ("If you don't see the backup dir Press n key")
     print ("Do yo want to continue?(y/n)")
     
     char4  = getch()
