@@ -93,7 +93,18 @@ elif (char == "3"):
     os.system("cd /data/openpilot; git pull")
 
 elif (char == "4"):
-    os.system("cd /data; rm -rf openpilot; curopdir=`ls -aldrt /data/openpilot_* | awk -F '/' '{print $3}' | tail -n 1`; mv $curopdir openpilot; reboot")
+    os.system("clear")
+    os.system("cd /data; ls -aldrt /data/openpilot_*")
+    print ("")
+    print ("This will remove your openpilot directory")
+    print ("And replace the openpilot dir with current bak dir")
+    print ("Please confirm current openpilot backup directory above")
+    print ("Do yo want to continue?(y/n)")
+    
+    char4  = getch()
+
+    if (char4 == "y"):
+        os.system("cd /data; rm -rf openpilot; curopdir=`ls -aldrt /data/openpilot_* | awk -F '/' '{print $3}' | tail -n 1`; mv $curopdir openpilot; reboot")
 
 elif (char == "5"):
     os.system("cd /data/openpilot; git branch")
@@ -110,7 +121,7 @@ elif (char == "6"):
     print ("EXIT: anykey")
     print ("")
     print ("Select Branch you want to change(number)")
-    print ("If you push the number, changing the branch and reboot automatically")
+    print ("Changing the branch and reboot will occur automatically")
 
     char6  = getch()
 
