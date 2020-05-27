@@ -18,37 +18,47 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
-print ("Please select job what you want(number)")
-print ("")
-print ("1. OPBACKUP   - copy your OP directory to openpilot_timestamp and back up the kegman.json file")
-print ("2. OPINSTALL  - install OP. if exist OP direcoty, will be renamed to openpilot_timestamp then install new one")
+os.system("clear")
+print ("1. OPBACKUP   - OP backup as openpilot_timestamp with kegman.json file")
+print ("2. OPINSTALL  - install OP new. if exist OP direcoty, will be renamed")
 print ("3. OPUPDATE   - run 'git pull' command to update OP latest")
-print ("4. OPRESTORE  - replace OP with current OP latest bak directory referring timestamp")
+print ("4. OPRESTORE  - replace OP with last OP backup directory")
 print ("5. SEEBRANCH  - confirm current branch")
 print ("6. CHBRANCH   - branch change(pull latest, quick change and reboot")
-print ("q. EXIT")
+print ("EXIT: anykey")
+print ("")
+print ("Please select job what you want(number)")
 
 
 char  = getch()
 
 if (char == "1"):
+    os.system("clear")
     ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
     print ("Copying openpilot to openpilot_(timestamp)...")
     os.system("cp -rp /data/openpilot /data/openpilot_" + ct)
     os.system("cp -f /data/kegman.json /data/kegman.json_" + ct)
     os.system("ls -altr /data")
+    print ("")
+    print ("")
+    print ("")
+    print ("")
+    print ("")
+    os.system("cd /system/comma/home; ./op.sh")
+
 
 elif (char == "2"):
     os.system("clear")
-    print ("Select Branch you want to install(number)")
-    print ("")
     print ("1. OPKR_0.7.3")
     print ("2. OPKR_0.7.4")
     print ("3. OPKR_0.7.5")
     print ("4. OPKR_0.7.3_BOLT")
     print ("5. OPKR_0.7.3_HKG_community")
     print ("6. OPKR_0.7.3_ATOM")
-    print ("q. EXIT")
+    print ("r. move to first menu")
+    print ("EXIT: anykey")
+    print ("")
+    print ("Select Branch you want to install(number)")
     
     char2  = getch()
 
@@ -76,6 +86,8 @@ elif (char == "2"):
         ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         os.system("mv /data/openpilot /data/openpilot_0.7.3_ATOM_" + ct)
         os.system("cd /data; git clone https://github.com/openpilotkr/openpilot.git; cd openpilot; git checkout OPKR_0.7.3_ATOM; reboot")
+    elif (char2 == "r"):
+        os.system("cd /system/comma/home; ./op.sh")
 
 elif (char == "3"):
     os.system("cd /data/openpilot; git pull")
@@ -88,16 +100,17 @@ elif (char == "5"):
 
 elif (char == "6"):
     os.system("clear")
-    print ("Select Branch you want to change(number)")
-    print ("Ff you push the number, changing the branch and reboot will be performed automatically")
-    print ("")
     print ("1. OPKR_0.7.3")
     print ("2. OPKR_0.7.4")
     print ("3. OPKR_0.7.5")
     print ("4. OPKR_0.7.3_BOLT")
     print ("5. OPKR_0.7.3_HKG_community")
     print ("6. OPKR_0.7.3_ATOM")
-    print ("q. EXIT")
+    print ("r. move to first menu")
+    print ("EXIT: anykey")
+    print ("")
+    print ("Select Branch you want to change(number)")
+    print ("If you push the number, changing the branch and reboot automatically")
 
     char6  = getch()
 
@@ -119,3 +132,5 @@ elif (char == "6"):
     elif (char6 == "6"):
         os.system("cd /data/openpiot; git pull")
         os.system("cd /data/openpilot; git checkout OPKR_0.7.3_ATOM; reboot")
+    elif (char6 == "r"):
+        os.system("cd /system/comma/home; ./op.sh")
