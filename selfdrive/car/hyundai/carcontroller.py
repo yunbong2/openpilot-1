@@ -38,7 +38,7 @@ def process_hud_alert(enabled, button_on, fingerprint, visual_alert, left_line,
                        right_line, left_lane_depart, right_lane_depart):
   hud_alert = 0
   if visual_alert == VisualAlert.steerRequired:
-    hud_alert = 4 if fingerprint in [CAR.GENESIS , CAR.GENESIS_G90, CAR.GENESIS_G80] else 3
+    hud_alert = 4 if fingerprint in [CAR.GENESIS] else 3
 
   # initialize to no line visible
   
