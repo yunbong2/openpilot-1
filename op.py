@@ -30,7 +30,7 @@ print ("")
 print ("Please select job what you want(number)")
 
 
-char  = getch()
+char = getch()
 
 if (char == "1"):
     os.system("clear")
@@ -43,7 +43,7 @@ if (char == "1"):
     print ("Your backup dir is above")
     print ("Press r key to move first menu")
 
-    char1  = getch()
+    char1 = getch()
     if (char1 == "r"):
         os.system("cd /system/comma/home; ./op.sh")
 
@@ -61,7 +61,7 @@ elif (char == "2"):
     print ("")
     print ("Select Branch you want to install(number)")
     
-    char2  = getch()
+    char2 = getch()
 
     if (char2 == "1"):    
         ct = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
@@ -96,7 +96,7 @@ elif (char == "3"):
     print ("")
     print ("Press r key to move first menu")
 
-    char3  = getch()
+    char3 = getch()
 
     if (char3 == "r"):
         os.system("cd /system/comma/home; ./op.sh")
@@ -113,7 +113,7 @@ elif (char == "4"):
     print ("If you don't see the backup dir Press n key")
     print ("Do yo want to continue?(y/n)")
     
-    char4  = getch()
+    char4 = getch()
 
     if (char4 == "y"):
         os.system("cd /data; rm -rf openpilot; curopdir=`ls -aldrt /data/openpilot_* | awk -F '/' '{print $3}' | tail -n 1`; mv $curopdir openpilot")
@@ -122,7 +122,7 @@ elif (char == "4"):
         print ("")
         print ("Do yo want to reboot?(y/n)")
 
-        char41  = getch()
+        char41 = getch()
 
         if (char41 == "y"):
             os.system("reboot")
@@ -140,7 +140,7 @@ elif (char == "5"):
     print ("")
     print ("Press r key to move first menu")
 
-    char5  = getch()
+    char5 = getch()
 
     if (char5 == "r"):
         os.system("cd /system/comma/home; ./op.sh")
@@ -159,7 +159,7 @@ elif (char == "6"):
     print ("Select Branch you want to change(number)")
     print ("Changing the branch and reboot will occur automatically")
 
-    char6  = getch()
+    char6 = getch()
 
     if (char6 == "1"):
         os.system("cd /data/openpiot; git pull")
