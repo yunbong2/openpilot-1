@@ -20,7 +20,7 @@ class SteerLimitParams:
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
 ACCEL_MAX = 1.5  # 1.5 m/s2
-ACCEL_MIN = -3.0 # 3   m/s2
+ACCEL_MIN = -3.0 # 3   m/s2 
 ACCEL_SCALE = max(ACCEL_MAX, -ACCEL_MIN)
 
 def accel_hysteresis(accel, accel_steady):
@@ -118,12 +118,17 @@ class CarController():
     else:
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX
 
+    if CS.lead_distance < 10 and v_ego_kph < 30:
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.5
+    elif abs(CS.angle_steers) > 10 and v_ego_kph < 30:
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.5
+    else:
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX
+
+
     ### Steering Torque
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.steer_torque_driver, SteerLimitParams)
     self.steer_rate_limited = new_steer != apply_steer
-
-    if CS.lead_distance < 10 and v_ego_kph < 20:
-      pass
 
     if abs( CS.steer_torque_driver ) > 200:
       self.steer_torque_over_timer = 100
