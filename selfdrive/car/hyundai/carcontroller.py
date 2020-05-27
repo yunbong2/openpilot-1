@@ -20,7 +20,7 @@ class SteerLimitParams:
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscilalitons within this value
 ACCEL_MAX = 1.5  # 1.5 m/s2
-ACCEL_MIN = -3.0 # 3   m/s2 
+ACCEL_MIN = -3.0 # 3   m/s2
 ACCEL_SCALE = max(ACCEL_MAX, -ACCEL_MIN)
 
 def accel_hysteresis(accel, accel_steady):
@@ -94,8 +94,6 @@ class CarController():
     apply_accel, self.accel_steady = accel_hysteresis(apply_accel, self.accel_steady)
     apply_accel = clip(apply_accel * ACCEL_SCALE, ACCEL_MIN, ACCEL_MAX)
 
-    v_ego_kph = CS.v_ego * CV.MS_TO_KPH
-
     lkas_active = enabled
 
     # Disable steering while turning blinker on and speed below 60 kph
@@ -116,8 +114,7 @@ class CarController():
     elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (60 * CV.KPH_TO_MS):  # btw 70km/h ~ 60km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.80
     elif CS.v_ego < (30 * CV.KPH_TO_MS):
-      if CS.lead_distance < 7 and CS.lead_distance > 1 or abs(CS.angle_steers) > 10:
-        new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.50
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.50
     else:
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX
 
