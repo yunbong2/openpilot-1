@@ -105,20 +105,19 @@ class CarController():
       elif CS.left_blinker_flash or CS.right_blinker_flash:
         self.turning_signal_timer = 100
 
-    if CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and v_ego_kph > 100:  # above 100km/h
+    if CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (100 * CV.KPH_TO_MS):  # above 100km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.60
-    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and v_ego_kph > 90:  # btw 100km/h ~ 90km/h
+    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (90 * CV.KPH_TO_MS):  # btw 100km/h ~ 90km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.65
-    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and v_ego_kph > 80:  # btw 90km/h ~ 80km/h
+    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (80 * CV.KPH_TO_MS):  # btw 90km/h ~ 80km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.70
-    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and v_ego_kph > 70:  # btw 80km/h ~ 70km/h
+    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (70 * CV.KPH_TO_MS):  # btw 80km/h ~ 70km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.75
-    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and v_ego_kph > 60:  # btw 70km/h ~ 60km/h
+    elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (60 * CV.KPH_TO_MS):  # btw 70km/h ~ 60km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.80
-    #elif CS.lead_distance < 7 and CS.lead_distance > 1 and v_ego_kph < 30:
-    #  new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.50
-    #elif abs(CS.angle_steers) > 10 and v_ego_kph < 30:
-    #  new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.50
+    elif CS.v_ego < (30 * CV.KPH_TO_MS):
+      if CS.lead_distance < 7 and CS.lead_distance > 1 or abs(CS.angle_steers) > 10:
+        new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.50
     else:
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX
 
@@ -129,8 +128,8 @@ class CarController():
     if abs( CS.steer_torque_driver ) > 200:
       self.steer_torque_over_timer = 100
     
-    if self.steer_torque_over_timer and abs( CS.steer_torque_driver ) > 30:
-      self.steer_torque_over_timer = 50
+    if self.steer_torque_over_timer > 1 and abs( CS.steer_torque_driver ) > 100:
+      self.steer_torque_over_timer = 100
 
     if self.turning_signal_timer or self.steer_torque_over_timer and CS.v_ego < (60 * CV.KPH_TO_MS):
       lkas_active = 0
