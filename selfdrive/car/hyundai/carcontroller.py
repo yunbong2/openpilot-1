@@ -10,9 +10,9 @@ from opendbc.can.packer import CANPacker
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 class SteerLimitParams:
-  STEER_MAX = 350   # 409 is the max, 255 is stock
+  STEER_MAX = 330   # 409 is the max, 255 is stock
   STEER_DELTA_UP = 3
-  STEER_DELTA_DOWN = 5
+  STEER_DELTA_DOWN = 4
   STEER_DRIVER_ALLOWANCE = 50
   STEER_DRIVER_MULTIPLIER = 2
   STEER_DRIVER_FACTOR = 1
@@ -103,7 +103,7 @@ class CarController():
         self.turning_signal_timer = 100
 
     if CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (100 * CV.KPH_TO_MS):  # above 100km/h
-      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.60
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.50
     elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (90 * CV.KPH_TO_MS):  # btw 100km/h ~ 90km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.65
     elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (80 * CV.KPH_TO_MS):  # btw 90km/h ~ 80km/h
@@ -112,8 +112,8 @@ class CarController():
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.75
     elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (60 * CV.KPH_TO_MS):  # btw 70km/h ~ 60km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.80
-    elif CS.v_ego < (30 * CV.KPH_TO_MS):
-      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.50
+    elif CS.v_ego < (40 * CV.KPH_TO_MS):
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.40
     else:
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX
 
