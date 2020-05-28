@@ -156,7 +156,7 @@ class CarController():
       self.timer_curvature = 300
     elif abs_angle_steers < 2 and  self.timer_curvature <= 0:
       xp = [0.5,1,1.5,2]
-      fp = [240,245,250,255]
+      fp = [280,300,320,340]
       param.STEER_MAX = interp( abs_angle_steers, xp, fp )
 
       if abs_angle_steers < 0.5 or v_ego_kph < 5:
