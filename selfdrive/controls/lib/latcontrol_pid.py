@@ -185,9 +185,9 @@ class LatControlPID():
         if not self.pid_change_flag:
           self.pid_change_flag = 1
 
-    self.linear_tune( CP, v_ego )
+    #self.linear_tune( CP, v_ego )
 
-    #self.sR_tune( CP, v_ego, path_plan )
+    self.sR_tune( CP, v_ego, path_plan )
 
 
 
