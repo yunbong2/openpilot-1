@@ -147,7 +147,7 @@ class CarController():
 
 
     if path_plan.laneChangeState != LaneChangeState.off:
-      param.STEER_MAX *= 0.5
+      #param.STEER_MAX *= 0.7
       param.STEER_DELTA_UP  = 1
       param.STEER_DELTA_DOWN = 5
 
