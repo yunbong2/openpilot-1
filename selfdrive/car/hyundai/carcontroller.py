@@ -147,9 +147,9 @@ class CarController():
 
 
     if path_plan.laneChangeState != LaneChangeState.off:
-      param.STEER_MAX *= 0.5
-      param.STEER_DELTA_UP  = 3
-      param.STEER_DELTA_DOWN = 4
+      param.STEER_MAX *= 0.3
+      param.STEER_DELTA_UP  = 2
+      param.STEER_DELTA_DOWN = 5
 
     #v_curvature
     elif LaC.v_curvature < 200:
