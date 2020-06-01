@@ -112,8 +112,8 @@ class CarController():
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.70
     elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (60 * CV.KPH_TO_MS):  # btw 70km/h ~ 60km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.75
-    elif CS.v_ego < (40 * CV.KPH_TO_MS):
-      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.40
+    elif CS.v_ego < (30 * CV.KPH_TO_MS):
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.50
     else:
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX
 
