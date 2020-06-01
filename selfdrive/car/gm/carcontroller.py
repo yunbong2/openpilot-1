@@ -126,7 +126,7 @@ class CarController():
         else:
           if CS.v_ego < 15 * CV.KPH_TO_MS:
             self.steer_max = P.STEER_MAX * 0.5
-          else
+          else:
             self.steer_max = P.STEER_MAX * 1.0
 
         new_steer = actuators.steer * self.steer_max
