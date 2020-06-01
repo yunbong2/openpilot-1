@@ -112,24 +112,10 @@ class CarController():
       if lkas_enabled:
         if self.turning_signal_timer and CS.v_ego < 16.666667:
           self.steer_max = P.STEER_MAX * 0.0
-        elif CS.angle_steers < -12.0:
-          if CS.v_ego > 100 * CV.KPH_TO_MS:
-            self.steer_max = P.STEER_MAX * 0.9
-          elif CS.v_ego > 80 * CV.KPH_TO_MS:
-            self.steer_max = P.STEER_MAX * 0.8
-          elif CS.v_ego > 60 * CV.KPH_TO_MS:
-            self.steer_max = P.STEER_MAX * 0.7
-          elif CS.v_ego > 40 * CV.KPH_TO_MS:
-            self.steer_max = P.STEER_MAX * 0.6
-          elif CS.v_ego > 15 * CV.KPH_TO_MS:
-            self.steer_max = P.STEER_MAX * 0.5
-          elif CS.v_ego < 15 * CV.KPH_TO_MS:
-            self.steer_max = P.STEER_MAX * 0.3
+        elif CS.v_ego < 15 * CV.KPH_TO_MS:
+          self.steer_max = P.STEER_MAX * 0.2
         else:
-          if CS.v_ego < 15 * CV.KPH_TO_MS:
-            self.steer_max = P.STEER_MAX * 0.3
-          else:
-            self.steer_max = P.STEER_MAX * 1.0
+          self.steer_max = P.STEER_MAX * 1.0
 
         new_steer = actuators.steer * self.steer_max
         #new_steer = actuators.steer * P.STEER_MAX
