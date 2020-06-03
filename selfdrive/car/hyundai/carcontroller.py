@@ -37,8 +37,6 @@ def accel_hysteresis(accel, accel_steady):
 def process_hud_alert(enabled, button_on, fingerprint, visual_alert, left_line,
                        right_line, left_lane_depart, right_lane_depart):
   hud_alert = 0
-  if visual_alert == VisualAlert.steerRequired:
-    hud_alert = 4 if fingerprint in [CAR.GENESIS] else 3
 
   # initialize to no line visible
   
@@ -58,10 +56,6 @@ def process_hud_alert(enabled, button_on, fingerprint, visual_alert, left_line,
   # initialize to no warnings
   left_lane_warning = 0
   right_lane_warning = 0
-  if left_lane_depart:
-    left_lane_warning = 1 if fingerprint in [CAR.GENESIS] else 2
-  if right_lane_depart:
-    right_lane_warning = 1 if fingerprint in [CAR.GENESIS] else 2
 
   return hud_alert, lane_visible, left_lane_warning, right_lane_warning
 
@@ -95,13 +89,6 @@ class CarController():
 
     lkas_active = enabled
 
-    # Disable steering while turning blinker on and speed below 60 kph
-    if CS.left_blinker_on or CS.right_blinker_on:
-      if self.car_fingerprint in [CAR.KONA, CAR.KONA_HEV, CAR.IONIQ_HEV]:
-        self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
-      elif CS.left_blinker_flash or CS.right_blinker_flash:
-        self.turning_signal_timer = 100
-
     if CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (100 * CV.KPH_TO_MS):  # above 100km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.50
     elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (90 * CV.KPH_TO_MS):  # btw 100km/h ~ 90km/h
@@ -121,6 +108,9 @@ class CarController():
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.steer_torque_driver, SteerLimitParams)
     self.steer_rate_limited = new_steer != apply_steer
 
+    if CS.left_blinker_on or CS.right_blinker_on:
+      if CS.left_blinker_flash or CS.right_blinker_flash:
+        self.turning_signal_timer = 100
     if self.turning_signal_timer and CS.v_ego < (60 * CV.KPH_TO_MS):
       lkas_active = 0
     if self.turning_signal_timer:
