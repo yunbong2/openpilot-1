@@ -57,7 +57,7 @@ class CarInterface(CarInterfaceBase):
     ret.steerLimitTimer = 0.8
     tire_stiffness_factor = 0.75
 
-    if candidate == CAR.NIRO:
+    if candidate == CAR.NIRO_HEV:
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 1425. + STD_CARGO_KG
       ret.wheelbase = 2.7
