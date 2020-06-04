@@ -173,7 +173,7 @@ class CarController():
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.steer_torque_driver, param)
     self.steer_rate_limited = new_steer != apply_steer
 
-    if self.car_fingerprint not in [CAR.GENESIS]:
+    if self.car_fingerprint not in [CAR.SONATA_TURBO, CAR.GENESIS, CAR.SANTAFE, CAR.GRANDEUR_HEV]:
       if abs( CS.steer_torque_driver ) > 200: #180:
         self.steer_torque_over_timer += 1
         if self.steer_torque_over_timer > 5:
@@ -215,7 +215,7 @@ class CarController():
         self.low_speed_car = low_speed
 
     # streer over check
-    if self.car_fingerprint not in [CAR.GENESIS]:
+    if self.car_fingerprint not in [CAR.SONATA_TURBO, CAR.GENESIS, CAR.SANTAFE, CAR.GRANDEUR_HEV]:
       if enabled and abs(CS.angle_steers) > 100. or CS.steer_error:
         self.streer_angle_over =  True
         self.steer_timer = 250
@@ -304,8 +304,8 @@ class CarController():
     vRel = int(vRel * 3.6 + 0.5)
   
     lead_objspd = CS.lead_objspd
-    str_log1 = 'CURV={:03.0f}/{:06.3f} TORQ=V:{:04.0f}/S:{:04.0f}'.format( LaC.v_curvature, LaC.model_sum, apply_steer, CS.steer_torque_driver )
-    str_log2 = 'D={:03.1f} V={:03.0f} ST_LIM={:03.0f} ST_MAX={:03.0f}'.format( dRel, vRel, steer_limit, param.STEER_MAX )
+    str_log1 = 'CV={:03.0f}/{:06.3f} TQ=V:{:04.0f}/S:{:04.0f}'.format( LaC.v_curvature, LaC.model_sum, apply_steer, CS.steer_torque_driver )
+    str_log2 = 'D={:03.1f} V={:03.0f} SLIM={:03.0f} SMAX={:03.0f}'.format( dRel, vRel, steer_limit, param.STEER_MAX )
     trace1.printf( '{} {}'.format( str_log1, str_log2 ) )
 
 
