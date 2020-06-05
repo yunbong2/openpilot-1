@@ -173,7 +173,7 @@ class CarController():
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.steer_torque_driver, param)
     self.steer_rate_limited = new_steer != apply_steer
 
-    if self.car_fingerprint not in [CAR.SONATA_TURBO, CAR.GENESIS, CAR.SANTAFE, CAR.GRANDEUR_HEV]:
+    if self.car_fingerprint not in [CAR.GENESIS, CAR.SANTAFE]:
       if abs( CS.steer_torque_driver ) > 200: #180:
         self.steer_torque_over_timer += 1
         if self.steer_torque_over_timer > 5:
@@ -215,7 +215,7 @@ class CarController():
         self.low_speed_car = low_speed
 
     # streer over check
-    if self.car_fingerprint not in [CAR.SONATA_TURBO, CAR.GENESIS, CAR.SANTAFE, CAR.GRANDEUR_HEV]:
+    if self.car_fingerprint not in [CAR.GENESIS, CAR.SANTAFE]:
       if enabled and abs(CS.angle_steers) > 100. or CS.steer_error:
         self.streer_angle_over =  True
         self.steer_timer = 250
