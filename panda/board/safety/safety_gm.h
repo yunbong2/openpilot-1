@@ -134,7 +134,7 @@ static int gm_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
         brake = 0;
       }
       if (brake && (!gm_brake_prev || gm_moving)) {
-         controls_allowed = 0;
+         controls_allowed = 1;
       }
       gm_brake_prev = brake;
     }
