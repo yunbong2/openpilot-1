@@ -133,10 +133,10 @@ static int gm_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
       if (brake < 10) {
         brake = 0;
       }
-      if (brake && (!gm_brake_prev || gm_moving)) {
-         controls_allowed = 0;
-      }
-      gm_brake_prev = brake;
+      //if (brake && (!gm_brake_prev || gm_moving)) {
+      //   controls_allowed = 0;
+      //}
+      //gm_brake_prev = brake;
     }
 
     // exit controls on rising edge of gas press
