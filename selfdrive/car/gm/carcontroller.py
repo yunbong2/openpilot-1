@@ -85,9 +85,7 @@ class CarController():
     if (frame % P.STEER_STEP) == 0:
       lkas_enabled = enabled and not CS.out.steerWarning and CS.out.vEgo > P.MIN_STEER_SPEED
       if lkas_enabled:
-        if self.turning_signal_timer and CS.out.vEgo < 60 * CV.KPH_TO_MS:
-          self.steer_max = 0
-        elif CS.out.vEgo < 8.0:
+        if CS.out.vEgo < 8.0:
           self.steer_max = 180
         elif CS.out.vEgo < 12.5:
           self.steer_max = 220
@@ -108,15 +106,6 @@ class CarController():
 
       can_sends.append(gmcan.create_steering_control(self.packer_pt,
         CanBus.POWERTRAIN, apply_steer, idx, lkas_enabled))
-
-    if CS.left_blinker_on or CS.right_blinker_on:
-      self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
-    if self.turning_signal_timer and CS.out.vEgo < 60 * CV.KPH_TO_MS:
-      lkas_enabled = 0
-    if self.turning_signal_timer:
-      self.turning_signal_timer -= 1
-    if not lkas_enabled:
-      apply_steer = 0
 
     ### GAS/BRAKE ###
 
