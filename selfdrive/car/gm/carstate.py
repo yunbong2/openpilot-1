@@ -166,7 +166,9 @@ class CarState(CarStateBase):
       self.user_brake = 0
 
     # Regen braking is braking
-    self.brake_pressed = self.user_brake > 10 or self.regen_pressed
+    #self.brake_pressed = self.user_brake > 10 or self.regen_pressed
+    #self.brake_pressed = self.user_brake > 10
+    #self.regenPressed = self.regen_pressed
 
     self.gear_shifter_valid = self.gear_shifter == car.CarState.GearShifter.drive
 

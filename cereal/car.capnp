@@ -158,6 +158,8 @@ struct CarState {
   readdistancelines @32 :Float32;
   lkMode @35 :Bool;
 
+  # regen peal, pressed only
+  regenPressed @36 :Bool;
 
 
   # which packets this state came from

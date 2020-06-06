@@ -386,8 +386,8 @@ class CarInterface(CarInterfaceBase):
       #if (ret.gasPressed and not self.gas_pressed_prev) or \
       # (ret.brakePressed): # and (not self.brake_pressed_prev or ret.vEgo > 0.001)):
       #  events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
-      if ret.brakePressed:
-        events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
+      #if ret.brakePressed:
+      #  events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
       #if ret.gasPressed:
       #  events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
       if ret.cruiseState.standstill:
@@ -395,6 +395,13 @@ class CarInterface(CarInterfaceBase):
       #if not self.CS.car_fingerprint in NO_ASCM_CARS:
       #  if self.CS.pcm_acc_status == AccState.FAULTED:
       #    events.append(create_event('controlsFailed', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
+
+      #if not self.regen_pressed_prev and ret.regenPressed and not self.disabled_by_regen :
+      #  events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
+      #  self.disabled_by_regen =True
+      #elif not ret.regenPressed and self.regen_pressed_prev and self.disabled_by_regen  :
+      #  events.append(create_event('pcmEnable', [ET.ENABLE]))
+      #  self.disabled_by_regen =False
 
       # handle button presses
       #for b in ret.buttonEvents:
@@ -422,6 +429,7 @@ class CarInterface(CarInterfaceBase):
     self.acc_active_prev = self.CS.acc_active
     self.gas_pressed_prev = ret.gasPressed
     self.brake_pressed_prev = ret.brakePressed
+    self.regen_pressed_prev = ret.regenPressed
     self.cruise_enabled_prev = ret.cruiseState.enabled
 
     # cast to reader so it can't be modified
