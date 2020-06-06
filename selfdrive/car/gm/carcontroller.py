@@ -110,10 +110,12 @@ class CarController():
     if (frame % P.STEER_STEP) == 0:
       lkas_enabled = enabled and not CS.steer_not_allowed and CS.lkMode and CS.v_ego > P.MIN_STEER_SPEED
       if lkas_enabled:
-        if self.turning_signal_timer and CS.v_ego < 16.666667:
+        if self.turning_signal_timer and CS.v_ego < 60 * CV.KPH_TO_MS:
           self.steer_max = P.STEER_MAX * 0.0
-        elif CS.v_ego < 15 * CV.KPH_TO_MS:
-          self.steer_max = P.STEER_MAX * 0.2
+        elif CS.v_ego < 30 * CV.KPH_TO_MS:
+          self.steer_max = P.STEER_MAX * 0.5
+        elif self.turning_signal_timer and CS.v_ego > 60 * CV.KPH_TO_MS:
+          self.steer_max = P.STEER_MAX * 0.8
         else:
           self.steer_max = P.STEER_MAX * 1.0
 
@@ -136,7 +138,7 @@ class CarController():
       
     if CS.left_blinker_on or CS.right_blinker_on:
       self.turning_signal_timer = 100  # Disable for 1.0 Seconds after blinker turned off
-    if self.turning_signal_timer and CS.v_ego < 16.666667:
+    if self.turning_signal_timer and CS.v_ego < 60 * CV.KPH_TO_MS:
       lkas_enabled = 0
     if self.turning_signal_timer:
       self.turning_signal_timer -= 1
