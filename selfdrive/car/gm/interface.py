@@ -208,7 +208,7 @@ class CarInterface(CarInterfaceBase):
 
     events = self.create_common_events(ret)
     
-    self.turning_indicator_alert = True if self.CC.turning_signal_timer and CS.out.vEgo < 60 * CV.KPH_TO_MS else False
+    self.turning_indicator_alert = True if self.CC.turning_signal_timer and self.CS.out.vEgo < 60 * CV.KPH_TO_MS else False
 
 
     if not ret.cruiseState.available:
