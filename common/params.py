@@ -105,6 +105,16 @@ keys = {
   "Offroad_PandaFirmwareMismatch": [TxType.CLEAR_ON_MANAGER_START, TxType.CLEAR_ON_PANDA_DISCONNECT],
   "Offroad_InvalidTime": [TxType.CLEAR_ON_MANAGER_START],
   "Offroad_IsTakingSnapshot": [TxType.CLEAR_ON_MANAGER_START],
+  'OPKRCameraOffset': '0.060',
+  'OPKRUIVolumeBoost': '0',
+  'OPKRUIScreenOffReversing': '0',
+  'OPKRUIScreenOffDriving': '0',
+  'OPKRUIBrightness': '0',
+  'OPKREnableAutoLC': '0',
+  'OPKRAssistedLCMinKPH': '60',
+  'OPKRAutoLCDelay': '1.0',
+  'OPKRRunMixplorer': '0',
+  'OPKRRunQuickEdit': '0',
 }
 
 
