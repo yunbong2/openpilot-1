@@ -513,6 +513,28 @@ def main():
     params.put("SpeedControlEnabled", "0")
   if params.get("CarAvoidanceEnabled") is None:
     params.put("CarAvoidanceEnabled", "0")
+  if params.get("OPKRCameraOffset") is None:
+    params.put("OPKRCameraOffset", "0.060")
+  if params.get("OPKRUIVolumeBoost") is None:
+    params.put("OPKRUIVolumeBoost", "0")
+  if params.get("OPKRUIScreenOffReversing") is None:
+    params.put("OPKRUIScreenOffReversing", "0")
+  if params.get("OPKRUIScreenOffDriving") is None:
+    params.put("OPKRUIScreenOffDriving", "0")
+  if params.get("OPKRUIBrightness") is None:
+    params.put("OPKRUIBrightness", "0")
+  if params.get("OPKREnableAutoLC") is None:
+    params.put("OPKREnableAutoLC", "1")
+  if params.get("CarAvoidanceEnabled") is None:
+    params.put("CarAvoidanceEnabled", "0")
+  if params.get("OPKRAssistedLCMinKPH") is None:
+    params.put("OPKRAssistedLCMinKPH", "60")
+  if params.get("OPKRAutoLCDelay") is None:
+    params.put("OPKRAutoLCDelay", "1")
+  if params.get("OPKREnableLogger") is None:
+    params.put("OPKREnableLogger", "0")
+  if params.get("OPKREnableUploader") is None:
+    params.put("OPKREnableUploader", "0")
 
   # is this chffrplus?
   if os.getenv("PASSIVE") is not None:
