@@ -111,8 +111,6 @@ keys = {
   "OPKRUIScreenOffDriving": [TxType.PERSISTENT],
   "OPKRUIBrightness": [TxType.PERSISTENT],
   "OPKREnableAutoLC": [TxType.PERSISTENT],
-  "OPKRAssistedLCMinKPH": [TxType.PERSISTENT],
-  "OPKRAutoLCDelay": [TxType.PERSISTENT],
   "OPKRRunMixplorer": [TxType.PERSISTENT],
   "OPKRRunQuickEdit": [TxType.PERSISTENT],
   "OPKREnableLogger": [TxType.PERSISTENT],

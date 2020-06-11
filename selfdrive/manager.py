@@ -514,7 +514,7 @@ def main():
   if params.get("CarAvoidanceEnabled") is None:
     params.put("CarAvoidanceEnabled", "0")
   if params.get("OPKRCameraOffset") is None:
-    params.put("OPKRCameraOffset", "0.060")
+    params.put("OPKRCameraOffset", "6")
   if params.get("OPKRUIVolumeBoost") is None:
     params.put("OPKRUIVolumeBoost", "0")
   if params.get("OPKRUIScreenOffReversing") is None:
@@ -525,12 +525,6 @@ def main():
     params.put("OPKRUIBrightness", "0")
   if params.get("OPKREnableAutoLC") is None:
     params.put("OPKREnableAutoLC", "1")
-  if params.get("CarAvoidanceEnabled") is None:
-    params.put("CarAvoidanceEnabled", "0")
-  if params.get("OPKRAssistedLCMinKPH") is None:
-    params.put("OPKRAssistedLCMinKPH", "60")
-  if params.get("OPKRAutoLCDelay") is None:
-    params.put("OPKRAutoLCDelay", "1")
   if params.get("OPKREnableLogger") is None:
     params.put("OPKREnableLogger", "0")
   if params.get("OPKREnableUploader") is None:
