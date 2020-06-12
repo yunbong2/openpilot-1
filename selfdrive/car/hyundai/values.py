@@ -4,6 +4,7 @@ Ecu = car.CarParams.Ecu
 
 class CAR:
   SONATA = "HYUNDAI SONATA"
+  SONATA_HEV = "HYUNDAI SONATA Hybrid"
   SONATA_TURBO = "HYUNDAI SONATA Turbo"
   GRANDEUR = "HYUNDAI GRANDEUR"
   GRANDEUR_HEV = "HYUNDAI GRANDEUR Hybrid"
@@ -39,6 +40,9 @@ FINGERPRINTS = {
   },
   {
     64: 8, 66: 8, 67: 8, 68: 8, 127: 8, 273: 8, 274: 8, 275: 8, 339: 8, 356: 4, 399: 8, 512: 6, 544: 8, 593: 8, 608: 8, 625: 8, 688: 5, 790: 8, 809: 8, 832: 8, 897: 8, 899: 8, 902: 8, 903: 6, 916: 8, 1040: 8, 1056: 8, 1057: 8, 1078: 4, 1151: 6, 1168: 7, 1170: 8, 1265: 4, 1280: 1, 1282: 4, 1287: 4, 1290: 8, 1292: 8, 1294: 8, 1312: 8, 1314: 8, 1322: 8, 1331: 8, 1332: 8, 1333: 8, 1342: 6, 1345: 8, 1348: 8, 1349: 8, 1351: 8, 1353: 8, 1363: 8, 1366: 8, 1367: 8, 1369: 8, 1371: 8, 1407: 8, 1415: 8, 1419: 8, 1425: 2, 1427: 6, 1440: 8, 1456: 4, 1460: 8, 1470: 8, 1472: 8, 1491: 8, 1530: 8, 1990: 8, 1998: 8, 2016: 8, 2024: 8
+  }],
+  CAR.SONATA_HEV: [{
+    68: 8, 127: 8, 304: 8, 320: 8, 339: 8, 352: 8, 356: 4, 544: 7, 593: 8, 688: 5, 832: 7, 881: 8, 882: 8, 897: 8, 902: 8, 903: 6, 916: 8, 1040: 8, 1056: 8, 1057: 8, 1078: 4, 1136: 6, 1151: 6, 1168: 7, 1173: 8, 1265: 4, 1280: 1, 1287: 4, 1290: 8, 1291: 8, 1292: 8, 1322: 8, 1331: 8, 1332: 8, 1333: 8, 1345: 8, 1355: 8, 1363: 8, 1369: 8, 1407: 8, 1419: 8, 1427: 6, 1429: 8, 1430: 8, 1448: 8, 1456: 4, 1470: 8, 1476: 8
   }],
   CAR.SONATA_TURBO: [{
     64: 8, 66: 8, 67: 8, 68: 8, 127: 8, 273: 8, 274: 8, 275: 8, 339: 8, 356: 4, 399: 8, 447: 8, 512: 6, 544: 8, 593: 8, 608: 8, 688: 5, 790: 8, 809: 8, 832: 8, 884: 8, 897: 8, 899: 8, 902: 8, 903: 6, 916: 8, 1040: 8, 1056: 8, 1057: 8, 1078: 4, 1151: 6, 1168: 7, 1170: 8, 1253: 8, 1254: 8, 1255: 8, 1265: 4, 1280: 1, 1282: 4, 1287: 4, 1290: 8, 1292: 8, 1294: 8, 1312: 8, 1314: 8, 1322: 8, 1331: 8, 1332: 8, 1333: 8, 1342: 6, 1345: 8, 1348: 8, 1349: 8, 1351: 8, 1353: 8, 1363: 8, 1365: 8, 1366: 8, 1367: 8, 1369: 8, 1371: 8, 1407: 8, 1414: 3, 1415: 8, 1419: 8, 1425: 2, 1427: 6, 1440: 8, 1456: 4, 1460: 8, 1470: 8, 1472: 8, 1486: 8, 1487: 8, 1491: 8, 1530: 8, 2015: 8, 2024: 8
@@ -201,11 +205,12 @@ CHECKSUM = {
 FEATURES = {
   "use_cluster_gears": [CAR.KONA, CAR.GRANDEUR, CAR.K7, CAR.MOHAVE, CAR.I30],  # Use Cluster for Gear Selection, rather than Transmission
   "use_tcu_gears": [CAR.K5, CAR.SONATA, CAR.SONATA_TURBO],  # Use TCU Message for Gear Selection
-  "use_elect_gears": [CAR.K5_HEV, CAR.GRANDEUR_HEV, CAR.IONIQ_HEV, CAR.IONIQ_EV, CAR.NIRO_HEV, CAR.KONA_HEV, CAR.KONA_EV, CAR.NIRO_EV, CAR.NEXO],
+  "use_elect_gears": [CAR.K5_HEV, CAR.SONATA_HEV, CAR.GRANDEUR_HEV, CAR.IONIQ_HEV, CAR.IONIQ_EV, CAR.NIRO_HEV, CAR.KONA_HEV, CAR.KONA_EV, CAR.NIRO_EV, CAR.NEXO],
 }
 
 DBC = {
   CAR.SONATA: dbc_dict('hyundai_kia_generic', None),
+  CAR.SONATA_HEV: dbc_dict('hyundai_kia_generic', None),
   CAR.SONATA_TURBO: dbc_dict('hyundai_kia_generic', None),
   CAR.GRANDEUR: dbc_dict('hyundai_kia_generic', None),
   CAR.GRANDEUR_HEV: dbc_dict('hyundai_kia_generic', None),
