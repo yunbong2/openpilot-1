@@ -362,8 +362,8 @@ class CarInterface(CarInterfaceBase):
       events.append(create_event('wrongCarMode', [ET.NO_ENTRY, ET.USER_DISABLE]))
     if ret.gearShifter == GearShifter.reverse:
       events.append(create_event('reverseGear', [ET.NO_ENTRY, ET.USER_DISABLE]))
-    if self.CS.steer_error:
-      events.append(create_event('steerTempUnavailable', [ET.NO_ENTRY, ET.WARNING]))
+    #if self.CS.steer_error:
+    #  events.append(create_event('steerTempUnavailable', [ET.NO_ENTRY, ET.WARNING]))
 
     if ret.cruiseState.enabled and not self.cruise_enabled_prev:
       events.append(create_event('pcmEnable', [ET.ENABLE]))
