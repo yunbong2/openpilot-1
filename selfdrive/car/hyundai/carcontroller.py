@@ -12,7 +12,7 @@ VisualAlert = car.CarControl.HUDControl.VisualAlert
 class SteerLimitParams:
   STEER_MAX = 330   # 409 is the max, 255 is stock
   STEER_DELTA_UP = 3
-  STEER_DELTA_DOWN = 4
+  STEER_DELTA_DOWN = 5
   STEER_DRIVER_ALLOWANCE = 50
   STEER_DRIVER_MULTIPLIER = 2
   STEER_DRIVER_FACTOR = 1
@@ -103,7 +103,7 @@ class CarController():
         self.turning_signal_timer = 100
 
     if CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (100 * CV.KPH_TO_MS):  # above 100km/h
-      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.45
+      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.40
     elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (90 * CV.KPH_TO_MS):  # btw 100km/h ~ 90km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.60
     elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (80 * CV.KPH_TO_MS):  # btw 90km/h ~ 80km/h
