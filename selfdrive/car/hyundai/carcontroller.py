@@ -371,14 +371,9 @@ class CarController():
         can_sends.append(create_clu11(self.packer, CS.scc_bus, CS.clu11, Buttons.RES_ACCEL, clu11_speed, self.resume_cnt))
         self.resume_cnt += 1
         # interval after 6 msgs
-        if self.car_fingerprint == CAR.NIRO_EV:
-          if self.resume_cnt > 0:
-            self.last_resume_frame = frame
-            self.resume_cnt = 0
-        else:
-          if self.resume_cnt > 5:
-            self.last_resume_frame = frame
-            self.resume_cnt = 0
+        if self.resume_cnt > 5:
+          self.last_resume_frame = frame
+          self.resume_cnt = 0
     # reset lead distnce after the car starts moving
     elif self.last_lead_distance != 0:
       self.last_lead_distance = 0
