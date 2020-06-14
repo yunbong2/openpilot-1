@@ -309,10 +309,10 @@ class CarController():
     vRel = int(vRel * 3.6 + 0.5)
   
     lead_objspd = CS.lead_objspd
-    #str_log1 = 'CV={:03.0f}/{:06.3f} TQ=V:{:04.0f}/S:{:04.0f}'.format( LaC.v_curvature, LaC.model_sum, apply_steer, CS.steer_torque_driver )
-    #str_log2 = 'D={:05.1f} V={:03.0f} S_LIM={:03.0f} S_MAX={:03.0f}'.format( dRel, vRel, steer_limit, param.STEER_MAX )
-    str_log1 = 'STOP={:d} LASTDIST={:03.1f} LEADDIST:{:03.1f} RESCNT:{:02d}'.format( CS.stopped, self.last_lead_distance, CS.lead_distance, self.resume_cnt )
-    str_log2 = 'FR={:d} LFR={:d}'.format( frame, self.last_resume_frame )
+    str_log1 = 'CV={:03.0f}/{:06.3f} TQ=V:{:04.0f}/S:{:04.0f}'.format( LaC.v_curvature, LaC.model_sum, apply_steer, CS.steer_torque_driver )
+    str_log2 = 'D={:05.1f} V={:03.0f} S_LIM={:03.0f} S_MAX={:03.0f}'.format( dRel, vRel, steer_limit, param.STEER_MAX )
+    #str_log1 = 'STOP={:d} LASTDIST={:03.1f} LEADDIST:{:03.1f} RESCNT:{:02d}'.format( CS.stopped, self.last_lead_distance, CS.lead_distance, self.resume_cnt )
+    #str_log2 = 'FR={:d} LFR={:d}'.format( frame, self.last_resume_frame )
 
     trace1.printf( '{} {}'.format( str_log1, str_log2 ) )
 
