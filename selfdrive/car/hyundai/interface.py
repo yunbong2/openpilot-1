@@ -107,10 +107,10 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kf = 0.00004
       ret.mass = 1595. + STD_CARGO_KG
       ret.wheelbase = 2.80
-      ret.steerRatio = 12.5
-      ret.steerRateCost = 0.4
+      ret.steerRatio = 12.0
+      ret.steerRateCost = 0.45
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.20], [0.04]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.18], [0.035]]
     elif candidate in [CAR.GRANDEUR, CAR.K7]:
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 1570. + STD_CARGO_KG
