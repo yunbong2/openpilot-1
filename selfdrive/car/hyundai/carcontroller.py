@@ -95,8 +95,6 @@ class CarController():
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.78
     elif CS.left_blinker_on or CS.right_blinker_on or CS.left_blinker_flash or CS.right_blinker_flash or self.turning_signal_timer and CS.v_ego > (60 * CV.KPH_TO_MS):  # btw 70km/h ~ 60km/h
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.80
-    elif CS.v_ego < (30 * CV.KPH_TO_MS):
-      new_steer = actuators.steer * SteerLimitParams.STEER_MAX * 0.50
     else:
       new_steer = actuators.steer * SteerLimitParams.STEER_MAX
 
@@ -182,7 +180,7 @@ class CarController():
         self.last_lead_distance = CS.lead_distance
         self.resume_cnt = 0
       # when lead car starts moving, create 6 RES msgs
-      elif CS.lead_distance > self.last_lead_distance and (frame - self.last_resume_frame) > 5:
+      elif CS.lead_distance != self.last_lead_distance and (frame - self.last_resume_frame) > 5:
         can_sends.append(create_clu11(self.packer, CS.scc_bus, CS.clu11, Buttons.RES_ACCEL, clu11_speed, self.clu11_cnt))
         self.resume_cnt += 1
         # interval after 6 msgs
