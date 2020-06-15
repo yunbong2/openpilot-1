@@ -65,12 +65,10 @@ class LatControlINDI():
         self.innerLoopGain = float(self.kegman.conf['innerLG'])
         self.timeConstant = float(self.kegman.conf['timeConst'])
         self.actuatorEffectiveness = float(self.kegman.conf['actEffect'])
-        self.stLimitTimer = float(self.kegman.conf['stLimitTimer'])
         self.RC = self.timeConstant
         self.G = self.actuatorEffectiveness
         self.outer_loop_gain = self.outerLoopGain
         self.inner_loop_gain = self.innerLoopGain
-        self.sat_limit = self.stLimitTimer
         
       self.mpc_frame = 0
 
