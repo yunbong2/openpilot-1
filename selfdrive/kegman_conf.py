@@ -80,6 +80,18 @@ class kegman_conf():
         self.config.update({"steerRatio":"-1"})
         self.config.update({"steerRateCost":"-1"})
         self.element_updated = True
+
+      if "steerMax" not in self.config:
+        self.config.update({"steerMax":"255"})
+        self.element_updated = True
+
+      if "deltaUp" not in self.config:
+        self.config.update({"deltaUp":"3"})
+        self.element_updated = True
+
+      if "deltaDown" not in self.config:
+        self.config.update({"deltaDown":"7"})
+        self.element_updated = True
 	
       if "leadDistance" not in self.config:
         self.config.update({"leadDistance":"5"})
