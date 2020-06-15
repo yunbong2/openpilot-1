@@ -41,7 +41,7 @@ button_delay = 0.2
 kegman = kegman_conf()
 kegman.conf['tuneGernby'] = "1"
 #kegman.write_config(kegman.conf)
-param = ["cameraOffset", "outerLG", "innerLG", "timeConst", "actEffect", "stLimitTimer", \
+param = ["cameraOffset", "outerLG", "innerLG", "timeConst", "actEffect", \
          "steerRatio", "sR_BP0", "sR_BP1", "sR_boost", "sR_time", "steerRateCost"]
 #param = ["Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
 #         "sR_BP1", "sR_time", "steerRateCost", "deadzone", "slowOnCurves", \
@@ -176,12 +176,6 @@ while True:
 
   if float(kegman.conf['actEffect']) > 10:
     kegman.conf['actEffect'] = "10"
-
-  if float(kegman.conf['stLimitTimer']) < 0 and float(kegman.conf['stLimitTimer']) != -1:
-    kegman.conf['stLimitTimer'] = "0"
-
-  if float(kegman.conf['stLimitTimer']) > 10:
-    kegman.conf['stLimitTimer'] = "10"
     
   if kegman.conf['liveParams'] != "1" and kegman.conf['liveParams'] != "0":
     kegman.conf['liveParams'] = "1"
