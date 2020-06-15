@@ -155,7 +155,7 @@ class kegman_conf():
                      "wheelTouchSeconds":"30000", "battPercOff":"100", "carVoltageMinEonShutdown":"11800", \
                      "brakeStoppingTarget":"0.25", "tuneGernby":"1", \
                      "outerLG":"-1", "innerLG":"-1", "timeConst":"-1", "actEffect":"-1", "stLimitTimer":"-1", \
-                     "liveParams":"1", "leadDistance":"5", \
+                     "liveParams":"1", "leadDistance":"5", "steerMax":"255", "deltaUp":"3", "deltaDown":"7", \
                      "1barBP0":"-0.1", "1barBP1":"2.25", "2barBP0":"-0.1", "2barBP1":"2.5", "3barBP0":"0.0", \
                      "3barBP1":"3.0", "1barMax":"2.1", "2barMax":"2.1", "3barMax":"2.1", \
                      "1barHwy":"0.4", "2barHwy":"0.3", "3barHwy":"0.1", \
