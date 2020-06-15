@@ -62,6 +62,9 @@ class kegman_conf():
 
       if "tuneGernby" not in self.config:
         self.config.update({"tuneGernby":"1"})
+        self.element_updated = True
+
+      if "outerLG" not in self.config:
         self.config.update({"outerLG":"-1"})
         self.config.update({"innerLG":"-1"})
         self.config.update({"timeConst":"-1"})
