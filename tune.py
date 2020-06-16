@@ -41,9 +41,9 @@ button_delay = 0.2
 kegman = kegman_conf()
 kegman.conf['tuneGernby'] = "1"
 #kegman.write_config(kegman.conf)
-param = ["cameraOffset", "Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
-         "sR_BP1", "sR_time", "steerRateCost"]
-#param = ["cameraOffset", "Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
+param = ["cameraOffset", "outerLG", "innerLG", "timeConst", "actEffect", \
+         "steerRatio", "sR_BP0", "sR_BP1", "sR_boost", "sR_time", "steerRateCost"]
+#param = ["Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
 #         "sR_BP1", "sR_time", "steerRateCost", "deadzone", "slowOnCurves", \
 #         "1barBP0", "1barBP1", "1barMax", "2barBP0", "2barBP1", \
 #         "2barMax", "3barBP0", "3barBP1", "3barMax", \
@@ -153,17 +153,29 @@ while True:
   if float(kegman.conf['tuneGernby']) != 1 and float(kegman.conf['tuneGernby']) != 0:
     kegman.conf['tuneGernby'] = "1"
 
-  if float(kegman.conf['Ki']) < 0 and float(kegman.conf['Ki']) != -1:
-    kegman.conf['Ki'] = "0"
+  if float(kegman.conf['outerLG']) < 0 and float(kegman.conf['outerLG']) != -1:
+    kegman.conf['outerLG'] = "0"
 
-  if float(kegman.conf['Ki']) > 2:
-    kegman.conf['Ki'] = "2"
+  if float(kegman.conf['outerLG']) > 10:
+    kegman.conf['outerLG'] = "10"
 
-  if float(kegman.conf['Kp']) < 0 and float(kegman.conf['Kp']) != -1:
-    kegman.conf['Kp'] = "0"
+  if float(kegman.conf['innerLG']) < 0 and float(kegman.conf['innerLG']) != -1:
+    kegman.conf['innerLG'] = "0"
 
-  if float(kegman.conf['Kp']) > 3:
-    kegman.conf['Kp'] = "3"
+  if float(kegman.conf['innerLG']) > 10:
+    kegman.conf['innerLG'] = "10"
+
+  if float(kegman.conf['timeConst']) < 0 and float(kegman.conf['timeConst']) != -1:
+    kegman.conf['timeConst'] = "0"
+
+  if float(kegman.conf['timeConst']) > 10:
+    kegman.conf['timeConst'] = "10"
+
+  if float(kegman.conf['actEffect']) < 0 and float(kegman.conf['actEffect']) != -1:
+    kegman.conf['actEffect'] = "0"
+
+  if float(kegman.conf['actEffect']) > 10:
+    kegman.conf['actEffect'] = "10"
     
   if kegman.conf['liveParams'] != "1" and kegman.conf['liveParams'] != "0":
     kegman.conf['liveParams'] = "1"
@@ -249,12 +261,7 @@ while True:
 #  if float(kegman.conf['3barHwy']) > 2:
 #    kegman.conf['3barHwy'] = "2" 
         
-  if float(kegman.conf['Kf']) > 0.01:
-    kegman.conf['Kf'] = "0.01"    
-    
-  if float(kegman.conf['Kf']) < 0:
-    kegman.conf['Kf'] = "0"    
-    
+ 
   if float(kegman.conf['sR_boost']) < 0:
     kegman.conf['sR_boost'] = "0"
     
@@ -266,9 +273,6 @@ while True:
     
   if float(kegman.conf['sR_time']) < 0.1:
     kegman.conf['sR_time'] = "0.1"
-
-  #if float(kegman.conf['Kf']) < 0.00001:
-  kegman.conf['Kf'] = str("{:.5f}".format(float(kegman.conf['Kf'])))
 
 #  if float(kegman.conf['slowOnCurves']) > 0.00001:
 #    kegman.conf['slowOnCurves'] = "1"
