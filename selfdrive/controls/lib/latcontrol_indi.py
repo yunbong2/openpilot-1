@@ -7,6 +7,8 @@ from common.numpy_fast import clip
 from selfdrive.car.toyota.values import SteerLimitParams
 from selfdrive.car import apply_toyota_steer_torque_limits
 from selfdrive.controls.lib.drive_helpers import get_steer_max
+from selfdrive.kegman_conf import kegman_conf
+
 
 
 class LatControlINDI():
@@ -34,6 +36,9 @@ class LatControlINDI():
 
     self.enforce_rate_limit = CP.carName == "toyota"
 
+    self.kegman = kegman_conf(CP)
+    self.mpc_frame = 0
+
     self.RC = CP.lateralTuning.indi.timeConstant
     self.G = CP.lateralTuning.indi.actuatorEffectiveness
     self.outer_loop_gain = CP.lateralTuning.indi.outerLoopGain
@@ -50,6 +55,25 @@ class LatControlINDI():
     self.output_steer = 0.
     self.sat_count = 0.0
 
+  def live_tune(self, CP):
+    self.mpc_frame += 1
+    if self.mpc_frame % 300 == 0:
+      # live tuning through /data/openpilot/tune.py overrides interface.py settings
+      self.kegman = kegman_conf()
+      if self.kegman.conf['tuneGernby'] == "1":
+        self.outerLoopGain = float(self.kegman.conf['outerLG'])
+        self.innerLoopGain = float(self.kegman.conf['innerLG'])
+        self.timeConstant = float(self.kegman.conf['timeConst'])
+        self.actuatorEffectiveness = float(self.kegman.conf['actEffect'])
+        self.stLimitTimer = float(self.kegman.conf['stLimitTimer'])
+        self.RC = self.timeConstant
+        self.G = self.actuatorEffectiveness
+        self.outer_loop_gain = self.outerLoopGain
+        self.inner_loop_gain = self.innerLoopGain
+        self.sat_limit = self.stLimitTimer
+        
+      self.mpc_frame = 0
+
   def _check_saturation(self, control, check_saturation, limit):
     saturated = abs(control) == limit
 
@@ -63,6 +87,9 @@ class LatControlINDI():
     return self.sat_count > self.sat_limit
 
   def update(self, active, v_ego, angle_steers, angle_steers_rate, eps_torque, steer_override, rate_limited, CP, path_plan):
+
+    self.live_tune(CP)
+
     # Update Kalman filter
     y = np.matrix([[math.radians(angle_steers)], [math.radians(angle_steers_rate)]])
     self.x = np.dot(self.A_K, self.x) + np.dot(self.K, y)
