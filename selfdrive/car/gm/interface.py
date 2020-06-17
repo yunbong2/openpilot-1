@@ -113,9 +113,6 @@ class CarInterface(CarInterfaceBase):
     tire_stiffness_factor = 0.444  # not optimized yet
 
     # Start with a baseline lateral tuning for all GM vehicles. Override tuning as needed in each model section below.
-    ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
-    ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.2], [0.00]]
-    ret.lateralTuning.pid.kf = 0.00004   # full torque for 20 deg at 80mph means 0.00007818594
     ret.steerRateCost = 1.0
     ret.steerActuatorDelay = 0.1  # Default delay, not measured yet
 
@@ -132,6 +129,11 @@ class CarInterface(CarInterfaceBase):
       ret.steerRateCost = 0.7
 
     elif candidate == CAR.BOLT:
+      ret.lateralTuning.init('indi')
+      ret.lateralTuning.indi.innerLoopGain = 3.0
+      ret.lateralTuning.indi.outerLoopGain = 2.0
+      ret.lateralTuning.indi.timeConstant = 1.0
+      ret.lateralTuning.indi.actuatorEffectiveness = 1.0
       # initial engage unkown - copied from Volt. Stop and go unknown.
       ret.minEnableSpeed = -1.
       ret.mass = 1616. + STD_CARGO_KG
@@ -140,7 +142,6 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 16.5  #Bolt EV has a 16.8 in the spec, but with this value I can see oversteer at sharp corner during openpilot engage.
       ret.steerRatioRear = 0.
       ret.centerToFront = ret.wheelbase * 0.4 # wild guess
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.1], [0.01]]
 
     elif candidate == CAR.MALIBU:
       # supports stop and go, but initial engage must be above 18mph (which include conservatism)
