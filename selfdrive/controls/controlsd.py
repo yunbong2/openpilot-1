@@ -255,9 +255,9 @@ def state_control(frame, rcv_frame, plan, path_plan, CS, CP, state, events, v_cr
       extra_text = ""
       if e == "belowSteerSpeed":
         if is_metric:
-          extra_text = str(int(round(CP.minSteerSpeed * CV.MS_TO_KPH))) + " kph"
+          extra_text = str(int(round(CP.minSteerSpeed * CV.MS_TO_KPH))) + " km/h 이상"
         else:
-          extra_text = str(int(round(CP.minSteerSpeed * CV.MS_TO_MPH))) + " mph"
+          extra_text = str(int(round(CP.minSteerSpeed * CV.MS_TO_MPH))) + " mi/h 이상"
       AM.add(frame, e, enabled, extra_text_2=extra_text)
 
   plan_age = DT_CTRL * (frame - rcv_frame['plan'])
