@@ -345,8 +345,8 @@ class CarInterface(CarInterfaceBase):
     #if cruiseEnabled and (self.CS.left_blinker_on or self.CS.right_blinker_on):
     #   events.append(create_event('manualSteeringRequiredBlinkersOn', [ET.WARNING]))
 
-    if self.CS.steer_error:
-      events.append(create_event('steerUnavailable', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE, ET.PERMANENT]))
+    #if self.CS.steer_error:
+    #  events.append(create_event('steerUnavailable', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE, ET.PERMANENT]))
     if self.CS.steer_not_allowed:
       events.append(create_event('steerTempUnavailable', [ET.NO_ENTRY, ET.WARNING]))
     if ret.doorOpen:
