@@ -28,8 +28,8 @@ class CarControllerParams():
       self.MIN_STEER_SPEED = -1.
 
     self.STEER_DRIVER_ALLOWANCE = 50   # allowed driver torque before start limiting
-    self.STEER_DRIVER_MULTIPLIER = 4   # weight driver torque heavily
-    self.STEER_DRIVER_FACTOR = 100     # from dbc
+    self.STEER_DRIVER_MULTIPLIER = 2   # weight driver torque heavily #4
+    self.STEER_DRIVER_FACTOR = 10     # from dbc #100
     self.NEAR_STOP_BRAKE_PHASE = 0.5 # m/s, more aggressive braking near full stop
 
     # Takes case of "Service Adaptive Cruise" and "Service Front Camera"
