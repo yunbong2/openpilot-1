@@ -52,6 +52,7 @@ struct sample_t gm_torque_driver;         // last few driver torques measured
 static void gm_init_lkas_pump(void);
 volatile gm_dual_buffer gm_lkas_buffer;
 volatile bool gm_ffc_detected = false;
+bool gm_forward_bus1 = false;
 
 static void gm_apply_buffer(volatile gm_dual_buffer *buffer, bool stock) {
   if (stock) {
@@ -288,19 +289,33 @@ static int gm_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
 
 static int gm_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
   int bus_fwd = -1;
-  if (bus_num == 0) {
-    bus_fwd = 1;  // Camera is on CAN2
-  }
-  if (bus_num == 1) {
-    int addr = GET_ADDR(to_fwd);
-    if (addr != 384) return 0;
-    gm_set_stock_lkas(to_fwd);
-    gm_ffc_detected = true;
-    gm_init_lkas_pump();
-  }
+  int addr = GET_ADDR(to_fwd);
+  int fwd_to_bus1 = -1;
+  if (gm_forward_bus1){fwd_to_bus1 = 1;}
 
+  if (!relay_malfunction) {
+    if (bus_num == 0) {
+    bus_fwd = 1;  // Camera is on CAN2
+    }
+    if (bus_num == 1) {
+      int addr = GET_ADDR(to_fwd);
+      if (addr != 384) return 0;
+      gm_set_stock_lkas(to_fwd);
+      gm_ffc_detected = true;
+      gm_init_lkas_pump();
+    }
+  } else {
+    if (bus_num == 0) {
+      bus_fwd = fwd_to_bus1;
+    }
+    if (bus_num == 1 && gm_forward_bus1) {
+      bus_fwd = 0;
+    }
+  }
+}
   // fallback to do not forward
   return bus_fwd;
+  }
 }
 
 
