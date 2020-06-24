@@ -1,16 +1,5 @@
-bool GM_forward_BUS1 = false;
-bool GM_forward_BUS2 = true;
-
 int default_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
-  int bus = GET_BUS(to_push);
-  int addr = GET_ADDR(to_push);
-
-  // check if LKAS connected to Bus0
-  if ((addr == 384) && (bus == 0)) {
-    if (GM_forward_BUS2 != false) {
-      GM_forward_BUS2 = false;
-	  }
-  }
+  UNUSED(to_push);
   return true;
 }
 
@@ -35,22 +24,9 @@ static int nooutput_tx_lin_hook(int lin_num, uint8_t *data, int len) {
 }
 
 static int default_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
-  int addr = GET_ADDR(to_fwd);
-  int bus_fwd = -1;
-  int GM_bus1 = 0, GM_bus2 = 0;
-  if (GM_forward_BUS1){GM_bus1 = 1;}
-  if (GM_forward_BUS2){GM_bus2 = 2;}
-  
-  if (bus_num == 0 && (GM_forward_BUS1 || GM_forward_BUS2)) {
-    bus_fwd = (GM_forward_BUS1 && GM_forward_BUS2) ? 12 : GM_bus1 + GM_bus2;
-  }
-  if (bus_num == 1 && GM_forward_BUS1) {
-    bus_fwd = GM_bus2 * 10;
-  }
-  if (bus_num == 2 && GM_forward_BUS2) {
-    bus_fwd = GM_bus1 * 10;
-  }
-  return bus_fwd;
+  UNUSED(bus_num);
+  UNUSED(to_fwd);
+  return -1;
 }
 
 const safety_hooks nooutput_hooks = {
