@@ -75,6 +75,12 @@ class PathPlanner():
     self.sR = [float(kegman.conf['steerRatio']), (float(kegman.conf['steerRatio']) + float(kegman.conf['sR_boost']))]
     self.sRBP = [float(kegman.conf['sR_BP0']), float(kegman.conf['sR_BP1'])]
 
+    self.lean_St_Velocity = float(kegman.conf['leanStVelocity'])
+    self.lean_Left_Amount = float(kegman.conf['leanLeftAmount'])
+    self.lean_Right_Amount = float(kegman.conf['leanRightAmount'])
+    self.lean_wait_time = 0
+    self.lean_offset = 0
+      
     self.steerRateCost_prev = self.steerRateCost
     self.setup_mpc()
 
@@ -112,7 +118,11 @@ class PathPlanner():
     angle_steers = sm['carState'].steeringAngle
     active = sm['controlsState'].active
 
+    vCurvature = sm['controlsState'].vCurvature
     angle_offset = sm['liveParameters'].angleOffset
+    v_ego_kph = v_ego * CV.MS_TO_KPH
+
+    lean_offset = 0
 
     # Run MPC
     self.angle_steers_des_prev = self.angle_steers_des_mpc
@@ -136,7 +146,7 @@ class PathPlanner():
          
       self.mpc_frame = 0
     
-    if v_ego > 11.111:
+    if v_ego_kph > 40:
       # boost steerRatio by boost amount if desired steer angle is high
       self.steerRatio_new = interp(abs(angle_steers), self.sRBP, self.sR)
       
@@ -221,7 +231,20 @@ class PathPlanner():
     else:
       self.libmpc.init_weights(MPC_COST_LAT.PATH, MPC_COST_LAT.LANE, MPC_COST_LAT.HEADING, self.steer_rate_cost)
 
-    self.LP.update_d_poly(v_ego)
+    if v_ego_kph > self.lean_St_Velocity:
+      if vCurvature > 1.5: # left
+        self.lean_offset = self.lean_Left_Amount
+        self.lean_wait_time = 50
+      elif vCurvature < -1.5:   # right
+        self.lean_offset = -self.lean_Right_Amount
+        self.lean_wait_time = 50
+
+    lean_offset = 0
+    if self.lean_wait_time:
+      self.lean_wait_time -= 1
+      lean_offset = self.lean_offset
+
+    self.LP.update_d_poly( lean_offset )
 
 
     # TODO: Check for active, override, and saturation
