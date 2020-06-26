@@ -136,6 +136,22 @@ class kegman_conf():
         self.config.update({"leanRightAmount":"0"})
         self.element_updated = True
 
+      if "steerMax" not in self.config:
+        self.config.update({"steerMax":"255"})
+        self.element_updated = True
+
+      if "deltaUp" not in self.config:
+        self.config.update({"deltaUp":"3"})
+        self.element_updated = True
+
+      if "deltaDown" not in self.config:
+        self.config.update({"deltaDown":"7"})
+        self.element_updated = True
+
+      if "threshold" not in self.config:
+        self.config.update({"threshold":"150"})
+        self.element_updated = True
+
       if self.element_updated:
         print("updated")
         self.write_config(self.config)
@@ -143,13 +159,14 @@ class kegman_conf():
     else:
       self.config = {"cameraOffset":"0.06", "lastTrMode":"1", "battChargeMin":"60", "battChargeMax":"70", \
                      "wheelTouchSeconds":"86400", "battPercOff":"100", "carVoltageMinEonShutdown":"11800", \
-                     "brakeStoppingTarget":"0.25", "tuneGernby":"1", \
+                     "brakeStoppingTarget":"0.25", "tuneGernby":"1", "threshold":"150", \
                      "Kp":"-1", "Ki":"-1", "liveParams":"1", "leadDistance":"5", "deadzone":"2.0", \
                      "1barBP0":"-0.1", "1barBP1":"2.25", "2barBP0":"-0.1", "2barBP1":"2.5", "3barBP0":"0.0", \
                      "3barBP1":"3.0", "1barMax":"2.1", "2barMax":"2.1", "3barMax":"2.1", \
                      "1barHwy":"0.4", "2barHwy":"0.3", "3barHwy":"0.1", \
                      "steerRatio":"-1", "steerRateCost":"-1", "slowOnCurves":"0", "Kf":"-1", \
                      "sR_boost":"0", "sR_BP0":"0", "sR_BP1":"0", "sR_time":"0.2", \
+                     "deltaUp":"3", "deltaDown":"5", "steerMax":"255", \
                      "leanStVelocity":"40", "leanLeftAmount":"0", "leanRightAmount":"0", \
                      "ALCnudgeLess":"1", "ALCminSpeed":"16.666667", "ALCtimer":"1.0", "CruiseDelta":"8", \
                      "CruiseEnableMin":"0"}
