@@ -130,6 +130,12 @@ class kegman_conf():
         self.config.update({"CruiseEnableMin":"0"})
         self.element_updated = True
 
+      if "leanStVelocity" not in self.config:
+        self.config.update({"leanStVelocity":"40"})
+        self.config.update({"leanLeftAmount":"0"})
+        self.config.update({"leanRightAmount":"0"})
+        self.element_updated = True
+
       if self.element_updated:
         print("updated")
         self.write_config(self.config)
@@ -144,6 +150,7 @@ class kegman_conf():
                      "1barHwy":"0.4", "2barHwy":"0.3", "3barHwy":"0.1", \
                      "steerRatio":"-1", "steerRateCost":"-1", "slowOnCurves":"0", "Kf":"-1", \
                      "sR_boost":"0", "sR_BP0":"0", "sR_BP1":"0", "sR_time":"0.2", \
+                     "leanStVelocity":"40", "leanLeftAmount":"0", "leanRightAmount":"0", \
                      "ALCnudgeLess":"1", "ALCminSpeed":"16.666667", "ALCtimer":"1.0", "CruiseDelta":"8", \
                      "CruiseEnableMin":"0"}
 
