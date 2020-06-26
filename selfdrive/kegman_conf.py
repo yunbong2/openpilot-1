@@ -145,7 +145,7 @@ class kegman_conf():
         self.element_updated = True
 
       if "deltaDown" not in self.config:
-        self.config.update({"deltaDown":"7"})
+        self.config.update({"deltaDown":"5"})
         self.element_updated = True
 
       if "threshold" not in self.config:
