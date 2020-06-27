@@ -64,7 +64,8 @@ LEON = False
 def setup_eon_fan():
   global LEON
 
-  os.system("echo 2 > /sys/module/dwc3_msm/parameters/otg_switch")
+  #os.system("echo 2 > /sys/module/dwc3_msm/parameters/otg_switch")
+  os.system("echo 0 > /sys/module/dwc3_msm/parameters/otg_switch")
 
   bus = SMBus(7, force=True)
   try:
@@ -75,6 +76,7 @@ def setup_eon_fan():
   except IOError:
     print("LEON detected")
     #os.system("echo 1 > /sys/devices/soc/6a00000.ssusb/power_supply/usb/usb_otg")
+    os.system("echo 0 > /sys/devices/soc/6a00000.ssusb/power_supply/usb/usb_otg")
     LEON = True
   bus.close()
 
