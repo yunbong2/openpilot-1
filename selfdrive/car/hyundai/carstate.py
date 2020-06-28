@@ -18,15 +18,13 @@ class CarState(CarStateBase):
     self.sas_bus = CP.sasBus
     self.scc_bus = CP.sccBus
     self.mdps_error_cnt = 0
+    self.lkas_button_on = True
     
-    self.cruise_main_button = False
-    self.cruise_buttons = False
+    self.cruise_main_button = 0
+    self.cruise_buttons = 0
 
     self.lkas_button_on = False
     self.lkas_error = False
-
-    self.prev_cruise_main_button = False
-    self.prev_cruise_buttons = False
 
     self.main_on = False
     self.acc_active = False
@@ -45,8 +43,9 @@ class CarState(CarStateBase):
     cp_mdps = cp2 if self.mdps_bus else cp
     cp_sas = cp2 if self.sas_bus else cp
     cp_scc = cp2 if self.scc_bus == 1 else cp_cam if self.scc_bus == 2 else cp
+
+    self.prev_cruise_buttons = self.cruise_buttons
     self.prev_cruise_main_button = self.cruise_main_button
-    self.prev_cruise_buttons  = self.cruise_buttons
 
     ret = car.CarState.new_message()
 
@@ -60,10 +59,11 @@ class CarState(CarStateBase):
     ret.wheelSpeeds.rl = cp.vl["WHL_SPD11"]['WHL_SPD_RL'] * CV.KPH_TO_MS
     ret.wheelSpeeds.rr = cp.vl["WHL_SPD11"]['WHL_SPD_RR'] * CV.KPH_TO_MS
     ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr + ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
-    ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
     
     self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
-    #ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
+    ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
+
+    ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
 
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
 
@@ -118,22 +118,27 @@ class CarState(CarStateBase):
     # cruise state
     #ret.cruiseState.available = True
     #ret.cruiseState.enabled = cp.vl["SCC12"]['ACCMode'] != 0
-    self.main_on = (cp_scc.vl["SCC11"]["MainMode_ACC"] != 0)
-    self.acc_active = (cp_scc.vl["SCC12"]['ACCMode'] != 0)
-
-    ret.cruiseState.available = self.main_on
+    self.main_on = (cp_scc.vl["SCC11"]["MainMode_ACC"] != 0) if not self.no_radar else \
+                                            cp.vl['EMS16']['CRUISE_LAMP_M']
+    self.acc_active = (cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
+                                      (cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0)
+    ret.cruiseState.available = self.main_on if not self.no_radar else \
+                                      cp.vl['EMS16']['CRUISE_LAMP_M'] != 0
     ret.cruiseState.enabled =  ret.cruiseState.available  #if not self.CP.longcontrolEnabled else ret.cruiseState.enabled
-    ret.cruiseState.standstill = cp_scc.vl["SCC11"]['SCCInfoDisplay'] == 4.
+    ret.cruiseState.standstill = cp_scc.vl["SCC11"]['SCCInfoDisplay'] == 4.  if not self.no_radar else False
 
     # most HKG cars has no long control, it is safer and easier to engage by main on
 
-    #if ret.cruiseState.enabled:
-    if self.acc_active:
-      is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
-      speed_conv = CV.MPH_TO_MS if is_set_speed_in_mph else CV.KPH_TO_MS
-      ret.cruiseState.speed = self.VSetDis * speed_conv
+    if ret.cruiseState.enabled:
+    #if self.acc_active:
+      speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
+      ret.cruiseState.speed = cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
+                                         cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv
+      #ret.cruiseState.speed = self.VSetDis * speed_conv
     else:
       ret.cruiseState.speed = 0
+    self.cruise_main_button = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"]
+    self.cruise_buttons = cp.vl["CLU11"]["CF_Clu_CruiseSwState"]
 
     # TODO: Find brake pressure
     ret.brake = 0
@@ -205,12 +210,9 @@ class CarState(CarStateBase):
 
 
     # atom append
-    self.pcm_acc_status = int(self.acc_active)
     self.driverOverride = cp.vl["TCS13"]["DriverOverride"]     # 1 Acc,  2 bracking, 0 Normal
-    self.cruise_main_button = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"]
-    self.cruise_buttons = cp.vl["CLU11"]["CF_Clu_CruiseSwState"]         # clu_CruiseSwState
     self.Lkas_LdwsSysState = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsSysState"]
-    #self.lkas_error = self.Lkas_LdwsSysState  == 7
+    self.lkas_error = self.Lkas_LdwsSysState  == 7
     #if not self.lkas_error:
     #  self.lkas_button_on = self.Lkas_LdwsSysState 
 
