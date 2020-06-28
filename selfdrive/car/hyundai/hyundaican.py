@@ -121,4 +121,9 @@ def create_mdps12(packer, frame, mdps12):
   values["CF_Mdps_Chksum2"] = checksum
 
   return packer.make_can_msg("MDPS12", 2, values)
-  
+
+def create_ems11(packer, ems11, enabled):
+  values = ems11
+  if enabled:
+    values["VS"] = 0
+  return packer.make_can_msg("values", 1, ems11)
