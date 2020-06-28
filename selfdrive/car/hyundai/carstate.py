@@ -17,7 +17,8 @@ class CarState(CarStateBase):
     self.mdps_bus = CP.mdpsBus
     self.sas_bus = CP.sasBus
     self.scc_bus = CP.sccBus
-
+    self.mdps_error_cnt = 0
+    
     self.cruise_main_button = False
     self.cruise_buttons = False
 
@@ -62,7 +63,7 @@ class CarState(CarStateBase):
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
     
     self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
-    ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
+    #ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
 
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
 
@@ -78,6 +79,8 @@ class CarState(CarStateBase):
     ret.steeringTorque = cp_mdps.vl["MDPS12"]['CR_Mdps_StrColTq']
     ret.steeringTorqueEps = cp_mdps.vl["MDPS12"]['CR_Mdps_OutTq']
     ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD
+    self.mdps_error_cnt += 1 if cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0 else -self.mdps_error_cnt
+    ret.steerWarning = self.mdps_error_cnt > 100 #cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0
 
     if leftBlinker:
       self.left_blinker_flash = 60
@@ -207,16 +210,17 @@ class CarState(CarStateBase):
     self.cruise_main_button = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"]
     self.cruise_buttons = cp.vl["CLU11"]["CF_Clu_CruiseSwState"]         # clu_CruiseSwState
     self.Lkas_LdwsSysState = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsSysState"]
-    self.lkas_error = self.Lkas_LdwsSysState  == 7
-    if not self.lkas_error:
-      self.lkas_button_on = self.Lkas_LdwsSysState 
+    #self.lkas_error = self.Lkas_LdwsSysState  == 7
+    #if not self.lkas_error:
+    #  self.lkas_button_on = self.Lkas_LdwsSysState 
 
 
     # save the entire LKAS11 and CLU11
     self.lkas11 = cp_cam.vl["LKAS11"]
     self.clu11 = cp.vl["CLU11"]
+    self.scc11 = cp_scc.vl["SCC11"]
+    self.scc12 = cp_scc.vl["SCC12"]
     self.mdps12 = cp_mdps.vl["MDPS12"]
-    
     self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
     self.steer_state = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiActive'] # 0 NOT ACTIVE, 1 ACTIVE
     self.lead_distance = cp_scc.vl["SCC11"]['ACC_ObjDist']
