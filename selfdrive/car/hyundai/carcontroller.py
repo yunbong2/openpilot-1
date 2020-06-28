@@ -1,6 +1,6 @@
 from cereal import car, log
 from selfdrive.car import apply_std_steer_torque_limits
-from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfa_mfa, create_mdps12
+from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfa_mfa, create_mdps12, create_ems11
 from selfdrive.car.hyundai.values import Buttons, SteerLimitParams, CAR
 from opendbc.can.packer import CANPacker
 from selfdrive.config import Conversions as CV
@@ -232,7 +232,7 @@ class CarController():
 
 
     # disable if steer angle reach 90 deg, otherwise mdps fault in some models
-    lkas_active = enabled and abs(CS.out.steeringAngle) < 90. #and self.lkas_button
+    lkas_active = enabled and abs(CS.out.steeringAngle) < 100. #and self.lkas_button
 
     # fix for Genesis hard fault at low speed
     if CS.out.vEgo < 16.7 and self.car_fingerprint == CAR.HYUNDAI_GENESIS:
@@ -258,10 +258,10 @@ class CarController():
 
     can_sends = []
     can_sends.append(create_lkas11(self.packer, self.lkas11_cnt, self.car_fingerprint, apply_steer, steer_req,
-                                   CS.lkas11, sys_warning, sys_state, CC, 0 ))
+                                   CS.lkas11, sys_warning, sys_state, enabled, CC, 0 ))
     if CS.mdps_bus == 1: # send lkas11 bus 1 if mdps is on bus 1                               
       can_sends.append(create_lkas11(self.packer, self.lkas11_cnt, self.car_fingerprint, apply_steer, steer_req,
-                                   CS.lkas11, sys_warning, sys_state, CC, 1 ))
+                                   CS.lkas11, sys_warning, sys_state, enabled, CC, 1 ))
     if frame % 2 and CS.mdps_bus: # send clu11 to mdps if it is not on bus 0
       can_sends.append(create_clu11(self.packer, frame, CS.mdps_bus, CS.clu11, Buttons.NONE, enabled_speed))
 
@@ -278,7 +278,7 @@ class CarController():
     trace1.printf2( '{}'.format( str_log2 ) )
 
     if pcm_cancel_cmd:
-      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
+      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL, clu11_speed))
 
     elif CS.out.cruiseState.standstill:
       # run only first time when the car stopped
