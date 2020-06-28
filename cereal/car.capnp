@@ -410,8 +410,8 @@ struct CarParams {
   lateralPIDatom @52 :LateralPIDatom;
   lateralCVatom @53 :LateralCVatom;
   lateralsRatom @54 :LateralsRatom;
-  mdpsBus @61: Int8;
-  sasBus @62: Int8;
+  mdpsBus @55: Int8;
+  sasBus @56: Int8;
 
   struct LateralsRatom {
     learnerParams @0 :Int16;    
