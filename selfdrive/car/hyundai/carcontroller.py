@@ -251,11 +251,11 @@ class CarController():
     if clu11_speed > enabled_speed or not lkas_active:
       enabled_speed = clu11_speed
 
-    can_sends = []
     if frame == 0: # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"] + 1
     self.lkas11_cnt %= 0x10
 
+    can_sends = []
     can_sends.append(create_lkas11(self.packer, self.lkas11_cnt, self.car_fingerprint, apply_steer, steer_req,
                                    CS.lkas11, sys_warning, sys_state, CC, 0 ))
     if CS.mdps_bus == 1: # send lkas11 bus 1 if mdps is on bus 1                               
@@ -284,11 +284,12 @@ class CarController():
         self.resume_cnt = 0
       # when lead car starts moving, create 6 RES msgs
       elif CS.lead_distance != self.last_lead_distance and (frame - self.last_resume_frame) > 5:
-        can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL))
+        can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed))
         self.resume_cnt += 1
         # interval after 6 msgs
         if self.resume_cnt > 5:
           self.last_resume_frame = frame
+          self.resume_cnt = 0
     # reset lead distnce after the car starts moving
     elif self.last_lead_distance != 0:
       self.last_lead_distance = 0
