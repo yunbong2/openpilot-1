@@ -412,6 +412,8 @@ struct CarParams {
   lateralsRatom @54 :LateralsRatom;
   mdpsBus @55: Int8;
   sasBus @56: Int8;
+  sccBus @57: Int8;
+  spasEnabled @58: Bool;
 
   struct LateralsRatom {
     learnerParams @0 :Int16;    
