@@ -27,6 +27,7 @@ class CarController():
     self.lkas11_cnt = 0
     self.last_resume_frame = 0
     self.last_lead_distance = 0
+    self.longcontrol = CP.openpilotLongitudinalControl
 
 
 
@@ -263,7 +264,10 @@ class CarController():
                                    CS.lkas11, sys_warning, sys_state, CC, 1 ))
     if frame % 2 and CS.mdps_bus: # send clu11 to mdps if it is not on bus 0
       can_sends.append(create_clu11(self.packer, frame, CS.mdps_bus, CS.clu11, Buttons.NONE, enabled_speed))
-    if CS.mdps_bus: # send mdps12 to LKAS to prevent LKAS error if no cancel cmd
+
+    if pcm_cancel_cmd and self.longcontrol:
+      can_sends.append(create_clu11(self.packer, frame, CS.scc_bus, CS.clu11, Buttons.CANCEL, clu11_speed))
+    elif CS.mdps_bus: # send mdps12 to LKAS to prevent LKAS error if no cancel cmd
       can_sends.append(create_mdps12(self.packer, frame, CS.mdps12))
 
     str_log1 = 'torg:{:5.0f} C={:.1f}/{:.1f} V={:.1f}/{:.1f} CV={:.1f}/{:.3f}'.format(  apply_steer, CS.lead_objspd, CS.lead_distance, self.dRel, self.vRel, self.model_speed, self.model_sum )

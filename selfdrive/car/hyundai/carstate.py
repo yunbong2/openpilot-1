@@ -60,6 +60,11 @@ class CarState(CarStateBase):
     ret.wheelSpeeds.rr = cp.vl["WHL_SPD11"]['WHL_SPD_RR'] * CV.KPH_TO_MS
     ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr + ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
+    
+    self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
+    ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
+
+    self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
 
     ret.standstill = ret.vEgoRaw < 0.1
 
@@ -91,13 +96,10 @@ class CarState(CarStateBase):
     lead_objspd = cp_scc.vl["SCC11"]['ACC_ObjRelSpd']
     self.lead_objspd = lead_objspd * CV.MS_TO_KPH
 
-    self.VSetDis = cp_scc.vl["SCC11"]['VSetDis']
-    self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
-
     self.Mdps_ToiUnavail = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail']
-    ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
-
-
+    
+    self.VSetDis = cp_scc.vl["SCC11"]['VSetDis']
+  
     
     steerWarning = False
     if ret.vEgo < 5 or not self.Mdps_ToiUnavail:
@@ -119,7 +121,6 @@ class CarState(CarStateBase):
     ret.cruiseState.available = self.main_on
     ret.cruiseState.enabled =  ret.cruiseState.available  #if not self.CP.longcontrolEnabled else ret.cruiseState.enabled
     ret.cruiseState.standstill = cp_scc.vl["SCC11"]['SCCInfoDisplay'] == 4.
-    self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
 
     # most HKG cars has no long control, it is safer and easier to engage by main on
 
