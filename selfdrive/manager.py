@@ -164,18 +164,18 @@ ThermalStatus = cereal.log.ThermalData.ThermalStatus
 # comment out anything you don't want to run
 managed_processes = {
   "thermald": "selfdrive.thermald.thermald",
-  #"uploader": "selfdrive.loggerd.uploader",  # delete able
-  #"deleter": "selfdrive.loggerd.deleter",   # delete able
+  "uploader": "selfdrive.loggerd.uploader",  # delete able
+  "deleter": "selfdrive.loggerd.deleter",   # delete able
   "controlsd": "selfdrive.controls.controlsd",
   "plannerd": "selfdrive.controls.plannerd",
   "radard": "selfdrive.controls.radard",
-  #"dmonitoringd": "selfdrive.controls.dmonitoringd",
+  "dmonitoringd": "selfdrive.controls.dmonitoringd",
   "ubloxd": ("selfdrive/locationd", ["./ubloxd"]),
-  #"loggerd": ("selfdrive/loggerd", ["./loggerd"]),  # delete able
-  #"logmessaged": "selfdrive.logmessaged",   # delete able
+  "loggerd": ("selfdrive/loggerd", ["./loggerd"]),  # delete able
+  "logmessaged": "selfdrive.logmessaged",   # delete able
   "locationd": "selfdrive.locationd.locationd",
   "tombstoned": "selfdrive.tombstoned",
-  #"logcatd": ("selfdrive/logcatd", ["./logcatd"]),  # delete able
+  "logcatd": ("selfdrive/logcatd", ["./logcatd"]),  # delete able
   "proclogd": ("selfdrive/proclogd", ["./proclogd"]),
   "boardd": ("selfdrive/boardd", ["./boardd"]),   # not used directly
   "pandad": "selfdrive.pandad",
@@ -186,10 +186,10 @@ managed_processes = {
   "sensord": ("selfdrive/sensord", ["./sensord"]),
   "clocksd": ("selfdrive/clocksd", ["./clocksd"]),
   "gpsd": ("selfdrive/sensord", ["./gpsd"]),
-  #"updated": "selfdrive.updated",   # delete able
-  #"dmonitoringmodeld": ("selfdrive/modeld", ["./dmonitoringmodeld"]),
+  "updated": "selfdrive.updated",   # delete able
+  "dmonitoringmodeld": ("selfdrive/modeld", ["./dmonitoringmodeld"]),
   "modeld": ("selfdrive/modeld", ["./modeld"]),
-  #"driverview": "selfdrive.controls.lib.driverview",
+  "driverview": "selfdrive.controls.lib.driverview",
 }
 
 daemon_processes = {
@@ -214,25 +214,25 @@ green_temp_processes = ['uploader']
 
 persistent_processes = [
   'thermald',
-  #'logmessaged',
+  'logmessaged',
   'ui',
-  #'uploader',
+  'uploader',
 ]
 
 if ANDROID:
   persistent_processes += [
-    #'logcatd',
+    'logcatd',
     'tombstoned',
-    #'updated',
-    #'deleter',
+    'updated',
+    'deleter',
   ]
 
 car_started_processes = [
   'controlsd',
   'plannerd',
-  #'loggerd',
+  'loggerd',
   'radard',
- # 'dmonitoringd',
+  'dmonitoringd',
   'calibrationd',
   'paramsd',
   'camerad',
@@ -242,17 +242,17 @@ car_started_processes = [
   'locationd',
 ]
 
-#if WEBCAM:
-#  car_started_processes += [
-#    'dmonitoringmodeld',
-#  ]
+if WEBCAM:
+  car_started_processes += [
+    'dmonitoringmodeld',
+  ]
 
 if ANDROID:
   car_started_processes += [
     'sensord',
     'clocksd',
     'gpsd',
-    #'dmonitoringmodeld',
+    'dmonitoringmodeld',
   ]
 
 def register_managed_process(name, desc, car_started=False):
