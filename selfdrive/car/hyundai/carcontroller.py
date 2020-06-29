@@ -248,9 +248,11 @@ class CarController():
     sys_warning, sys_state = self.process_hud_alert( lkas_active, CC )
 
     clu11_speed = CS.clu11["CF_Clu_Vanz"]
-    enabled_speed = 38 if CS.is_set_speed_in_mph else 60
-    if clu11_speed > enabled_speed or not lkas_active:
-      enabled_speed = clu11_speed
+    #enabled_speed = 38 if CS.is_set_speed_in_mph else 60
+    #if clu11_speed > enabled_speed or not lkas_active:
+    #  enabled_speed = clu11_speed
+
+    print( 'clu11_speed={}  enabled={}'.format( clu11_speed, enabled ) )
 
     if frame == 0: # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"]
