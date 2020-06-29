@@ -259,17 +259,17 @@ class CarController():
 
     can_sends = []
     can_sends.append(create_lkas11(self.packer, self.lkas11_cnt, self.car_fingerprint, apply_steer, steer_req,
-                                   CS.lkas11, sys_warning, sys_state, enabled, CC, 0 ))
+                                   CS.lkas11, sys_warning, sys_state, CC, enabled, 0 ))
     if CS.mdps_bus == 1: # send lkas11 bus 1 if mdps is on bus 1                               
       can_sends.append(create_lkas11(self.packer, self.lkas11_cnt, self.car_fingerprint, apply_steer, steer_req,
-                                   CS.lkas11, sys_warning, sys_state, enabled, CC, 1 ))
+                                   CS.lkas11, sys_warning, sys_state, CC, enabled, 1 ))
     if CS.mdps_bus: # send clu11 to mdps if it is not on bus 0
       can_sends.append(create_clu11(self.packer, frame, CS.mdps_bus, CS.clu11, Buttons.NONE, enabled_speed))
 
-    if pcm_cancel_cmd and self.longcontrol:
-      can_sends.append(create_clu11(self.packer, frame, CS.scc_bus, CS.clu11, Buttons.CANCEL, clu11_speed))
-    else: # send mdps12 to LKAS to prevent LKAS error if no cancel cmd
-      can_sends.append(create_mdps12(self.packer, frame, CS.mdps12))
+    #if pcm_cancel_cmd and self.longcontrol:
+    #  can_sends.append(create_clu11(self.packer, frame, CS.scc_bus, CS.clu11, Buttons.CANCEL, clu11_speed))
+    #else: # send mdps12 to LKAS to prevent LKAS error if no cancel cmd
+    can_sends.append(create_mdps12(self.packer, frame, CS.mdps12))
 
     str_log1 = 'torg:{:5.0f} C={:.1f}/{:.1f} V={:.1f}/{:.1f} CV={:.1f}/{:.3f}'.format(  apply_steer, CS.lead_objspd, CS.lead_distance, self.dRel, self.vRel, self.model_speed, self.model_sum )
     str_log2 = 'limit={:.0f} LC={} tm={:.1f}'.format( apply_steer_limit, path_plan.laneChangeState, self.timer1.sampleTime()  )
@@ -278,10 +278,10 @@ class CarController():
     str_log2 = 'U={:.0f}  LK={:.0f} dir={} steer={:5.0f} '.format( CS.Mdps_ToiUnavail, CS.lkas_button_on, self.steer_torque_ratio_dir, CS.out.steeringTorque  )
     trace1.printf2( '{}'.format( str_log2 ) )
 
-    if pcm_cancel_cmd:
-      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
+    #if pcm_cancel_cmd:
+    #  can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
 
-    elif CS.out.cruiseState.standstill:
+    if CS.out.cruiseState.standstill:
       # run only first time when the car stopped
       if self.last_lead_distance == 0:
         # get the lead distance from the Radar
