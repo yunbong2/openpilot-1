@@ -68,7 +68,7 @@ class CarState(CarStateBase):
     #if  clu_Vanz:
     self.clu_Vanz = clu_Vanz
 
-    print( 'clu_Vanz={} self.clu_Vanz={} vEgo={}'.format( clu_Vanz, self.clu_Vanz, vEgo ) )
+    print( 'clu_Vanz={} self.clu_Vanz={} vEgo={} mdps={} sas={} scc={}'.format( clu_Vanz, self.clu_Vanz, vEgo, self.mdps_bus, self.sas_bus, self.scc_bus ) )
     ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
 
 
