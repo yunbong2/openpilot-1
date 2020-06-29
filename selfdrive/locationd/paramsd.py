@@ -147,6 +147,10 @@ def main(sm=None, pm=None):
         put_nonblocking("LiveParameters", json.dumps(params))
 
       pm.send('liveParameters', msg)
+      print('ok => paramsd.py  ={} '.format(msg) )
+
+    else:
+      print('error => paramsd.py   ')
 
 
 if __name__ == "__main__":
