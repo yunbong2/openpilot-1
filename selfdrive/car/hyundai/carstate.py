@@ -59,7 +59,7 @@ class CarState(CarStateBase):
     ret.wheelSpeeds.rl = cp.vl["WHL_SPD11"]['WHL_SPD_RL'] * CV.KPH_TO_MS
     ret.wheelSpeeds.rr = cp.vl["WHL_SPD11"]['WHL_SPD_RR'] * CV.KPH_TO_MS
     ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr + ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
-    ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
+    vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
     
     self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
     ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
@@ -289,7 +289,7 @@ class CarState(CarStateBase):
 
     checks = [
       # address, frequency
-      ("TCS13", 50),
+      #("TCS13", 50),
       ("TCS15", 10),
       ("CLU11", 50),
       ("ESP12", 100),
@@ -297,11 +297,7 @@ class CarState(CarStateBase):
       ("CGW4", 5),
       ("WHL_SPD11", 50),
     ]
-    if CP.sccBus == 0 and CP.enableCruise:
-      checks += [
-        ("SCC11", 50),
-        ("SCC12", 50),
-      ]
+
     if CP.mdpsBus == 0:
       signals += [
         ("CR_Mdps_StrColTq", "MDPS12", 0),
@@ -332,6 +328,45 @@ class CarState(CarStateBase):
         ("CRUISE_LAMP_M", "EMS16", 0),
         ("CF_Lvr_CruiseSet", "LVR12", 0),
       ]
+    elif not CP.sccBus:
+      signals += [
+        ("MainMode_ACC", "SCC11", 0),
+        ("VSetDis", "SCC11", 0),
+        ("SCCInfoDisplay", "SCC11", 0),
+        ("ACC_ObjDist", "SCC11", 0),
+        ("ACC_ObjRelSpd", "SCC11", 0),
+        ("TauGapSet", "SCC11", 0),
+        ("Navi_SCC_Camera_Act", "SCC11", 0),
+
+        ("CF_VSM_Prefill", "SCC12", 0),
+        ("CF_VSM_DecCmdAct", "SCC12", 0),
+        ("CF_VSM_HBACmd", "SCC12", 0),
+        ("CF_VSM_Warn", "SCC12", 0),
+        ("CF_VSM_Stat", "SCC12", 0),
+        ("CF_VSM_BeltCmd", "SCC12", 0),
+        ("ACCFailInfo", "SCC12", 0),
+        ("ACCMode", "SCC12", 0),
+        ("StopReq", "SCC12", 0),
+        ("CR_VSM_DecCmd", "SCC12", 0),
+        ("aReqMax", "SCC12", 0),
+        ("TakeOverReq", "SCC12", 0),
+        ("PreFill", "SCC12", 0),
+        ("aReqMin", "SCC12", 0),
+        ("CF_VSM_ConfMode", "SCC12", 0),
+        ("AEB_Failinfo", "SCC12", 0),
+        ("AEB_Status", "SCC12", 0),
+        ("AEB_CmdAct", "SCC12", 0),
+        ("AEB_StopReq", "SCC12", 0),
+        ("CR_VSM_Alive", "SCC12", 0),
+        ("CR_VSM_ChkSum", "SCC12", 0),
+      ]
+      checks += [
+        ("SCC11", 50),
+        ("SCC12", 50),
+      ]
+
+
+
     if CP.carFingerprint in FEATURES["use_cluster_gears"]:
       signals += [
         ("CF_Clu_InhibitD", "CLU15", 0),
@@ -413,10 +448,10 @@ class CarState(CarStateBase):
       ]
     if CP.sccBus == 1:
       signals += [
-        ("MainMode_ACC", "SCC11", 1),
+        ("MainMode_ACC", "SCC11", 0),
+        ("VSetDis", "SCC11", 0),        
         ("SCCInfoDisplay", "SCC11", 0),
         ("AliveCounterACC", "SCC11", 0),
-        ("VSetDis", "SCC11", 30),
         ("ObjValid", "SCC11", 0),
         ("DriverAlertDisplay", "SCC11", 0),
         ("TauGapSet", "SCC11", 4),
@@ -453,15 +488,15 @@ class CarState(CarStateBase):
         ("CR_VSM_Alive", "SCC12", 0),
         ("CR_VSM_ChkSum", "SCC12", 0),
 
-        ("SCCDrvModeRValue", "SCC13", 2),
-        ("SCC_Equip", "SCC13", 1),
-        ("AebDrvSetStatus", "SCC13", 0),
+        #("SCCDrvModeRValue", "SCC13", 2),
+        #("SCC_Equip", "SCC13", 1),
+        #("AebDrvSetStatus", "SCC13", 0),
 
-        ("JerkUpperLimit", "SCC14", 0),
-        ("JerkLowerLimit", "SCC14", 0),
-        ("SCCMode2", "SCC14", 0),
-        ("ComfortBandUpper", "SCC14", 0),
-        ("ComfortBandLower", "SCC14", 0),
+        #("JerkUpperLimit", "SCC14", 0),
+        #("JerkLowerLimit", "SCC14", 0),
+        #("SCCMode2", "SCC14", 0),
+        #("ComfortBandUpper", "SCC14", 0),
+        #("ComfortBandLower", "SCC14", 0),
       ]
       checks += [
         ("SCC11", 50),
@@ -535,15 +570,15 @@ class CarState(CarStateBase):
         ("CR_VSM_Alive", "SCC12", 0),
         ("CR_VSM_ChkSum", "SCC12", 0),
 
-        ("SCCDrvModeRValue", "SCC13", 2),
-        ("SCC_Equip", "SCC13", 1),
-        ("AebDrvSetStatus", "SCC13", 0),
+        #("SCCDrvModeRValue", "SCC13", 2),
+        #("SCC_Equip", "SCC13", 1),
+        #("AebDrvSetStatus", "SCC13", 0),
 
-        ("JerkUpperLimit", "SCC14", 0),
-        ("JerkLowerLimit", "SCC14", 0),
-        ("SCCMode2", "SCC14", 0),
-        ("ComfortBandUpper", "SCC14", 0),
-        ("ComfortBandLower", "SCC14", 0),
+        #("JerkUpperLimit", "SCC14", 0),
+        #("JerkLowerLimit", "SCC14", 0),
+        #("SCCMode2", "SCC14", 0),
+        #("ComfortBandUpper", "SCC14", 0),
+        #("ComfortBandLower", "SCC14", 0),
       ]
       checks += [
         ("SCC11", 50),
