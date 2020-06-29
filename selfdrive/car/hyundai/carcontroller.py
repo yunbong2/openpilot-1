@@ -265,8 +265,8 @@ class CarController():
     if CS.mdps_bus == 1: # send lkas11 bus 1 if mdps is on bus 1                               
       can_sends.append(create_lkas11(self.packer, self.lkas11_cnt, self.car_fingerprint, apply_steer, steer_req,
                                    CS.lkas11, sys_warning, sys_state, CC, enabled, 1 ))
-    #if CS.mdps_bus: # send clu11 to mdps if it is not on bus 0
-    #  can_sends.append(create_clu11(self.packer, frame, CS.mdps_bus, CS.clu11, Buttons.NONE, enabled_speed))
+    if CS.mdps_bus: # send clu11 to mdps if it is not on bus 0
+      can_sends.append(create_clu11(self.packer, frame, CS.mdps_bus, CS.clu11, Buttons.NONE, enabled_speed))
 
     #if pcm_cancel_cmd and self.longcontrol:
     #  can_sends.append(create_clu11(self.packer, frame, CS.scc_bus, CS.clu11, Buttons.CANCEL, clu11_speed))
