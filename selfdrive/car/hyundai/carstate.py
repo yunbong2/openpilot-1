@@ -36,6 +36,8 @@ class CarState(CarStateBase):
     self.right_blinker_flash = 0  
     self.steerWarning = 0  
 
+    self.clu_Vanz = 0 
+
     self.TSigLHSw = 0
     self.TSigRHSw = 0
 
@@ -65,7 +67,7 @@ class CarState(CarStateBase):
 
     if  clu_Vanz:
       self.clu_Vanz = clu_Vanz
-      
+
     ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
 
 
