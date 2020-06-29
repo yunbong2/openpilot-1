@@ -106,13 +106,14 @@ def main(sm=None, pm=None):
   i = 0
   while True:
     sm.update()
-
+    print('error => paramsd.py  11 ')
     for which, updated in sm.updated.items():
       if not updated:
         continue
       t = sm.logMonoTime[which] * 1e-9
       learner.handle_log(t, which, sm[which])
 
+    print('error => paramsd.py  122 ')
     # TODO: set valid to false when locationd stops sending
     # TODO: make sure controlsd knows when there is no gyro
 
