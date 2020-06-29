@@ -252,7 +252,7 @@ class CarController():
     #if clu11_speed > enabled_speed or not lkas_active:
     #  enabled_speed = clu11_speed
 
-    print( 'clu11_speed={}  enabled={}'.format( clu11_speed, enabled ) )
+    #print( 'clu11_speed={}  enabled={}'.format( clu11_speed, enabled ) )
 
     if frame == 0: # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"]
