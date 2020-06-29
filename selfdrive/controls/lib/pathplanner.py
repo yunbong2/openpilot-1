@@ -267,7 +267,7 @@ class PathPlanner():
     
 
     plan_send = messaging.new_message('pathPlan')
-    plan_send.valid = sm.all_alive_and_valid(service_list=['carState', 'controlsState', 'model', 'liveParameters' ])
+    plan_send.valid = sm.all_alive_and_valid(service_list=['carState', 'controlsState', 'model'] ) #, 'liveParameters' ])
     plan_send.pathPlan.laneWidth = float(self.LP.lane_width)
     plan_send.pathPlan.dPoly = [float(x) for x in self.LP.d_poly]
     plan_send.pathPlan.lPoly = [float(x) for x in self.LP.l_poly]
@@ -287,6 +287,7 @@ class PathPlanner():
 
     pm.send('pathPlan', plan_send)
 
+    print( 'pathPlan={} '.format( plan_send ))
     #print( 'plan_send.valid={} liveParameters={}'.format(  plan_send.valid ,  bool(sm['liveParameters'].valid) ) )
 
 
