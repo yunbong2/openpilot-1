@@ -59,11 +59,10 @@ class CarState(CarStateBase):
     ret.wheelSpeeds.rl = cp.vl["WHL_SPD11"]['WHL_SPD_RL'] * CV.KPH_TO_MS
     ret.wheelSpeeds.rr = cp.vl["WHL_SPD11"]['WHL_SPD_RR'] * CV.KPH_TO_MS
     ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr + ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
+    ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
     
     self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
     ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
-
-    ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
 
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
 
@@ -210,6 +209,7 @@ class CarState(CarStateBase):
 
 
     # atom append
+    self.pcm_acc_status = int(self.acc_active)
     self.driverOverride = cp.vl["TCS13"]["DriverOverride"]     # 1 Acc,  2 bracking, 0 Normal
     self.Lkas_LdwsSysState = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsSysState"]
     self.lkas_error = self.Lkas_LdwsSysState  == 7
@@ -549,4 +549,5 @@ class CarState(CarStateBase):
         ("SCC11", 50),
         ("SCC12", 50),
       ]
+
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 2)

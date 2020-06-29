@@ -253,8 +253,9 @@ class CarController():
       enabled_speed = clu11_speed
 
     if frame == 0: # initialize counts from last received count signals
-      self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"] + 1
-    self.lkas11_cnt %= 0x10
+      self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"]
+
+    self.lkas11_cnt = (self.lkas11_cnt + 1) % 0x10
 
     can_sends = []
     can_sends.append(create_lkas11(self.packer, self.lkas11_cnt, self.car_fingerprint, apply_steer, steer_req,
@@ -278,7 +279,7 @@ class CarController():
     trace1.printf2( '{}'.format( str_log2 ) )
 
     if pcm_cancel_cmd:
-      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL, clu11_speed))
+      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
 
     elif CS.out.cruiseState.standstill:
       # run only first time when the car stopped
@@ -304,6 +305,5 @@ class CarController():
       can_sends.append(create_lfa_mfa(self.packer, frame, enabled))
 
     # counter inc
-    self.lkas11_cnt += 1
     return can_sends
 
