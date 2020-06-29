@@ -279,7 +279,7 @@ class PathPlanner():
     plan_send.pathPlan.rateSteers = float(rate_desired)
     plan_send.pathPlan.angleOffset = float(angleOffsetAverage)
     plan_send.pathPlan.mpcSolutionValid = bool(plan_solution_valid)
-    plan_send.pathPlan.paramsValid = bool(sm['liveParameters'].valid)
+    plan_send.pathPlan.paramsValid = True  #bool(sm['liveParameters'].valid)
 
     plan_send.pathPlan.desire = desire
     plan_send.pathPlan.laneChangeState = self.lane_change_state
