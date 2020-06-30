@@ -119,6 +119,7 @@ class Controls:
     elif self.CP.lateralTuning.which() == 'lqr':
       self.LaC = LatControlLQR(self.CP)
 
+    self.old_state = 0
     self.state = State.disabled
     self.enabled = False
     self.active = False
@@ -357,6 +358,9 @@ class Controls:
     # Check if openpilot is engaged
     self.enabled = self.active or self.state == State.preEnabled
 
+    if self.old_state != self.state: 
+      print( 'cruise={:.0f} kph{:.1f} enable={} self.active={} self.state={}'.format( CS.cruiseState.enabled, self.v_cruise_kph, self.enabled, self.active, self.state ) )
+      self.old_state = self.state
     #print( 'cruise={:.0f} kph{:.1f} enable={} self.active={} self.state={}'.format( CS.cruiseState.enabled, self.v_cruise_kph, self.enabled, self.active, self.state ) )
 
   def state_control(self, CS):
