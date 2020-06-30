@@ -178,8 +178,14 @@ def calibration_incomplete_alert(CP, sm, metric):
 EVENTS = {
   # ********** events with no alerts **********
 
-  EventName.gasPressed: {ET.PRE_ENABLE: None},
-
+  #EventName.gasPressed: {ET.PRE_ENABLE: None},
+  EventName.gasPressed: {
+    ET.PERMANENT: Alert(
+      "gasPressed",
+      "check debug",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
+  },
   # ********** events only containing alerts displayed in all states **********
 
   EventName.debugAlert: {
