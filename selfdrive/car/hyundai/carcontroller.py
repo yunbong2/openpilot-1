@@ -228,7 +228,7 @@ class CarController():
       apply_steer_limit = int(self.steer_torque_ratio * param.STEER_MAX)
       apply_steer = self.limit_ctrl( apply_steer, apply_steer_limit, 0 )
 
-    print( 'enable={:.0f} apply_steer={:.0f}/{:.0f}/{:.0f} CS.out.steeringAngle={:.3f} CS.out.vEgo={:.3f}'.format( enabled, apply_steer1, apply_steer, self.apply_steer_last, CS.out.steeringAngle, CS.out.vEgo * 3.6 ) )
+    print( 'enable={:.0f} apply_steer={:.0f}/{:.0f}/{:.0f} actuators.steer={:.5f} CS.out.vEgo={:.3f}'.format( enabled, apply_steer1, apply_steer, self.apply_steer_last, actuators.steer, CS.out.vEgo * 3.6 ) )
     # disable if steer angle reach 90 deg, otherwise mdps fault in some models
     lkas_active = enabled and abs(CS.out.steeringAngle) < 100. #and self.lkas_button
 
