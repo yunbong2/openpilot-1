@@ -126,7 +126,7 @@ class PIController():
     self.errorPrev = error
     self.prevInput = setpoint
 
-
+    print( 'vEgo={:.1f} control={:.5f} limit={:.1f}{:.1f}  PID={:.5f}{:.5f}{:.5f}{:.5f} '.format( speed, self.control, self.neg_limit, self.pos_limit, self.p , self.f, self.i , self.d  ) )
     #self.time_cnt += 1
     ##if self.time_cnt > 2:
     #  self.time_cnt = 0
