@@ -8,7 +8,6 @@
 #include "safety/safety_gm_ascm.h"
 #include "safety/safety_gm.h"
 #include "safety/safety_ford.h"
-//#include "safety/safety_hyundai_KYD.h"
 //#include "safety/safety_hyundai_073.h"
 #include "safety/safety_hyundai_076.h"
 //#include "safety/safety_hyundai.h"
