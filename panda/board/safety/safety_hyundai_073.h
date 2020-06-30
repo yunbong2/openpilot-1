@@ -9,7 +9,7 @@ const int HYUNDAI_STANDSTILL_THRSLD = 30;  // ~1kph
 const CanMsg HYUNDAI_TX_MSGS[] = {
   {832, 0, 8},{832, 1, 8},  // LKAS11 Bus 0, 1
   {1265, 0, 4},{1265, 1, 4}, {1265, 2, 4},  // CLU11 Bus 0, 1, 2
-  //{1157, 0, 4}, // LFAHDA_MFC Bus 0
+  {1157, 0, 4}, // LFAHDA_MFC Bus 0
   {593, 2, 8},  // MDPS12, Bus 2
   // {1056, 0, 8}, //   SCC11,  Bus 0
   {1057, 0, 8},  //   SCC12,  Bus 0
@@ -26,7 +26,6 @@ const CanMsg HYUNDAI_TX_MSGS[] = {
 //       wheel speeds stuck at 0 and we don't disengage on brake press
 // TODO: refactor addr check to cleanly re-enable commented out checks for cars that have them
 AddrCheckStruct hyundai_rx_checks[] = {
- // {.msg = {{593, 0, 8, .check_checksum = false, .max_counter = 15U, .expected_timestep = 20000U}}},  
   {.msg = {{608, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U}}},
 //  {.msg = {{897, 0, 8, .max_counter = 255U,. expected_timestep = 10000U}}},
   // TODO: older hyundai models don't populate the counter bits in 902
@@ -42,7 +41,7 @@ const int HYUNDAI_RX_CHECK_LEN = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_c
 static uint8_t hyundai_get_counter(CAN_FIFOMailBox_TypeDef *to_push) {
   int addr = GET_ADDR(to_push);
 
-  uint8_t cnt = 0;
+  uint8_t cnt;
   if (addr == 608) {
     cnt = (GET_BYTE(to_push, 7) >> 4) & 0x3;
   } else if (addr == 902) {
@@ -105,8 +104,7 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push)
                                  hyundai_get_checksum, hyundai_compute_checksum,
                                  hyundai_get_counter);
 
-
-//  bool valid = addr_safety_check( to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN, NULL, NULL, NULL );
+  //bool valid = addr_safety_check( to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN, NULL, NULL, NULL );
 
   bool unsafe_allow_gas = unsafe_mode & UNSAFE_DISABLE_DISENGAGE_ON_GAS;    
 
@@ -171,9 +169,8 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push)
       }
       cruise_engaged_prev = cruise_engaged;
     }
+  // TODO: check gas pressed
 
-
-    // TODO: check gas pressed
     // check if stock camera ECU is on bus 0
     if ((safety_mode_cnt > RELAY_TRNS_TIMEOUT) && bus == 0 && addr == 832) {
       relay_malfunction_set();
@@ -200,8 +197,9 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push)
       }
     }
 
-/*
     // GAS_START: check gas pressed(START)
+
+
     // exit controls on rising edge of gas press for cars with long control
     if (addr == 608 && OP_SCC_live && bus == 0) {
       bool gas_pressed = (GET_BYTE(to_push, 7) >> 6) != 0;
@@ -228,7 +226,7 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push)
       brake_pressed_prev = brake_pressed;
     }
     // GAS_END: check gas pressed(END)
-*/
+
 
 
   return valid;
