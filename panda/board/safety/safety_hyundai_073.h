@@ -26,15 +26,15 @@ const CanMsg HYUNDAI_TX_MSGS[] = {
 //       wheel speeds stuck at 0 and we don't disengage on brake press
 // TODO: refactor addr check to cleanly re-enable commented out checks for cars that have them
 AddrCheckStruct hyundai_rx_checks[] = {
-//  {.msg = {{608, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U}}},
+  {.msg = {{593, 0, 8, .check_checksum = false, .max_counter = 15U, .expected_timestep = 20000U}}},  
+  {.msg = {{608, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U}}},
 //  {.msg = {{897, 0, 8, .max_counter = 255U,. expected_timestep = 10000U}}},
   // TODO: older hyundai models don't populate the counter bits in 902
   //{.msg = {{902, 0, 8, .max_counter = 15U,  .expected_timestep = 10000U}}},
-//  {.msg = {{902, 0, 8, .max_counter = 0U,  .expected_timestep = 10000U}}},
+  {.msg = {{902, 0, 8, .max_counter = 0U,  .expected_timestep = 10000U}}},
   //{.msg = {{916, 0, 8, .check_checksum = true, .max_counter = 7U, .expected_timestep = 10000U}}},
-//  {.msg = {{916, 0, 8, .check_checksum = false, .max_counter = 0U, .expected_timestep = 10000U}}},
-  {.msg = {{593, 0, 8, .check_checksum = false, .max_counter = 15U, .expected_timestep = 20000U}}},
-  {.msg = {{1057, 0, 8, .check_checksum = false, .max_counter = 15U, .expected_timestep = 20000U}}},
+  {.msg = {{916, 0, 8, .check_checksum = false, .max_counter = 0U, .expected_timestep = 10000U}}},
+  {.msg = {{1057, 0, 8, .check_checksum = true, .max_counter = 15U, .expected_timestep = 20000U}}},
 };
 
 const int HYUNDAI_RX_CHECK_LEN = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_checks[0]);
@@ -42,7 +42,7 @@ const int HYUNDAI_RX_CHECK_LEN = sizeof(hyundai_rx_checks) / sizeof(hyundai_rx_c
 static uint8_t hyundai_get_counter(CAN_FIFOMailBox_TypeDef *to_push) {
   int addr = GET_ADDR(to_push);
 
-  uint8_t cnt;
+  uint8_t cnt = 0;
   if (addr == 608) {
     cnt = (GET_BYTE(to_push, 7) >> 4) & 0x3;
   } else if (addr == 902) {
@@ -101,13 +101,12 @@ bool hyundai_forward_bus1 = false;
 static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) 
 {
 
-/*
   bool valid = addr_safety_check(to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN,
                                  hyundai_get_checksum, hyundai_compute_checksum,
                                  hyundai_get_counter);
-*/
 
-  bool valid = addr_safety_check( to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN, NULL, NULL, NULL );
+
+//  bool valid = addr_safety_check( to_push, hyundai_rx_checks, HYUNDAI_RX_CHECK_LEN, NULL, NULL, NULL );
 
   bool unsafe_allow_gas = unsafe_mode & UNSAFE_DISABLE_DISENGAGE_ON_GAS;    
 
