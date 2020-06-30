@@ -121,6 +121,6 @@ class LatControlPID():
       pid_log.output = output_steer
       pid_log.saturated = bool(self.pid.saturated)
 
-    #print( 'vEgo={:.1f} output_steer={:.5f} self.angle_steers_des={:.1f}'.format( CS.vEgo, output_steer , self.angle_steers_des  ) )
+    print( 'active={:.1f} vEgo={:.1f} output_steer={:.5f} self.angle_steers_des={:.1f}'.format( active, CS.vEgo, output_steer , self.angle_steers_des  ) )
 
     return output_steer, float(self.angle_steers_des), pid_log
