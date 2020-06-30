@@ -248,9 +248,9 @@ class CarController():
     sys_warning, sys_state = self.process_hud_alert( lkas_active, CC )
 
     clu11_speed = CS.clu11["CF_Clu_Vanz"]
-    #enabled_speed = 38 if CS.is_set_speed_in_mph else 60
-    #if clu11_speed > enabled_speed or not lkas_active:
-    #  enabled_speed = clu11_speed
+    enabled_speed = 38 if CS.is_set_speed_in_mph else 60
+    if clu11_speed > enabled_speed or not lkas_active:
+      enabled_speed = clu11_speed
 
     #print( 'clu11_speed={}  enabled={}'.format( clu11_speed, enabled ) )
 
@@ -262,11 +262,11 @@ class CarController():
     can_sends = []
     can_sends.append(create_lkas11(self.packer, self.lkas11_cnt, self.car_fingerprint, apply_steer, steer_req,
                                    CS.lkas11, sys_warning, sys_state, CC, enabled, 0 ))
-    if CS.mdps_bus == 1: # send lkas11 bus 1 if mdps is on bus 1                               
+    if CS.mdps_bus or CS.scc_bus == 1: # send lkas11 bus 1 if mdps is on bus 1                               
       can_sends.append(create_lkas11(self.packer, self.lkas11_cnt, self.car_fingerprint, apply_steer, steer_req,
                                    CS.lkas11, sys_warning, sys_state, CC, enabled, 1 ))
     if CS.mdps_bus: # send clu11 to mdps if it is not on bus 0
-      can_sends.append(create_clu11(self.packer, frame, CS.mdps_bus, CS.clu11, Buttons.NONE, clu11_speed))
+      can_sends.append(create_clu11(self.packer, frame, CS.mdps_bus, CS.clu11, Buttons.NONE, enabled_speed))
 
     #if pcm_cancel_cmd and self.longcontrol:
     #  can_sends.append(create_clu11(self.packer, frame, CS.scc_bus, CS.clu11, Buttons.CANCEL, clu11_speed))
