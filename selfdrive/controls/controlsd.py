@@ -353,7 +353,7 @@ class Controls:
     # Check if openpilot is engaged
     self.enabled = self.active or self.state == State.preEnabled
 
-    #print( 'enable={} self.active={} self.state={}'.format( self.enabled, self.active, self.state ) )
+    print( 'cruise={:.0f} kph{:.1f} enable={} self.active={} self.state={}'.format( CS.cruiseState.enabled, self.v_cruise_kph, self.enabled, self.active, self.state ) )
 
   def state_control(self, CS):
     """Given the state, this function returns an actuators packet"""
