@@ -201,7 +201,6 @@ class CarController():
   def update(self, CC, CS, frame, sm, CP ):
     if self.CP != CP:
       self.CP = CP
-    #self.CP = CarInterface.live_tune( self.CP, False )
 
     enabled = CC.enabled
     actuators = CC.actuators
@@ -217,7 +216,6 @@ class CarController():
 
 
     # Steering Torque
-    #param = SteerLimitParams()
     param = self.steerParams_torque( CS, abs_angle_steers, path_plan, CC )
 
 
