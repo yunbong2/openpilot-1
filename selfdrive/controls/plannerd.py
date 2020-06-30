@@ -36,7 +36,7 @@ def plannerd_thread(sm=None, pm=None):
   sm['liveParameters'].sensorValid = True
   sm['liveParameters'].steerRatio = CP.steerRatio
   sm['liveParameters'].stiffnessFactor = 1.0
-  print( 'plannerd_thread={}'.formaT( sm['liveParameters'] ) )
+  #print( 'plannerd_thread={}'.formaT( sm['liveParameters'] ) )
   
   while True:
     sm.update()

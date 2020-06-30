@@ -288,7 +288,7 @@ class PathPlanner():
     plan_send.pathPlan.laneChangeDirection = self.lane_change_direction
 
     pm.send('pathPlan', plan_send)
-    print('pathPlan={} '.format( plan_send ))
+    #print('pathPlan={} '.format( plan_send ))
     #print( 'pathPlan={} '.format( plan_send ))
     #print( 'plan_send.valid={} liveParameters={}'.format(  plan_send.valid ,  bool(sm['liveParameters'].valid) ) )
 
