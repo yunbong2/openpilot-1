@@ -335,13 +335,17 @@ class Controls:
     elif self.state == State.disabled:
       if self.events.any(ET.ENABLE):
         if self.events.any(ET.NO_ENTRY):
+          print( 'self.current_alert_types.append(ET.NO_ENTRY)' )
           self.current_alert_types.append(ET.NO_ENTRY)
 
         else:
           if self.events.any(ET.PRE_ENABLE):
+            print( 'self.state = State.preEnabled' )
             self.state = State.preEnabled
           else:
+            print( 'self.state = State.enabled' )
             self.state = State.enabled
+
           self.current_alert_types.append(ET.ENABLE)
           self.v_cruise_kph = initialize_v_cruise(CS.vEgo, CS.buttonEvents, self.v_cruise_kph_last)
 
@@ -353,7 +357,7 @@ class Controls:
     # Check if openpilot is engaged
     self.enabled = self.active or self.state == State.preEnabled
 
-    print( 'cruise={:.0f} kph{:.1f} enable={} self.active={} self.state={}'.format( CS.cruiseState.enabled, self.v_cruise_kph, self.enabled, self.active, self.state ) )
+    #print( 'cruise={:.0f} kph{:.1f} enable={} self.active={} self.state={}'.format( CS.cruiseState.enabled, self.v_cruise_kph, self.enabled, self.active, self.state ) )
 
   def state_control(self, CS):
     """Given the state, this function returns an actuators packet"""
