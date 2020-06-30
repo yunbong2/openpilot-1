@@ -26,7 +26,7 @@ const CanMsg HYUNDAI_TX_MSGS[] = {
 //       wheel speeds stuck at 0 and we don't disengage on brake press
 // TODO: refactor addr check to cleanly re-enable commented out checks for cars that have them
 AddrCheckStruct hyundai_rx_checks[] = {
-  {.msg = {{593, 0, 8, .check_checksum = false, .max_counter = 15U, .expected_timestep = 20000U}}},  
+ // {.msg = {{593, 0, 8, .check_checksum = false, .max_counter = 15U, .expected_timestep = 20000U}}},  
   {.msg = {{608, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U}}},
 //  {.msg = {{897, 0, 8, .max_counter = 255U,. expected_timestep = 10000U}}},
   // TODO: older hyundai models don't populate the counter bits in 902
