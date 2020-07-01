@@ -58,7 +58,6 @@ class App():
     self.opts = opts
 
     self.is_installed = False
-    self.is_enabled = True if params.get(self.enable_param, encoding='utf8') == "1" else False
     self.last_is_enabled = False
     self.is_auto_runnable = False
     self.is_running = False
