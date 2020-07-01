@@ -190,6 +190,7 @@ managed_processes = {
   #"dmonitoringmodeld": ("selfdrive/modeld", ["./dmonitoringmodeld"]),
   "modeld": ("selfdrive/modeld", ["./modeld"]),
   #"driverview": "selfdrive.controls.lib.driverview",
+  "appd": "selfdrive.kyd.appd.appd",
 }
 
 daemon_processes = {
@@ -225,6 +226,7 @@ if ANDROID:
     'tombstoned',
     #'updated',
     #'deleter',
+    'appd',
   ]
 
 car_started_processes = [
@@ -562,6 +564,20 @@ def main():
     ("OpenpilotEnabledToggle", "1"),
     ("LaneChangeEnabled", "1"),
     ("IsDriverViewEnabled", "0"),
+    ("OpkrAutoScreenOff", "0"),
+    ("OpkrEnableDriverMonitoring", "0"),
+    ("OpkrEnableLogger", "0"),
+    ("OpkrEnableLearner", "0"),
+    ("OpkrAutoResume", "1"),
+    ("OpkrTraceSet", "0"),
+    ("OpkrWhoisDriver", "0"),
+    ("OpkrTuneProfile", "0"),
+    ("OpkrTuneStartAt", "-2"),
+    ("OpkrAccelProfile", "-2"),
+    ("OpkrDevelMode1", "1"),
+    ("OpkrDevelMode2", "1"),
+    ("OpkrRunMixplorer", "0"),
+    ("OpkrRunQuickedit", "0"),
   ]
 
   # set unset params
