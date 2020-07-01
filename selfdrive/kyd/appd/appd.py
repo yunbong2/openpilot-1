@@ -135,6 +135,7 @@ def init_apps(apps):
   apps.append(App(
     "com.mixplorer",
     "com.mixplorer.activities.BrowseActivity",
+    [],
     None,
     "OpkrRunMixplorer",
     App.TYPE_UTIL,
@@ -147,6 +148,7 @@ def init_apps(apps):
   apps.append(App(
     "com.quickedit",
     "com.quickedit.activities.BrowseActivity",
+    [],
     None,
     "OpkrRunQuickedit",
     App.TYPE_UTIL,
