@@ -64,44 +64,22 @@ class App():
     self.manual_ctrl_status = self.MANUAL_IDLE
     self.manually_ctrled = False
 
-    if self.is_enabled:
-      local_version = self.get_local_version()
-      if local_version is not None:
-        self.is_installed = True
-
-      if is_online:
-        remote_version = local_version
-        if local_version is not None and auto_update:
-          remote_version = self.get_remote_version()
-        if local_version is None or (remote_version is not None and local_version != remote_version):
-          self.update_app()
-      if self.is_installed:
-        self.set_package_permissions()
-    else:
-      self.uninstall_app()
-
-    if self.manual_ctrl_param is not None:
-      put_nonblocking(self.manual_ctrl_param, '0')
-    self.last_ts = sec_since_boot()
 
   def run(self, force = False):
-    if self.is_installed and (force or self.is_enabled):
       # app is manually ctrl, we record that
-      if self.manual_ctrl_param is not None and self.manual_ctrl_status == self.MANUAL_ON:
-        put_nonblocking(self.manual_ctrl_param, '0')
-        self.manually_ctrled = True
-        self.is_running = False
+    if self.manual_ctrl_param is not None and self.manual_ctrl_status == self.MANUAL_ON:
+       put_nonblocking(self.manual_ctrl_param, '0')
+       self.manually_ctrled = True
+       self.is_running = False
 
       # only run app if it's not running
-      if force or not self.is_running:
-        self.system("pm enable %s" % self.app)
-
-        if self.app_type == self.TYPE_GPS_SERVICE:
+     if force or not self.is_running:
+       self.system("pm enable %s" % self.app)
+       if self.app_type == self.TYPE_GPS_SERVICE:
           self.appops_set(self.app, "android:mock_location", "allow")
-
-        if self.app_type in [self.TYPE_SERVICE, self.TYPE_GPS_SERVICE]:
+       if self.app_type in [self.TYPE_SERVICE, self.TYPE_GPS_SERVICE]:
           self.system("am startservice %s/%s" % (self.app, self.activity))
-        else:
+       else:
           self.system("am start -n %s/%s" % (self.app, self.activity))
     self.is_running = True
 
@@ -185,8 +163,6 @@ def main():
       modified = get_last_modified()
       for app in apps:
         # read params loop
-        if last_modified != modified:
-          app.read_params()
         if app.last_is_enabled and not app.is_enabled and app.is_running:
           app.kill(True)
 
