@@ -73,29 +73,20 @@ class App():
        self.is_running = False
 
       # only run app if it's not running
-     if force or not self.is_running:
-       self.system("pm enable %s" % self.app)
-       if self.app_type == self.TYPE_GPS_SERVICE:
-          self.appops_set(self.app, "android:mock_location", "allow")
-       if self.app_type in [self.TYPE_SERVICE, self.TYPE_GPS_SERVICE]:
-          self.system("am startservice %s/%s" % (self.app, self.activity))
-       else:
-          self.system("am start -n %s/%s" % (self.app, self.activity))
+       self.system("am start -n %s/%s" % (self.app, self.activity))
     self.is_running = True
 
   def kill(self, force = False):
-    if self.is_installed and (force or self.is_enabled):
       # app is manually ctrl, we record that
-      if self.manual_ctrl_param is not None and self.manual_ctrl_status == self.MANUAL_OFF:
-        put_nonblocking(self.manual_ctrl_param, '0')
-        self.manually_ctrled = True
-        self.is_running = True
+    if self.manual_ctrl_param is not None and self.manual_ctrl_status == self.MANUAL_OFF:
+      put_nonblocking(self.manual_ctrl_param, '0')
+      self.manually_ctrled = True
+      self.is_running = True
 
       # only kill app if it's running
-      if force or self.is_running:
-        if self.app_type == self.TYPE_GPS_SERVICE:
-          self.appops_set(self.app, "android:mock_location", "deny")
-
+    if force or self.is_running:
+      if self.app_type == self.TYPE_GPS_SERVICE:
+        self.appops_set(self.app, "android:mock_location", "deny")
         self.system("pkill %s" % self.app)
         self.is_running = False
 
@@ -150,7 +141,6 @@ def main():
   thermal_status = None
   start_ts = sec_since_boot()
   init_done = False
-  last_modified = None
 
   while 1: #has_enabled_apps:
     if not init_done:
