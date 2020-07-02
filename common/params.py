@@ -113,7 +113,6 @@ keys = {
   "OpkrAutoResume": [TxType.PERSISTENT],
   "OpkrTraceSet": [TxType.PERSISTENT],
   "OpkrWhoisDriver": [TxType.PERSISTENT],
-  "OpkrEnableLiveTune": [TxType.PERSISTENT],
   "OpkrTuneProfile": [TxType.PERSISTENT],
   "OpkrTuneStartAt": [TxType.PERSISTENT],
   "OpkrAccelProfile": [TxType.PERSISTENT],
