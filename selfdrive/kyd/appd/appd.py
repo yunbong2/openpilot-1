@@ -68,12 +68,11 @@ def main(gctx=None):
         # once the temp drop below yellow, we then re-enable them
         #
         # set allow_auto_boot back to True once the thermal status is < yellow
-        thermal_status = msg.thermal.thermalStatus
-      # kill mixplorer when car started
-      if mixplorer_is_running:status
-        mixplorer_is_running = exec_app('-1', mixplorer, mixplorer_main)
+              # kill mixplorer when car started
+      if mixplorer_is_running:
+        mixplorer_is_running = exec_app('0', mixplorer, mixplorer_main)
       if quickedit_is_running:
-        quickedit_is_running = exec_app('-1', quickedit, quickedit_main)
+        quickedit_is_running = exec_app('0', quickedit, quickedit_main)
 
     # car off
     else:
