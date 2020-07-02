@@ -6,7 +6,7 @@ import shutil
 from common.basedir import BASEDIR
 from selfdrive.swaglog import cloudlog
 
-android_packages = ("ai.comma.plus.offroad", "com.mixplorer", "com.rhmsoft.edit.pro", "com.locnall.KimGiSa", "com.gmd.hidesoftkeys")
+android_packages = ("ai.comma.plus.offroad", "com.mixplorer", "com.rhmsoft.edit.pro", "kr.mappers.AtlanSmart", "com.gmd.hidesoftkeys")
 
 def get_installed_apks():
   dat = subprocess.check_output(["pm", "list", "packages", "-f"], encoding='utf8').strip().split("\n")

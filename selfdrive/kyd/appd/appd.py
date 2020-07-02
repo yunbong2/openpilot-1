@@ -15,8 +15,8 @@ mixplorer_main = "com.mixplorer.activities.BrowseActivity"
 quickedit = "com.rhmsoft.edit.pro"
 quickedit_main = "com.rhmsoft.edit.activity.MainActivity"
 
-atlanmap = "com.locnall.KimGiSa"
-atlanmap_main = "com.locnall.KimGiSa.activity.SearchActivity"
+atlanmap = "kr.mappers.AtlanSmart"
+atlanmap_main = "kr.mappers.AtlanSmart.AtlanSmart"
 
 softkey = "com.gmd.hidesoftkeys"
 softkey_main = "com.gmd.hidesoftkeys.MainActivity"
