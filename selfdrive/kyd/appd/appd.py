@@ -12,8 +12,8 @@ params = Params()
 mixplorer = "com.mixplorer"
 mixplorer_main = "com.mixplorer.activities.BrowseActivity"
 
-quickedit = "com.rhmsoft.edit_pro"
-quickedit_main = "com.rhmsoft.edit_pro.activity.MainActivity"
+quickedit = "com.rhmsoft.edit.pro"
+quickedit_main = "com.rhmsoft.edit.activity.MainActivity"
 
 offroad = "ai.comma.plus.offroad"
 offroad_main = ".MainActivity"
