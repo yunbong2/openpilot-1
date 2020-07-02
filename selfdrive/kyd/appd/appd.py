@@ -78,7 +78,7 @@ class App():
     if self.enable_param is None:
       self.is_enabled = False
     else:
-      self.is_enabled = True if params.get(self.enable_param, encoding='utf8') == "1" else False
+      self.is_enabled = True
 
     if self.is_enabled:
       # a service app should run automatically and not manual controllable.
@@ -89,13 +89,13 @@ class App():
         if self.manual_ctrl_param is None:
           self.manual_ctrl_status = self.MANUAL_IDLE
         else:
-          self.manual_ctrl_status = params.get(self.manual_ctrl_param, encoding='utf8')
+          self.manual_ctrl_status = True
 
         if self.manual_ctrl_status == self.MANUAL_IDLE:
           if self.auto_run_param is None:
             self.is_auto_runnable = False
           else:
-            self.is_auto_runnable = True if params.get(self.auto_run_param, encoding='utf8') == "1" else False
+            self.is_auto_runnable = True
     else:
       self.is_auto_runnable = False
       self.manual_ctrl_status = self.MANUAL_IDLE
