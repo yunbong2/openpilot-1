@@ -16,7 +16,7 @@ quickedit = "com.rhmsoft.edit.pro"
 quickedit_main = "com.rhmsoft.edit.activity.MainActivity"
 
 kakaonavi = "com.locnall.KimGiSa"
-kakaonavi_main = "com.locnall.KimGiSa.activity.IntroActivity"
+kakaonavi_main = "com.locnall.KimGiSa.activity.MainActivity"
 
 softkey = "com.gmd.hidesoftkeys"
 softkey_main = "com.gmd.hidesoftkeys.MainActivity"
