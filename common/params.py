@@ -122,7 +122,7 @@ keys = {
   "OpkrDevelMode2": [TxType.PERSISTENT],
   "OpkrRunMixplorer": [TxType.PERSISTENT],
   "OpkrRunQuickedit": [TxType.PERSISTENT],
-  "OpkrRunKakaonavi": [TxType.PERSISTENT],
+  "OpkrRunAtlanmap": [TxType.PERSISTENT],
   "OpkrRunSoftkey": [TxType.PERSISTENT],
 }
 

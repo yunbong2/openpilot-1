@@ -581,7 +581,7 @@ def main():
     ("OpkrDevelMode2", "1"),
     ("OpkrRunMixplorer", "0"),
     ("OpkrRunQuickedit", "0"),
-    ("OpkrRunKakaonavi", "0"),
+    ("OpkrRunAtlanmap", "0"),
     ("OpkrRunSoftkey", "0"),
   ]
 
