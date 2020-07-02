@@ -147,7 +147,7 @@ class App():
         if self.app_type == self.TYPE_GPS_SERVICE:
           self.appops_set(self.app, "android:mock_location", "deny")
 
-        self.system("pkill %s" % self.app)
+        #self.system("pkill %s" % self.app)
         self.is_running = False
 
   def system(self, cmd):
