@@ -577,8 +577,8 @@ def main():
     ("OpkrAccelProfile", "0"),
     ("OpkrDevelMode1", "1"),
     ("OpkrDevelMode2", "1"),
-    ("OpkrRunMixplorer", "0"),
-    ("OpkrRunQuickedit", "0"),
+    ("OpkrRunMixplorer", "1"),
+    ("OpkrRunQuickedit", "1"),
   ]
 
   # set unset params
