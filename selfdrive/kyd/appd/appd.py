@@ -92,10 +92,10 @@ def main(gctx=None):
         #
         # set allow_auto_boot back to True once the thermal status is < yellow
         # kill mixplorer when car started
-      if mixplorer_is_running:
-        mixplorer_is_running = exec_app('0', mixplorer, mixplorer_main)
-      if quickedit_is_running:
-        quickedit_is_running = exec_app('0', quickedit, quickedit_main)
+      #if mixplorer_is_running:
+      #  mixplorer_is_running = exec_app('0', mixplorer, mixplorer_main)
+      #if quickedit_is_running:
+      #  quickedit_is_running = exec_app('0', quickedit, quickedit_main)
       if not atlanmap_is_running:
         softkey_is_running = exec_app('0', softkey, softkey_main)
 
