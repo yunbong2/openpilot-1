@@ -8,7 +8,6 @@ from selfdrive.swaglog import cloudlog
 from common.realtime import sec_since_boot
 from common.params import Params, put_nonblocking
 params = Params()
-from selfdrive.dragonpilot.dragonconf import dp_get_last_modified
 from math import floor
 
 class App():
@@ -188,7 +187,6 @@ def main():
   thermal_status = None
   start_ts = sec_since_boot()
   init_done = False
-  last_modified = None
 
   while 1: #has_enabled_apps:
     if not init_done and sec_since_boot() - start_ts >= 10:
@@ -198,11 +196,9 @@ def main():
     if init_done:
       enabled_apps = []
       has_fullscreen_apps = False
-      modified = dp_get_last_modified()
       for app in apps:
         # read params loop
-        if last_modified != modified:
-          app.read_params()
+        app.read_params()
         if app.last_is_enabled and not app.is_enabled and app.is_running:
           app.kill(True)
 
@@ -215,7 +211,6 @@ def main():
             app.run(True) if app.manual_ctrl_status == App.MANUAL_ON else app.kill(True)
 
           enabled_apps.append(app)
-      last_modified = modified
       msg = messaging.recv_sock(thermal_sock, wait=True)
       started = msg.thermal.started
       # when car is running
