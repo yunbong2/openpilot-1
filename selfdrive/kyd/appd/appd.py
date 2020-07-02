@@ -15,6 +15,12 @@ mixplorer_main = "com.mixplorer.activities.BrowseActivity"
 quickedit = "com.rhmsoft.edit.pro"
 quickedit_main = "com.rhmsoft.edit.activity.MainActivity"
 
+kakaonavi = "com.locnall.KimGiSa"
+kakaonavi_main = "com.locnall.KimGiSa.navi.ui.activity.KNNaviActivity"
+
+softkey = "com.gmd.hidesoftkeys"
+softkey_main = "com.gmd.hidesoftkeys.MainActivity"
+
 offroad = "ai.comma.plus.offroad"
 offroad_main = ".MainActivity"
 
@@ -22,9 +28,13 @@ def main(gctx=None):
 
   opkr_enable_mixplorer = True #if params.get('OpkrRunMixplorer', encoding='utf8') == "1" else False
   opkr_enable_quickedit = True #if params.get("OpkrQuickedit", encoding='utf8') == "1" else False
+  opkr_enable_kakaonavi = True #if params.get("OpkrKakaonavi", encoding='utf8') == "1" else False
   
   mixplorer_is_running = False
   quickedit_is_running = False
+  kakaonavi_is_running = False
+  softkey_is_running = False
+
   allow_auto_boot = True
   last_started = False
   frame = 0
@@ -33,14 +43,18 @@ def main(gctx=None):
 
   put_nonblocking('OpkrRunMixplorer', '0')
   put_nonblocking('OpkrRunQuickedit', '0')
+  put_nonblocking('OpkrRunKakaonavi', '0')
+  put_nonblocking('OpkrRunSoftkey', '0')
 
   # we want to disable all app when boot
   system("pm disable %s" % mixplorer)
   system("pm disable %s" % quickedit)
+  system("pm disable %s" % kakaonavi)
+  system("pm disable %s" % softkey)
 
   thermal_sock = messaging.sub_sock('thermal')
 
-  while opkr_enable_mixplorer or opkr_enable_quickedit:
+  while opkr_enable_mixplorer or opkr_enable_quickedit or opkr_enable_kakaonavi:
 
     # allow user to manually start/stop app
     if opkr_enable_mixplorer:
@@ -55,6 +69,14 @@ def main(gctx=None):
         quickedit_is_running = exec_app(status, quickedit, quickedit_main)
         put_nonblocking('OpkrRunQuickedit', '0')
 
+    if opkr_enable_kakaonavi:
+      status = params.get('OpkrRunKakaonavi', encoding='utf8')
+      if not status == "0":
+        kakaonavi_is_running = exec_app(status, kakaonavi, kakaonavi_main)
+        put_nonblocking('OpkrRunKakaonavi', '0')
+        softkey_is_running = exec_app(status, softkey, softkey_main)
+        put_nonblocking('OpkrRunSoftkey', '0')
+
     msg = messaging.recv_sock(thermal_sock, wait=True)
     started = msg.thermal.started
     # car on
@@ -68,11 +90,13 @@ def main(gctx=None):
         # once the temp drop below yellow, we then re-enable them
         #
         # set allow_auto_boot back to True once the thermal status is < yellow
-              # kill mixplorer when car started
+        # kill mixplorer when car started
       if mixplorer_is_running:
         mixplorer_is_running = exec_app('0', mixplorer, mixplorer_main)
       if quickedit_is_running:
         quickedit_is_running = exec_app('0', quickedit, quickedit_main)
+      if not kakaonavi_is_running:
+        softkey_is_running = exec_app('0', softkey, softkey_main)
 
     # car off
     else:

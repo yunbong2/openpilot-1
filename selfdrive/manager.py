@@ -565,6 +565,7 @@ def main():
     ("LaneChangeEnabled", "1"),
     ("IsDriverViewEnabled", "0"),
     ("IsOpenpilotViewEnabled", "0"),
+    ("OpkrAutoShutdown", "0"),
     ("OpkrAutoScreenOff", "0"),
     ("OpkrEnableDriverMonitoring", "0"),
     ("OpkrEnableLogger", "0"),
@@ -575,10 +576,13 @@ def main():
     ("OpkrTuneProfile", "0"),
     ("OpkrTuneStartAt", "0"),
     ("OpkrAccelProfile", "0"),
+    ("OpkrAutoLanechangedelay", "0"),
     ("OpkrDevelMode1", "1"),
     ("OpkrDevelMode2", "1"),
     ("OpkrRunMixplorer", "0"),
     ("OpkrRunQuickedit", "0"),
+    ("OpkrRunKakaonavi", "0"),
+    ("OpkrRunSoftkey", "0"),
   ]
 
   # set unset params
