@@ -16,10 +16,10 @@ quickedit = "com.rhmsoft.edit.pro"
 quickedit_main = "com.rhmsoft.edit.activity.MainActivity"
 
 kakaonavi = "com.locnall.KimGiSa"
-kakaonavi_main = "com.locnall.KimGiSa.activity.AAProjectionModeActivity"
+kakaonavi_main = "com.locnall.KimGiSa.activity.IntroActivity"
 
 softkey = "com.gmd.hidesoftkeys"
-softkey_main = "com.gmd.hidesoftkeys.ShortcutActivity"
+softkey_main = "com.gmd.hidesoftkeys.MainActivity"
 
 offroad = "ai.comma.plus.offroad"
 offroad_main = ".MainActivity"
@@ -73,10 +73,10 @@ def main(gctx=None):
     if opkr_enable_kakaonavi:
       status = params.get('OpkrRunKakaonavi', encoding='utf8')
       if not status == "0":
-        kakaonavi_is_running = exec_app(status, kakaonavi, kakaonavi_main)
         softkey_is_running = exec_app(status, softkey, softkey_main)
-        put_nonblocking('OpkrRunKakaonavi', '0')
         put_nonblocking('OpkrRunSoftkey', '0')
+        kakaonavi_is_running = exec_app(status, kakaonavi, kakaonavi_main)
+        put_nonblocking('OpkrRunKakaonavi', '0')
 
     msg = messaging.recv_sock(thermal_sock, wait=True)
     started = msg.thermal.started
