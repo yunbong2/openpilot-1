@@ -163,6 +163,7 @@ def init_apps(apps):
   apps.append(App(
     "com.mixplorer",
     "com.mixplorer.activities.BrowseActivity",
+    [],
     None,
     "OpkrRunMixplorer",
     App.TYPE_UTIL,
@@ -170,6 +171,7 @@ def init_apps(apps):
       "android.permission.READ_EXTERNAL_STORAGE",
       "android.permission.WRITE_EXTERNAL_STORAGE",
     ],
+    [],
   ))
 
 def main():
