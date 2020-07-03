@@ -19,7 +19,7 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
   #values["CF_Lkas_LdwsRHWarning"] = right_lane_depart  
 
 
-  if car_fingerprint in [CAR.SONATA, CAR.PALISADE]:
+  if car_fingerprint in [CAR.PALISADE]:
     values["CF_Lkas_Bca_R"] = int(CC.hudControl.leftLaneVisible) + (int(CC.hudControl.rightLaneVisible) << 1)
     values["CF_Lkas_LdwsOpt_USM"] = 2
 
@@ -36,6 +36,11 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
     # SysWarning 6 = keep hands on wheel (red) + beep
     # Note: the warning is hidden while the blinkers are on
     values["CF_Lkas_SysWarning"] = 4 if sys_warning else 0
+
+  if car_fingerprint == CAR.SANTAFE:
+    values["CF_Lkas_FcwOpt_USM"] = 2 if enabled else 1
+    values["CF_Lkas_LdwsOpt_USM"] = 2
+    values["CF_Lkas_SysWarning"] = 0
 
   dat = packer.make_can_msg("LKAS11", 0, values)[2]
 

@@ -233,7 +233,7 @@ class CarController():
     lkas_active = enabled and abs(CS.out.steeringAngle) < 100. #and self.lkas_button
 
     # fix for Genesis hard fault at low speed
-    if CS.out.vEgo < 16.7 and self.car_fingerprint == CAR.HYUNDAI_GENESIS:
+    if CS.out.vEgo < 16.666667 and self.car_fingerprint == CAR.GENESIS:
       lkas_active = 0
 
     if not lkas_active:
@@ -301,7 +301,7 @@ class CarController():
 
 
     # 20 Hz LFA MFA message
-    if frame % 5 == 0 and self.car_fingerprint in [CAR.SONATA, CAR.PALISADE]:
+    if frame % 5 == 0 and self.car_fingerprint in [CAR.PALISADE]:
       can_sends.append(create_lfa_mfa(self.packer, frame, enabled))
 
     # counter inc

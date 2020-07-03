@@ -423,7 +423,7 @@ class CarState(CarStateBase):
       checks += [
         ("E_EMS11", 100),
       ]
-    if CP.carFingerprint in [CAR.SANTA_FE]:
+    if CP.carFingerprint in [CAR.SANTAFE]:
       checks.remove(("TCS13", 50))
 
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 0)
