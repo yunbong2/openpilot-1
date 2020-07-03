@@ -6,7 +6,7 @@ import shutil
 from common.basedir import BASEDIR
 from selfdrive.swaglog import cloudlog
 
-android_packages = ("ai.comma.plus.offroad", "com.mixplorer", "com.rhmsoft.edit.pro", "kr.mappers.AtlanSmart", "com.gmd.hidesoftkeys")
+android_packages = ("com.mixplorer", "com.rhmsoft.edit.pro", "kr.mappers.AtlanSmart", "com.gmd.hidesoftkeys", "ai.comma.plus.offroad")
 
 def get_installed_apks():
   dat = subprocess.check_output(["pm", "list", "packages", "-f"], encoding='utf8').strip().split("\n")
@@ -36,6 +36,7 @@ def set_package_permissions():
   pm_grant("ai.comma.plus.offroad", "android.permission.READ_EXTERNAL_STORAGE")
   appops_set("ai.comma.plus.offroad", "SU", "allow")
   appops_set("ai.comma.plus.offroad", "WIFI_SCAN", "allow")
+  appops_set("com.gmd.hidesoftkeys", "SU", "allow")
 
 def appops_set(package, op, mode):
   system(f"LD_LIBRARY_PATH= appops set {package} {op} {mode}")
