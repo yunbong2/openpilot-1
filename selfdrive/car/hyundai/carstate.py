@@ -38,18 +38,18 @@ class CarState(CarStateBase):
     # cruise state
     #ret.cruiseState.available = True
     #ret.cruiseState.enabled = cp.vl["SCC12"]['ACCMode'] != 0
-    self.main_on = (cp_scc.vl["SCC11"]["MainMode_ACC"] != 0)
-    self.acc_active = (cp_scc.vl["SCC12"]['ACCMode'] != 0)
+    self.main_on = (cp.vl["SCC11"]["MainMode_ACC"] != 0)
+    self.acc_active = (cp.vl["SCC12"]['ACCMode'] != 0)
     ret.cruiseState.available = self.main_on
     ret.cruiseState.enabled =  ret.cruiseState.available
-    ret.cruiseState.standstill = cp_scc.vl["SCC11"]['SCCInfoDisplay'] == 4.
+    ret.cruiseState.standstill = cp.vl["SCC11"]['SCCInfoDisplay'] == 4.
 
     # most HKG cars has no long control, it is safer and easier to engage by main on
 
     #if ret.cruiseState.enabled:
     if self.acc_active:
       speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
-      ret.cruiseState.speed = cp_scc.vl["SCC11"]['VSetDis'] * speed_conv
+      ret.cruiseState.speed = cp.vl["SCC11"]['VSetDis'] * speed_conv
       #ret.cruiseState.speed = self.VSetDis * speed_conv
     else:
       ret.cruiseState.speed = 0
