@@ -27,7 +27,8 @@ const int GM_DRIVER_TORQUE_FACTOR = 4;
 const int GM_MAX_GAS = 3072;
 const int GM_MAX_REGEN = 1404;
 const int GM_MAX_BRAKE = 350;
-const AddrBus GM_TX_MSGS[] = {{384, 0}, {1033, 0}, {1034, 0}, {715, 0}, {880, 0},  // pt bus
+const int GM_GAS_INTERCEPTOR_THRESHOLD = 458;  // (610 + 306.25) / 2ratio between offset and gain from dbc file
+const AddrBus GM_TX_MSGS[] = {{384, 0}, {1033, 0}, {1034, 0}, {715, 0}, {880, 0}, {512, 0},  // pt bus
                               {161, 1}, {774, 1}, {776, 1}, {784, 1},   // obs bus
                               {789, 2},  // ch bus
                               {0x104c006c, 3}, {0x10400060, 3}};  // gmlan
@@ -42,6 +43,7 @@ AddrCheckStruct gm_rx_checks[] = {
 };
 const int GM_RX_CHECK_LEN = sizeof(gm_rx_checks) / sizeof(gm_rx_checks[0]);
 
+int gm_camera_bus = -1;
 int gm_brake_prev = 0;
 //int gm_gas_prev = 0;
 bool gm_moving = false;
@@ -77,6 +79,16 @@ static void gm_set_stock_lkas(CAN_FIFOMailBox_TypeDef *to_send) {
   gm_lkas_buffer.stock_ts = TIM2->CNT;
 }
 
+static void gm_detect_cam(void) {
+  if (gm_camera_bus != -1) return;
+  if (board_has_relay()) {
+    gm_camera_bus = 2;
+  }
+  else {
+    gm_camera_bus = 1;
+  }
+}
+
 static void gm_set_op_lkas(CAN_FIFOMailBox_TypeDef *to_send) {
   gm_lkas_buffer.op_frame.RIR = to_send->RIR;
   gm_lkas_buffer.op_frame.RDTR = to_send->RDTR;
@@ -91,6 +103,7 @@ static int gm_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
                                  NULL, NULL, NULL);
 
   if (valid) {
+    gm_detect_cam();
     int bus = GET_BUS(to_push);
     int addr = GET_ADDR(to_push);
 
@@ -140,6 +153,15 @@ static int gm_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     }
 
     // exit controls on rising edge of gas press
+    if (addr == 0x201) {
+      gas_interceptor_detected = 1;
+      int gas_interceptor = GET_INTERCEPTOR(to_push);
+      if ((gas_interceptor > GM_GAS_INTERCEPTOR_THRESHOLD) &&
+          (gas_interceptor_prev <= GM_GAS_INTERCEPTOR_THRESHOLD)) {
+        //controls_allowed = 0; //TODO: remove / fix (probably problem with threshold)
+      }
+      gas_interceptor_prev = gas_interceptor;
+    }
     //if (addr == 417) {
     //  int gas = GET_BYTE(to_push, 6);
     //  if (gas && !gm_gas_prev) {
@@ -178,6 +200,7 @@ static int gm_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
   int tx = 1;
   int addr = GET_ADDR(to_send);
   int bus = GET_BUS(to_send);
+  gm_detect_cam();
 
   if (!msg_allowed(addr, bus, GM_TX_MSGS, sizeof(GM_TX_MSGS)/sizeof(GM_TX_MSGS[0]))) {
     tx = 0;
@@ -189,8 +212,18 @@ static int gm_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
 
   // disallow actuator commands if gas or brake (with vehicle moving) are pressed
   // and the the latching controls_allowed flag is True
-  //int pedal_pressed = gm_gas_prev || (gm_brake_prev && gm_moving);
-  bool current_controls_allowed = controls_allowed; //&& !pedal_pressed;
+  int pedal_pressed = (gm_brake_prev && gm_moving);
+  bool current_controls_allowed = controls_allowed && !(pedal_pressed);
+
+  // GAS: safety check
+  if (addr == 0x200) {
+    if (!current_controls_allowed) {
+      if (GET_BYTE(to_send, 0) || GET_BYTE(to_send, 1)) {
+        puts("gas safety check failed");
+        tx = 0;
+      }
+    }
+  }
 
   // BRAKE: safety check
   if (addr == 789) {
@@ -209,10 +242,10 @@ static int gm_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
   // LKA STEER: safety check
   if (addr == 384) {
     uint32_t vals[4];
-      vals[0] = 0x00000000U;
-      vals[1] = 0x10000fffU;
-      vals[2] = 0x20000ffeU;
-      vals[3] = 0x30000ffdU;
+    vals[0] = 0x00000000U;
+    vals[1] = 0x10000fffU;
+    vals[2] = 0x20000ffeU;
+    vals[3] = 0x30000ffdU;
 
     int rolling_counter = GET_BYTE(to_send, 0) >> 4;
     int desired_torque = ((GET_BYTE(to_send, 0) & 0x7U) << 8) + GET_BYTE(to_send, 1);
@@ -251,12 +284,14 @@ static int gm_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
 
     // reset to 0 if either controls is not allowed or there's a violation
     if (violation || !current_controls_allowed) {
+      puts("no steer reset to zero");
       gm_desired_torque_last = 0;
       gm_rt_torque_last = 0;
       gm_ts_last = ts;
     }
 
     if (violation) {
+      puts("no steer violation");
       //Replace payload with appropriate zero value for expected rolling counter
       to_send->RDLR = vals[rolling_counter];
     }
@@ -281,19 +316,31 @@ static int gm_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
       tx = 0;
     }
   }
-
+  puth(addr);
+  puts(": ");
+  puth(tx);
+  puts("\n");
   // 1 allows the message through
   return tx;
 }
 
 static int gm_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
+  gm_detect_cam();
   int bus_fwd = -1;
   if (bus_num == 0) {
-    bus_fwd = 1;  // Camera is on CAN2
+    if (gm_ffc_detected) {
+      //only perform forwarding if we have seen LKAS messages on CAN2
+      bus_fwd = gm_camera_bus;  // Camera is on CAN2
+    }
   }
-  if (bus_num == 1) {
+  if (bus_num == gm_camera_bus) {
     int addr = GET_ADDR(to_fwd);
-    if (addr != 384) return 0;
+    if (addr != 384) {
+      //only perform forwarding if we have seen LKAS messages on CAN2
+      if (gm_ffc_detected) {
+        return 0;
+      }
+    }
     gm_set_stock_lkas(to_fwd);
     gm_ffc_detected = true;
     gm_init_lkas_pump();
@@ -305,8 +352,8 @@ static int gm_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
 
 
 static CAN_FIFOMailBox_TypeDef * gm_pump_hook(void) {
-  //volatile int pedal_pressed = (volatile int)gm_gas_prev || ((volatile int)gm_brake_prev && (volatile int)gm_moving);
-  volatile bool current_controls_allowed = (volatile bool)controls_allowed; //&& !(volatile int)pedal_pressed;
+  volatile int pedal_pressed = (volatile int)gm_brake_prev && (volatile int)gm_moving;
+  volatile bool current_controls_allowed = (volatile bool)controls_allowed; && !(volatile int)pedal_pressed;
 
   if (!gm_ffc_detected) {
     //If we haven't seen lkas messages from CAN2, there is no passthrough, just use OP
@@ -315,6 +362,7 @@ static CAN_FIFOMailBox_TypeDef * gm_pump_hook(void) {
     gm_apply_buffer(&gm_lkas_buffer, false);
     //In OP only mode we need to send zero if controls are not allowed
     if (!current_controls_allowed) {
+      puts("current controls not allowed...\n");
       gm_lkas_buffer.current_frame.RDLR = 0U;
       gm_lkas_buffer.current_frame.RDHR = 0U;
     }
@@ -374,6 +422,10 @@ static CAN_FIFOMailBox_TypeDef * gm_pump_hook(void) {
   // Merge the rewritten checksum back into the BxCAN frame RDLR
   gm_lkas_buffer.current_frame.RDLR &= 0x0000FFFF;
   gm_lkas_buffer.current_frame.RDLR |= (checksumswap << 16);
+
+  puts("lkas command: ");
+  puth(gm_lkas_buffer.current_frame.RDLR);
+  puts("\n");
 
   return (CAN_FIFOMailBox_TypeDef*)&gm_lkas_buffer.current_frame;
 }
