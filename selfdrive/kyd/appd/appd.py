@@ -19,8 +19,7 @@ atlanmap = "kr.mappers.AtlanSmart"
 atlanmap_main = "kr.mappers.AtlanSmart.AtlanSmart"
 
 softkey = "com.gmd.hidesoftkeys"
-#softkey_main = "com.gmd.hidesoftkeys.MainActivity"
-softkey_main = "com.gmd.hidesoftkeys.ShortcutActivity"
+softkey_main = "com.gmd.hidesoftkeys.MainActivity"
 
 offroad = "ai.comma.plus.offroad"
 offroad_main = ".MainActivity"
