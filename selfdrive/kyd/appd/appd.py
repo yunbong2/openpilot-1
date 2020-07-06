@@ -18,6 +18,9 @@ quickedit_main = "com.rhmsoft.edit.activity.MainActivity"
 atlanmap = "kr.mappers.AtlanSmart"
 atlanmap_main = "kr.mappers.AtlanSmart.AtlanSmart"
 
+onenavi = "kt.navi"
+onenavi_main = "kt.navi.UIActivity"
+
 softkey = "com.gmd.hidesoftkeys"
 softkey_main = "com.gmd.hidesoftkeys.MainActivity"
 
@@ -29,12 +32,14 @@ def main(gctx=None):
   opkr_enable_mixplorer = True #if params.get('OpkrRunMixplorer', encoding='utf8') == "1" else False
   opkr_enable_quickedit = True #if params.get("OpkrQuickedit", encoding='utf8') == "1" else False
   opkr_enable_atlanmap = True #if params.get("OpkrAtlanmap", encoding='utf8') == "1" else False
+  opkr_enable_onenavi = True #if params.get("OpkrAtlanmap", encoding='utf8') == "1" else False
   opkr_enable_softkey = True if params.get("OpkrEnableSoftkey", encoding='utf8') == "1" else False
   opkr_boot_softkey = True if params.get("OpkrBootSoftkey", encoding='utf8') == "1" else False
   
   mixplorer_is_running = False
   quickedit_is_running = False
   atlanmap_is_running = False
+  onenavi_is_running = False
   softkey_is_running = False
 
   allow_auto_boot = True
@@ -46,17 +51,19 @@ def main(gctx=None):
   put_nonblocking('OpkrRunMixplorer', '0')
   put_nonblocking('OpkrRunQuickedit', '0')
   put_nonblocking('OpkrRunAtlanmap', '0')
+  put_nonblocking('OpkrRunOnenavi', '0')
   put_nonblocking('OpkrRunSoftkey', '0')
 
   # we want to disable all app when boot
   system("pm disable %s" % mixplorer)
   system("pm disable %s" % quickedit)
   system("pm disable %s" % atlanmap)
+  system("pm disable %s" % onenavi)
   system("pm disable %s" % softkey)
 
   thermal_sock = messaging.sub_sock('thermal')
 
-  while opkr_enable_mixplorer or opkr_enable_quickedit or opkr_enable_atlanmap or opkr_enable_softkey:
+  while opkr_enable_mixplorer or opkr_enable_quickedit or opkr_enable_atlanmap or opkr_enable_onenavi or opkr_enable_softkey:
 
     # allow user to manually start/stop app
     if opkr_enable_mixplorer:
@@ -84,6 +91,14 @@ def main(gctx=None):
         put_nonblocking('OpkrRunSoftkey', '0')
         atlanmap_is_running = exec_app(status, atlanmap, atlanmap_main)
         put_nonblocking('OpkrRunAtlanmap', '0')
+
+    if opkr_enable_onenavi:
+      status = params.get('OpkrRunOnenavi', encoding='utf8')
+      if not status == "0":
+        softkey_is_running = exec_app(status, softkey, softkey_main)
+        put_nonblocking('OpkrRunSoftkey', '0')
+        onenavi_is_running = exec_app(status, onenavi, onenavi_main)
+        put_nonblocking('OpkrRunOnenavi', '0')
 
     msg = messaging.recv_sock(thermal_sock, wait=True)
     started = msg.thermal.started
