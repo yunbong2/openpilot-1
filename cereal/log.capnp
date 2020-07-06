@@ -296,7 +296,7 @@ struct ThermalData {
 
   memUsedPercent @19 :Int8;
   cpuPerc @20 :Int8;
-  ipAddr @21 :Text;
+  ipAddr @25 :Text;
 
   enum ThermalStatus {
     green @0;   # all processes run
