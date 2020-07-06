@@ -108,6 +108,8 @@ keys = {
   "Offroad_IsTakingSnapshot": [TxType.CLEAR_ON_MANAGER_START],
   "OpkrAutoShutdown": [TxType.PERSISTENT],
   "OpkrAutoScreenOff": [TxType.PERSISTENT],
+  "OpkrUIVolumeBoost": [TxType.PERSISTENT],
+  "OpkrUIBrightness": [TxType.PERSISTENT],
   "OpkrEnableDriverMonitoring": [TxType.PERSISTENT],
   "OpkrEnableLogger": [TxType.PERSISTENT],
   "OpkrEnableLearner": [TxType.PERSISTENT],
@@ -122,8 +124,18 @@ keys = {
   "OpkrDevelMode2": [TxType.PERSISTENT],
   "OpkrRunMixplorer": [TxType.PERSISTENT],
   "OpkrRunQuickedit": [TxType.PERSISTENT],
-  "OpkrRunAtlanmap": [TxType.PERSISTENT],
+  "OpkrEnableSoftkey": [TxType.PERSISTENT],
   "OpkrRunSoftkey": [TxType.PERSISTENT],
+  "OpkrBootSoftkey": [TxType.PERSISTENT],
+  "OpkrEnableNavigation": [TxType.PERSISTENT],
+  "OpkrRunAtlanmap": [TxType.PERSISTENT],
+  "OpkrBootAtlanmap": [TxType.PERSISTENT],
+  "OpkrRunOnenavi": [TxType.PERSISTENT],
+  "OpkrBootOnenavi": [TxType.PERSISTENT],
+  "OpkrRunTmap": [TxType.PERSISTENT],
+  "OpkrBootTmap": [TxType.PERSISTENT],
+  "OpkrRunKakaonavi": [TxType.PERSISTENT],
+  "OpkrBootKakaonavi": [TxType.PERSISTENT],
 }
 
 
