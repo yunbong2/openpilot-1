@@ -29,7 +29,8 @@ def main(gctx=None):
   opkr_enable_mixplorer = True #if params.get('OpkrRunMixplorer', encoding='utf8') == "1" else False
   opkr_enable_quickedit = True #if params.get("OpkrQuickedit", encoding='utf8') == "1" else False
   opkr_enable_atlanmap = True #if params.get("OpkrAtlanmap", encoding='utf8') == "1" else False
-  opkr_enable_softkey = True #if params.get("OpkrSoftkey", encoding='utf8') == "1" else False
+  opkr_enable_softkey = True if params.get("OpkrEnableSoftkey", encoding='utf8') == "1" else False
+  opkr_boot_softkey = True if params.get("OpkrBootSoftkey", encoding='utf8') == "1" else False
   
   mixplorer_is_running = False
   quickedit_is_running = False
@@ -55,7 +56,7 @@ def main(gctx=None):
 
   thermal_sock = messaging.sub_sock('thermal')
 
-  while opkr_enable_mixplorer or opkr_enable_quickedit or opkr_enable_atlanmap:
+  while opkr_enable_mixplorer or opkr_enable_quickedit or opkr_enable_atlanmap or opkr_enable_softkey:
 
     # allow user to manually start/stop app
     if opkr_enable_mixplorer:
@@ -69,6 +70,12 @@ def main(gctx=None):
       if not status == "0":
         quickedit_is_running = exec_app(status, quickedit, quickedit_main)
         put_nonblocking('OpkrRunQuickedit', '0')
+
+    if opkr_enable_softkey:
+      status = params.get('OpkrRunSoftkey', encoding='utf8')
+      if not status == "0":
+        softkey_is_running = exec_app(status, softkey, softkey_main)
+        put_nonblocking('OpkrRunSoftkey', '0')
 
     if opkr_enable_atlanmap:
       status = params.get('OpkrRunAtlanmap', encoding='utf8')
@@ -86,6 +93,11 @@ def main(gctx=None):
       if start_delay is None:
         start_delay = frame + 3
 
+      if opkr_boot_softkey:
+        if not softkey_is_running:
+          softkey_is_running = exec_app('1', softkey, softkey_main)
+          put_nonblocking('OpkrRunSoftkey', '0')
+
         # Logic:
         # if temp reach red, we disable all 3rd party apps.
         # once the temp drop below yellow, we then re-enable them
@@ -96,8 +108,6 @@ def main(gctx=None):
       #  mixplorer_is_running = exec_app('0', mixplorer, mixplorer_main)
       #if quickedit_is_running:
       #  quickedit_is_running = exec_app('0', quickedit, quickedit_main)
-      if not atlanmap_is_running:
-        softkey_is_running = exec_app('0', softkey, softkey_main)
 
     # car off
     else:
