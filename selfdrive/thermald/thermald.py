@@ -18,6 +18,8 @@ import cereal.messaging as messaging
 from selfdrive.loggerd.config import get_available_percent
 from selfdrive.pandad import get_expected_signature
 from selfdrive.thermald.power_monitoring import PowerMonitoring, get_battery_capacity, get_battery_status, get_battery_current, get_battery_voltage, get_usb_present
+import re
+import subprocess
 
 FW_SIGNATURE = get_expected_signature()
 
@@ -150,7 +152,7 @@ def handle_fan_uno(max_cpu_temp, bat_temp, fan_speed, ignition):
 
 def thermald_thread():
   # prevent LEECO from undervoltage
-  BATT_PERC_OFF = 90 #10 if LEON else 3
+  BATT_PERC_OFF = 100 #10 if LEON else 3
 
   health_timeout = int(1000 * 2.5 * DT_TRML)  # 2.5x the expected health frequency
 
@@ -189,6 +191,9 @@ def thermald_thread():
   no_panda_cnt = 0
 
   IsDriverViewEnabled = 0
+
+  ts_last_ip = 0
+  ip_addr = '255.255.255.255'
 
   while 1:
     ts = sec_since_boot()
@@ -261,6 +266,18 @@ def thermald_thread():
     if is_uno:
       msg.thermal.batteryPercent = 100
       msg.thermal.batteryStatus = "Charging"
+
+    # kyd
+    # update ip every 10 seconds
+    ts = sec_since_boot()
+    if ts - ts_last_ip >= 10.:
+      try:
+        result = subprocess.check_output(["ifconfig", "wlan0"], encoding='utf8')  # pylint: disable=unexpected-keyword-arg
+        ip_addr = re.findall(r"inet addr:((\d+\.){3}\d+)", result)[0][0]
+      except:
+        ip_addr = 'N/A'
+      ts_last_ip = ts
+    msg.thermal.ipAddr = ip_addr
 
     current_filter.update(msg.thermal.batteryCurrent / 1e6)
 

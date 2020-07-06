@@ -165,6 +165,8 @@ typedef struct UIScene {
   int satelliteCount;
   uint8_t athenaStatus;
 
+  //kyd
+  std::string ipAddr;
 
   // pathcoloring
   float output_scale;
