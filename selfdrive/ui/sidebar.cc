@@ -4,6 +4,8 @@
 #include <map>
 #include "ui.hpp"
 
+extern float  fFontSize;
+
 static void ui_draw_sidebar_background(UIState *s) {
   int sbr_x = !s->scene.uilayout_sidebarcollapsed ? 0 : -(sbr_w) + bdr_s * 2;
   ui_draw_rect(s->vg, sbr_x, 0, sbr_w, vwp_h, COLOR_BLACK_ALPHA(85));
@@ -46,7 +48,7 @@ static void ui_draw_sidebar_ip_addr(UIState *s) {
   char network_ip_str[15];
 //  snprintf(network_ip_str, sizeof(network_ip_str), "%s", s->scene.ipAddr);
   nvgFillColor(s->vg, COLOR_WHITE);
-  nvgFontSize(s->vg, 34);
+  nvgFontSize(s->vg, 34*fFontSize);
   nvgFontFaceId(s->vg, s->font_sans_regular);
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
   nvgTextBox(s->vg, network_ip_x, network_ip_y, network_ip_w, s->scene.ipAddr.c_str(), NULL);
@@ -61,7 +63,7 @@ static void ui_draw_sidebar_battery_text(UIState *s) {
   char battery_str[7];
   snprintf(battery_str, sizeof(battery_str), "%d%%%s", s->scene.batteryPercent, s->scene.batteryCharging ? "+" : "-");
   nvgFillColor(s->vg, COLOR_WHITE);
-  nvgFontSize(s->vg, 44);
+  nvgFontSize(s->vg, 44*fFontSize);
   nvgFontFaceId(s->vg, s->font_sans_regular);
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
   nvgTextBox(s->vg, battery_img_x, battery_img_y, battery_img_w, battery_str, NULL);
@@ -95,7 +97,7 @@ static void ui_draw_sidebar_network_type(UIState *s) {
   const int network_h = 100;
   const char *network_type = network_type_map[s->scene.networkType];
   nvgFillColor(s->vg, COLOR_WHITE);
-  nvgFontSize(s->vg, 48);
+  nvgFontSize(s->vg, 48*fFontSize);
   nvgFontFaceId(s->vg, s->font_sans_regular);
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
   nvgTextBox(s->vg, network_x, network_y, network_w, network_type ? network_type : "--", NULL);
@@ -127,19 +129,19 @@ static void ui_draw_sidebar_metric(UIState *s, const char* label_str, const char
 
   if (!message_str) {
     nvgFillColor(s->vg, COLOR_WHITE);
-    nvgFontSize(s->vg, 78);
+    nvgFontSize(s->vg, 78*fFontSize);
     nvgFontFaceId(s->vg, s->font_sans_bold);
     nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, metric_x + 50, metric_y + 50, metric_w - 60, value_str, NULL);
 
     nvgFillColor(s->vg, COLOR_WHITE);
-    nvgFontSize(s->vg, 46);
+    nvgFontSize(s->vg, 46*fFontSize);
     nvgFontFaceId(s->vg, s->font_sans_regular);
     nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, metric_x + 50, metric_y + 50 + 66, metric_w - 60, label_str, NULL);
   } else {
     nvgFillColor(s->vg, COLOR_WHITE);
-    nvgFontSize(s->vg, 46);
+    nvgFontSize(s->vg, 46*fFontSize);
     nvgFontFaceId(s->vg, s->font_sans_bold);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, metric_x + 35, metric_y + (strchr(message_str, '\n') ? 40 : 50), metric_w - 50, message_str, NULL);
