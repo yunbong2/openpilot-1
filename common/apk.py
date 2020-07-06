@@ -28,6 +28,7 @@ def install_apk(path):
 
 def start_offroad():
   set_package_permissions()
+  system("am start -n com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
   system("am start -n ai.comma.plus.offroad/.MainActivity")
 
 def set_package_permissions():
