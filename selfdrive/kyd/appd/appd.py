@@ -19,7 +19,7 @@ atlanmap = "kr.mappers.AtlanSmart"
 atlanmap_main = "kr.mappers.AtlanSmart.AtlanSmart"
 
 onenavi = "kt.navi"
-onenavi_main = "kt.navi.activity.Intro_Activity"
+onenavi_main = "kt.navi.UIActivity"
 
 tmap = "com.skt.tmap.ku"
 tmap_main = "com.skt.tmap.activity.TmapNaviActivity"
