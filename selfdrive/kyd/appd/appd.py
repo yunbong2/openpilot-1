@@ -19,13 +19,13 @@ atlanmap = "kr.mappers.AtlanSmart"
 atlanmap_main = "kr.mappers.AtlanSmart.AtlanSmart"
 
 onenavi = "kt.navi"
-onenavi_main = "kt.navi.UIActivity"
+onenavi_main = "kt.navi.activity.Intro_Activity"
 
 tmap = "com.skt.tmap.ku"
 tmap_main = "com.skt.tmap.activity.TmapNaviActivity"
 
 kakaonavi = "com.locnall.KimGiSa"
-kakaonavi_main = "com.locnall.KimGiSa.navi.ui.activity.KNNaviActivity"
+kakaonavi_main = "com.locnall.KimGiSa.activity.IntroActivity"
 
 softkey = "com.gmd.hidesoftkeys"
 softkey_main = "com.gmd.hidesoftkeys.MainActivity"
