@@ -45,7 +45,7 @@ def main(gctx=None):
   opkr_boot_tmap = True if params.get("OpkrBootTmap", encoding='utf8') == "1" else False
   opkr_enable_kakaonavi = True #if params.get("OpkrEnableKakaonavi", encoding='utf8') == "1" else False
   opkr_boot_kakaonavi = True if params.get("OpkrBootKakaonavi", encoding='utf8') == "1" else False
-  opkr_enable_softkey = True if params.get("OpkrEnableSoftkey", encoding='utf8') == "1" else False
+  opkr_enable_softkey = True #if params.get("OpkrEnableSoftkey", encoding='utf8') == "1" else False
   opkr_boot_softkey = True if params.get("OpkrBootSoftkey", encoding='utf8') == "1" else False
   
   mixplorer_is_running = False
