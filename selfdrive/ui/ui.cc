@@ -15,6 +15,8 @@
 #include "ui.hpp"
 #include "dashcam.h"
 
+int  is_awake_command = false;
+
 static int last_brightness = -1;
 static void set_brightness(UIState *s, int brightness) {
   if (last_brightness != brightness && (s->awake || brightness == 0)) {
@@ -38,11 +40,17 @@ static void enable_event_processing(bool yes) {
   }
 }
 
-static void set_awake(UIState *s, bool awake) {
+static void set_awake(UIState *s, bool awake, int nTime ) 
+{
+  if( nTime <= 0 )
+  {
+    nTime = 30;
+  }
+    
 #ifdef QCOM
   if (awake) {
     // 30 second timeout at 30 fps
-    s->awake_timeout = 30*30;
+    s->awake_timeout = 30*nTime;
   }
   if (s->awake != awake) {
     s->awake = awake;
@@ -100,6 +108,10 @@ static void navigate_to_home(UIState *s) {
 
 static void handle_driver_view_touch(UIState *s, int touch_x, int touch_y) {
   int err = write_db_value("IsDriverViewEnabled", "0", 1);
+}
+
+static void handle_openpilot_view_touch(UIState *s, int touch_x, int touch_y) {
+  int err = write_db_value("IsOpenpilotViewEnabled", "0", 1);
 }
 
 static void handle_sidebar_touch(UIState *s, int touch_x, int touch_y) {
@@ -227,7 +239,7 @@ static void ui_init(UIState *s) {
   s->fb = framebuffer_init("ui", 0, true, &s->fb_w, &s->fb_h);
   assert(s->fb);
 
-  set_awake(s, true);
+  set_awake(s, true, 30);
 
   s->model_changed = false;
   s->livempc_or_radarstate_changed = false;
@@ -350,6 +362,7 @@ void handle_message(UIState *s, SubMaster &sm) {
     auto alert_sound = data.getAlertSound();
     const auto sound_none = cereal::CarControl::HUDControl::AudibleAlert::NONE;
     if (alert_sound != s->alert_sound){
+      is_awake_command = true;
       if (s->alert_sound != sound_none){
         stop_alert_sound(s->alert_sound);
       }
@@ -365,8 +378,10 @@ void handle_message(UIState *s, SubMaster &sm) {
     scene.alert_size = data.getAlertSize();
     auto alertStatus = data.getAlertStatus();
     if (alertStatus == cereal::ControlsState::AlertStatus::USER_PROMPT) {
+      is_awake_command = true;
       update_status(s, STATUS_WARNING);
     } else if (alertStatus == cereal::ControlsState::AlertStatus::CRITICAL) {
+      is_awake_command = true;
       update_status(s, STATUS_ALERT);
     } else{
       update_status(s, scene.engaged ? STATUS_ENGAGED : STATUS_DISENGAGED);
@@ -512,6 +527,19 @@ void handle_message(UIState *s, SubMaster &sm) {
     scene.leftBlinker = data.getLeftBlinker();
     scene.rightBlinker = data.getRightBlinker();
     scene.getGearShifter = data.getGearShifter();
+
+
+    auto cruiseState = data.getCruiseState();
+
+    scene.cruiseState.standstill = cruiseState.getStandstill();
+    scene.cruiseState.modeSel = cruiseState.getModeSel();
+
+
+    auto getWheelSpeeds = data.getWheelSpeeds();
+    scene.wheel.fl = getWheelSpeeds.getFl();
+    scene.wheel.fr = getWheelSpeeds.getFr();
+    scene.wheel.rl = getWheelSpeeds.getRl();
+    scene.wheel.rr = getWheelSpeeds.getRr();    
   }
 
   if (sm.updated("carParams")) {
@@ -903,10 +931,12 @@ int main(int argc, char* argv[]) {
   s->volume_timeout = 5 * UI_FREQ;
   int draws = 0;
 
+  UIScene &scene = s->scene;
   s->scene.satelliteCount = -1;
   s->started = false;
   s->vision_seen = false;
-
+  int nAwakeTime = 0;
+  int nParamRead = 0;
   while (!do_exit) {
     bool should_swap = false;
     if (!s->started) {
@@ -916,6 +946,26 @@ int main(int argc, char* argv[]) {
     }
     pthread_mutex_lock(&s->lock);
     double u1 = millis_since_boot();
+
+    // parameter Read.
+    nParamRead++;
+    switch( nParamRead )
+    {
+      case 1: ui_get_params( "OpkrDevelMode1", &scene.params.nOpkrDevelMode1 ); break;
+      case 2: ui_get_params( "OpkrAutoScreenOff", &scene.params.nOpkrAutoScreenOff ); break;
+      case 3: ui_get_params( "OpkrAccelProfile", &scene.params.nOpkrAccelProfile ); break;
+      
+      default: nParamRead = 0; break;
+    }
+
+    int nTimeOff = scene.params.nOpkrAutoScreenOff * 60;
+    if( nAwakeTime != nTimeOff )
+    {
+        nAwakeTime = nTimeOff;
+        //LOGW("nOpkrAutoScreenOff %d",nAwakeTime);
+    }
+    
+    if( nAwakeTime == 0 )  nTimeOff = 30;
 
     // light sensor is only exposed on EONs
     float clipped_brightness = (s->light_sensor*brightness_m) + brightness_b;
@@ -933,8 +983,9 @@ int main(int argc, char* argv[]) {
     // poll for touch events
     int touch_x = -1, touch_y = -1;
     int touched = touch_poll(&touch, &touch_x, &touch_y, 0);
-    if (touched == 1) {
-      set_awake(s, true);
+    if (touched == 1) 
+    {
+      set_awake(s, true, nTimeOff);
 
       if( touch_x  < 1660 || touch_y < 885 )
       {
@@ -943,7 +994,7 @@ int main(int argc, char* argv[]) {
       }
       else
       {
-        handle_driver_view_touch(s, touch_x, touch_y);
+        handle_openpilot_view_touch(s, touch_x, touch_y);
       }
       
     }
@@ -953,7 +1004,35 @@ int main(int argc, char* argv[]) {
       // always process events offroad
       check_messages(s);
     } else {
-      set_awake(s, true);
+      static int modelSel;
+
+      if( modelSel != scene.cruiseState.modeSel )
+      {
+        modelSel = scene.cruiseState.modeSel;
+        nAwakeTime = 0;
+      }
+      else if( scene.engaged && scene.v_ego < 1 )
+      {
+        nAwakeTime = 0;
+      }
+
+      float maxspeed = scene.v_cruise;
+      int  maxspeed_calc = maxspeed;
+      static int _maxspeed_calc;
+      if( maxspeed_calc != _maxspeed_calc)
+      {
+        _maxspeed_calc = maxspeed_calc;
+        is_awake_command = true;
+      //  LOGW("is_awake_command = true  speed = %d", maxspeed_calc );
+      }         
+
+      if( is_awake_command || nAwakeTime == 0 || scene.cruiseState.standstill  )
+      {
+        is_awake_command = false;
+        set_awake(s, true, 30);
+      }
+        
+
       // Car started, fetch a new rgb image from ipc
       if (s->vision_connected){
         ui_update(s);
@@ -972,10 +1051,13 @@ int main(int argc, char* argv[]) {
     }
 
     // manage wakefulness
-    if (s->awake_timeout > 0) {
-      s->awake_timeout--;
-    } else {
-      set_awake(s, false);
+    if( nAwakeTime)
+    {
+      if (s->awake_timeout > 0) {
+        s->awake_timeout--;
+      } else  {
+        set_awake(s, false, 30);
+      }
     }
 
     // manage hardware disconnect
@@ -988,9 +1070,8 @@ int main(int argc, char* argv[]) {
     // Don't waste resources on drawing in case screen is off
     if (s->awake) 
     {
+      dashcam(s, touch_x, touch_y);        
       ui_draw(s);
-
-      dashcam(s, touch_x, touch_y);      
       glFinish();
       should_swap = true;
     }
@@ -1064,7 +1145,7 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  set_awake(s, true);
+  set_awake(s, true, 30);
   ui_sound_destroy();
 
   // wake up bg thread to exit

@@ -111,6 +111,14 @@ typedef struct UIScene {
   float v_ego;
   bool decel_for_model;
 
+  struct _WHEEL_VEGO
+  {
+    float fl;
+    float fr;
+    float rl;
+    float rr;
+  } wheel;
+
   float speedlimit;
   bool speedlimit_valid;
   bool map_valid;
@@ -165,7 +173,6 @@ typedef struct UIScene {
   int satelliteCount;
   uint8_t athenaStatus;
 
-  //kyd
   std::string ipAddr;
 
   // pathcoloring
@@ -206,6 +213,20 @@ typedef struct UIScene {
       float steerRatio;
       struct LateralsRatom  lateralsRatom;
   } carParams;
+
+  struct _CRUISE_STATE
+  {
+    bool standstill;
+    int  modeSel;
+  } cruiseState;
+
+
+  struct  _PARAMS
+  {
+    int nOpkrDevelMode1;
+    int nOpkrAutoScreenOff;
+    int nOpkrAccelProfile;
+  } params;
 
 } UIScene;
 
