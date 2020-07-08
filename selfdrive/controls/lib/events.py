@@ -610,7 +610,7 @@ EVENTS = {
       "기어가 드라이브모드가 아닙니다",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.chimeGearDrive, 4., 0., 4.),
-
+  },
   EventName.calibrationInvalid: {
     ET.SOFT_DISABLE: SoftDisableAlert("캘리브레이션 유효하지 않음: 장치 위치 조정 및 재 캘리브레이션"),
     ET.NO_ENTRY: NoEntryAlert("캘리브레이션 유효하지 않음: 장치 위치 조정 및 재 캘리브레이션"),
