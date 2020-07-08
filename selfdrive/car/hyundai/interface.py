@@ -215,7 +215,7 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
     elif candidate == CAR.SOUL_EV:
       ret.lateralTuning.pid.kf = 0.00005
-      ret.mass = 2020. + STD_CARGO_KG
+      ret.mass = 1695. + STD_CARGO_KG
       ret.wheelbase = 2.6
       ret.steerRatio = 12.5
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
