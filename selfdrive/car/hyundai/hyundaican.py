@@ -1,4 +1,5 @@
 import crcmod
+import copy
 from selfdrive.car.hyundai.values import CAR, CHECKSUM
 
 hyundai_checksum = crcmod.mkCrcFun(0x11D, initCrc=0xFD, rev=False, xorOut=0xdf)
@@ -7,7 +8,8 @@ hyundai_checksum = crcmod.mkCrcFun(0x11D, initCrc=0xFD, rev=False, xorOut=0xdf)
 def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
                   lkas11, sys_warning, sys_state, CC, enabled, bus):
 
-  values = lkas11
+  values = copy.deepcopy( lkas11 )
+  #values = lkas11
   values["CF_Lkas_LdwsSysState"] = sys_state
   values["CF_Lkas_SysWarning"] = 3 if sys_warning else 0
   values["CR_Lkas_StrToqReq"] = apply_steer
@@ -19,7 +21,7 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
   #values["CF_Lkas_LdwsRHWarning"] = right_lane_depart  
 
 
-  if car_fingerprint in [CAR.PALISADE]:
+  if car_fingerprint in [CAR.PALISADE, CAR.SELTOS]:
     values["CF_Lkas_Bca_R"] = int(CC.hudControl.leftLaneVisible) + (int(CC.hudControl.rightLaneVisible) << 1)
     values["CF_Lkas_LdwsOpt_USM"] = 2
 
@@ -59,13 +61,18 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
 
   return packer.make_can_msg("LKAS11", bus, values)
 
-def create_clu11(packer, frame, bus, clu11, button, speed):
-  values = clu11
+
+def create_clu11(packer, frame, bus, clu11, button, speed = None):
+  values = copy.deepcopy( clu11 )
+  #values = clu11
+  if speed != None:
+    values["CF_Clu_Vanz"] = speed
+
   values["CF_Clu_CruiseSwState"] = button
-  values["CF_Clu_Vanz"] = speed
   values["CF_Clu_AliveCnt1"] = frame % 0x10
   return packer.make_can_msg("CLU11", bus, values)
-  
+
+
 def create_lfa_mfa(packer, frame, enabled):
   values = {
     "ACTIVE": enabled,
@@ -87,7 +94,8 @@ def create_lfa_mfa(packer, frame, enabled):
   return packer.make_can_msg("LFAHDA_MFC", 0, values)
 
 def create_mdps12(packer, frame, mdps12):
-  values = mdps12
+  values = copy.deepcopy( mdps12 )
+  #values = mdps12
   values["CF_Mdps_ToiActive"] = 0
   values["CF_Mdps_ToiUnavail"] = 1
   values["CF_Mdps_MsgCount2"] = frame % 0x100
@@ -100,9 +108,12 @@ def create_mdps12(packer, frame, mdps12):
   return packer.make_can_msg("MDPS12", 2, values)
 
 def create_scc12(packer, apply_accel, enabled, cnt, scc_live, scc12):
-  values = scc12
-  values["aReqRaw"] = apply_accel if enabled else 0 #aReqMax
-  values["aReqValue"] = apply_accel if enabled else 0 #aReqMin
+  values = copy.deepcopy( scc12 )
+  #values = scc12
+  if enabled and scc12["ACCMode"] == 1:
+    values["aReqMax"] = apply_accel
+    values["aReqMin"] = apply_accel
+  
   values["CR_VSM_Alive"] = cnt
   values["CR_VSM_ChkSum"] = 0
   if not scc_live:
