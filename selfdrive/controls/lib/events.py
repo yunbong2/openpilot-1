@@ -601,15 +601,9 @@ EVENTS = {
   },
 
   EventName.wrongGear: {
-    #ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeGearDrive),  #ET.SOFT_DISABLE: SoftDisableAlert("기어가 드라이브모드가 아닙니다"),
-    ET.PERMANENT: Alert(
-      "오픈파일럿 사용불가",
-      "기어가 드라이브모드가 아닙니다",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.LOWER, VisualAlert.none, AudibleAlert.chimeGearDrive, 4., 0., 4.),
-    #ET.PERMANENT: Alert(Priority.LOWER, VisualAlert.none, AudibleAlert.chimeGearDrive, 4., 0., 4.),
+    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),  #ET.SOFT_DISABLE: SoftDisableAlert("기어가 드라이브모드가 아닙니다"),
     ET.NO_ENTRY: NoEntryAlert("기어가 드라이브모드가 아닙니다"),
-  }, 
+  },
 
   EventName.calibrationInvalid: {
     ET.SOFT_DISABLE: SoftDisableAlert("캘리브레이션 유효하지 않음: 장치 위치 조정 및 재 캘리브레이션"),
@@ -623,12 +617,12 @@ EVENTS = {
   },
 
   EventName.doorOpen: {
-    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage), #ET.SOFT_DISABLE: SoftDisableAlert("도어가 열려있습니다"),
+    ET.SOFT_DISABLE: SoftDisableAlert("도어가 열려있습니다"),
     ET.NO_ENTRY: NoEntryAlert("도어가 열려있습니다"),
   },
 
   EventName.seatbeltNotLatched: {
-    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeSeatBelt), #ET.SOFT_DISABLE: SoftDisableAlert("안전벨트를 체결하세요"),
+    ET.SOFT_DISABLE: SoftDisableAlert("안전벨트를 체결하세요"),
     ET.NO_ENTRY: NoEntryAlert("안전벨트를 체결하세요"),
   },
 
@@ -713,7 +707,6 @@ EVENTS = {
     ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("가속페달 오류: 차량을 재시작하세요"),
     ET.NO_ENTRY: NoEntryAlert("가속페달 오류: 차량을 재시작하세요"),
   },
-
 
   EventName.reverseGear: {
     ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
