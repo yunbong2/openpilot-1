@@ -164,18 +164,18 @@ ThermalStatus = cereal.log.ThermalData.ThermalStatus
 # comment out anything you don't want to run
 managed_processes = {
   "thermald": "selfdrive.thermald.thermald",
-  #"uploader": "selfdrive.loggerd.uploader",  # delete able
-  #"deleter": "selfdrive.loggerd.deleter",   # delete able
+  "uploader": "selfdrive.loggerd.uploader",  # delete able
+  "deleter": "selfdrive.loggerd.deleter",   # delete able
   "controlsd": "selfdrive.controls.controlsd",
   "plannerd": "selfdrive.controls.plannerd",
   "radard": "selfdrive.controls.radard",
-  #"dmonitoringd": "selfdrive.controls.dmonitoringd",
+  "dmonitoringd": "selfdrive.controls.dmonitoringd",
   "ubloxd": ("selfdrive/locationd", ["./ubloxd"]),
-  #"loggerd": ("selfdrive/loggerd", ["./loggerd"]),  # delete able
-  #"logmessaged": "selfdrive.logmessaged",   # delete able
+  "loggerd": ("selfdrive/loggerd", ["./loggerd"]),  # delete able
+  "logmessaged": "selfdrive.logmessaged",   # delete able
   "locationd": "selfdrive.locationd.locationd",
   "tombstoned": "selfdrive.tombstoned",
-  #"logcatd": ("selfdrive/logcatd", ["./logcatd"]),  # delete able
+  "logcatd": ("selfdrive/logcatd", ["./logcatd"]),  # delete able
   "proclogd": ("selfdrive/proclogd", ["./proclogd"]),
   "boardd": ("selfdrive/boardd", ["./boardd"]),   # not used directly
   "pandad": "selfdrive.pandad",
@@ -187,10 +187,10 @@ managed_processes = {
   "clocksd": ("selfdrive/clocksd", ["./clocksd"]),
   "gpsd": ("selfdrive/sensord", ["./gpsd"]),
   #"updated": "selfdrive.updated",   # delete able
-  #"dmonitoringmodeld": ("selfdrive/modeld", ["./dmonitoringmodeld"]),
+  "dmonitoringmodeld": ("selfdrive/modeld", ["./dmonitoringmodeld"]),
   "modeld": ("selfdrive/modeld", ["./modeld"]),
-  #"driverview": "selfdrive.controls.lib.driverview",
-  "appd": "selfdrive.kyd.appd.appd",
+  "driverview": "selfdrive.controls.lib.driverview",  # delete able
+  "appd": "selfdrive.kyd.appd.appd",  
 }
 
 daemon_processes = {
@@ -215,26 +215,26 @@ green_temp_processes = ['uploader']
 
 persistent_processes = [
   'thermald',
-  #'logmessaged',
+  'logmessaged',
   'ui',
-  #'uploader',
+  'uploader',
 ]
 
 if ANDROID:
   persistent_processes += [
-    #'logcatd',
+    'logcatd',
     'tombstoned',
     #'updated',
-    #'deleter',
-    'appd',
+    'deleter',
+    'appd',    
   ]
 
 car_started_processes = [
   'controlsd',
   'plannerd',
-  #'loggerd',
+  'loggerd',
   'radard',
- # 'dmonitoringd',
+  'dmonitoringd',
   'calibrationd',
   'paramsd',
   'camerad',
@@ -244,17 +244,17 @@ car_started_processes = [
   'locationd',
 ]
 
-#if WEBCAM:
-#  car_started_processes += [
-#    'dmonitoringmodeld',
-#  ]
+if WEBCAM:
+  car_started_processes += [
+    'dmonitoringmodeld',
+  ]
 
 if ANDROID:
   car_started_processes += [
     'sensord',
     'clocksd',
     'gpsd',
-    #'dmonitoringmodeld',
+    'dmonitoringmodeld',
   ]
 
 def register_managed_process(name, desc, car_started=False):
@@ -430,10 +430,28 @@ def manager_thread():
   cloudlog.info("manager start")
   cloudlog.info({"environ": os.environ})
 
-  # save boot log
-  subprocess.call(["./loggerd", "--bootlog"], cwd=os.path.join(BASEDIR, "selfdrive/loggerd"))
 
   params = Params()
+
+  EnableDriverMonitoring = int(params.get('OpkrEnableDriverMonitoring')) 
+  EnableLogger = int(params.get('OpkrEnableLogger')) 
+
+  if not EnableDriverMonitoring:
+    car_started_processes.remove( 'dmonitoringd' )
+    car_started_processes.remove( 'dmonitoringmodeld' )
+    
+
+  if not EnableLogger:
+    car_started_processes.remove( 'loggerd' )
+    persistent_processes.remove( 'logmessaged' )
+    persistent_processes.remove( 'uploader' )
+    persistent_processes.remove( 'logcatd' )
+    persistent_processes.remove( 'updated' )
+    persistent_processes.remove( 'deleter' )
+  else:
+    # save boot log
+    subprocess.call(["./loggerd", "--bootlog"], cwd=os.path.join(BASEDIR, "selfdrive/loggerd"))
+
 
   # start daemon processes
   for p in daemon_processes:
@@ -473,7 +491,7 @@ def manager_thread():
         if p in persistent_processes:
           start_managed_process(p)
 
-    if msg.thermal.freeSpace < 0.05:
+    if msg.thermal.freeSpace < 0.1:
       logger_dead = True
 
     if msg.thermal.started and "driverview" not in running:
@@ -569,16 +587,16 @@ def main():
     ("OpkrAutoScreenOff", "0"),
     ("OpkrUIVolumeBoost", "0"),
     ("OpkrUIBrightness", "0"),
-    ("OpkrEnableDriverMonitoring", "0"),
+    ("OpkrEnableDriverMonitoring", "1"),
     ("OpkrEnableLogger", "0"),
-    ("OpkrEnableGetoffAlert", "0"),
+    ("OpkrEnableGetoffAlert", "1"),
     ("OpkrEnableLearner", "0"),
     ("OpkrAutoResume", "1"),
     ("OpkrTraceSet", "0"),
     ("OpkrWhoisDriver", "0"),
     ("OpkrTuneProfile", "0"),
     ("OpkrTuneStartAt", "0"),
-    ("OpkrAccelProfile", "0"),
+    ("OpkrAccelProfile", "0"),   #악셀프로파일 0:미사용, 1:브드럽게,2:보통,3:빠르게
     ("OpkrAutoLanechangedelay", "0"),
     ("OpkrDevelMode1", "1"),
     ("OpkrDevelMode2", "1"),
