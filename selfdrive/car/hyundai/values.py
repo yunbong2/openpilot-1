@@ -4,7 +4,7 @@ Ecu = car.CarParams.Ecu
 
 # Steer torque limits
 class SteerLimitParams:
-  STEER_MAX = 365   # 409 is the max, 255 is stock
+  STEER_MAX = 255   # 409 is the max, 255 is stock
   STEER_DELTA_UP = 3
   STEER_DELTA_DOWN = 5
   STEER_DRIVER_ALLOWANCE = 50
@@ -39,6 +39,7 @@ class CAR:
   NIRO_EV = "KIA NIRO ELECTRIC"
   NEXO = "HYUNDAI NEXO"
   SELTOS = "KIA SELTOS"
+  SOUL_EV = "KIA SOUL EV"
 
 
 class Buttons:
@@ -219,6 +220,12 @@ FINGERPRINTS = {
   CAR.SELTOS: [{
     67: 8, 127: 8, 304: 8, 320: 8, 339: 8, 354: 8, 356: 4, 544: 8, 593: 8, 608: 8, 688: 6, 809: 8, 832: 8, 854: 8, 870: 7, 871: 8, 872: 8, 897: 8, 902: 8, 905: 8, 909: 8, 910: 5, 911: 5, 913: 8, 916: 8, 1040: 8, 1042: 8, 1056: 8, 1057: 8, 1078: 4, 1107: 5, 1114: 8, 1136: 8, 1145: 8, 1151: 8, 1155: 8, 1156: 8, 1157: 4, 1162: 8, 1164: 8, 1168: 8, 1170: 8, 1173: 8, 1186: 2, 1191: 2, 1225: 8, 1265: 4, 1280: 8, 1287: 4, 1290: 8, 1292: 8, 1294: 8, 1312: 8, 1322: 8, 1342: 6, 1345: 8, 1348: 8, 1363: 8, 1369: 8, 1379: 8, 1384: 8, 1394: 8, 1407: 8, 1414: 3, 1419: 8, 1427: 6, 1446: 8, 1456: 4, 1470: 8, 1485: 8, 1911: 8
   }],
+  CAR.SOUL_EV: [{
+    127: 8, 304: 8, 320: 8, 339: 8, 352: 8, 356: 4, 544: 8, 546: 8, 593: 8, 688: 6, 832: 8, 881: 8, 882: 8, 897: 8, 902: 8, 903: 8, 905: 8, 909: 8, 913: 8, 916: 8, 1040: 8, 1042: 8, 1056: 8, 1057: 8, 1078: 4, 1136: 8, 1151: 6, 1155: 8, 1156: 8, 1157: 4, 1162: 8, 1164: 8, 1168: 7, 1173: 8, 1186: 2, 1191: 2, 1193: 8, 1225: 8, 1227: 8, 1265: 4, 1280: 1, 1287: 4, 1290: 8, 1291: 8, 1292: 8, 1294: 8, 1312: 8, 1322: 8, 1342: 6, 1345: 8, 1348: 8, 1355: 8, 1363: 8, 1369: 8, 1378: 8, 1379: 8, 1407: 8, 1419: 8, 1426: 8, 1427: 6, 1429: 8, 1430: 8, 1456: 4, 1470: 8, 1473: 8, 1507: 8, 1535: 8
+  },
+  {
+    127: 8, 304: 8, 320: 8, 339: 8, 352: 8, 356: 4, 544: 8, 546: 8, 593: 8, 688: 6, 832: 8, 881: 8, 882: 8, 897: 8, 902: 8, 903: 8, 905: 8, 909: 8, 913: 8, 916: 8, 1040: 8, 1042: 8, 1056: 8, 1057: 8, 1078: 4, 1136: 8, 1151: 6, 1155: 8, 1156: 8, 1157: 4, 1162: 8, 1164: 8, 1168: 7, 1173: 8, 1186: 2, 1191: 2, 1193: 8, 1225: 8, 1227: 8, 1265: 4, 1280: 1, 1287: 4, 1290: 8, 1291: 8, 1292: 8, 1294: 8, 1312: 8, 1322: 8, 1342: 6, 1345: 8, 1348: 8, 1355: 8, 1363: 8, 1369: 8, 1378: 8, 1379: 8, 1407: 8, 1419: 8, 1426: 8, 1427: 6, 1429: 8, 1430: 8, 1456: 4, 1470: 8, 1473: 8, 1507: 8, 1535: 8, 2000: 8, 2008: 8
+  }],
 }
 
 ECU_FINGERPRINT = {
@@ -233,7 +240,7 @@ CHECKSUM = {
 FEATURES = {
   "use_cluster_gears": [CAR.AVANTE, CAR.KONA, CAR.NIRO, CAR.I30, CAR.GRANDEUR, CAR.K7],  # Use Cluster for Gear Selection, rather than Transmission
   "use_tcu_gears": [CAR.K5, CAR.SONATA, CAR.SONATA_TURBO],  # Use TCU Message for Gear Selection
-  "use_elect_gears": [CAR.K5_HYBRID, CAR.SONATA_HYBRID, CAR.GRANDEUR_HYBRID, CAR.IONIQ_EV, CAR.KONA_EV, CAR.NIRO_EV, CAR.NEXO],
+  "use_elect_gears": [CAR.K5_HYBRID, CAR.SONATA_HYBRID, CAR.GRANDEUR_HYBRID, CAR.IONIQ_EV, CAR.KONA_EV, CAR.NIRO_EV, CAR.NEXO, CAR.SOUL_EV],
 }
 
 DBC = {
@@ -264,6 +271,7 @@ DBC = {
   CAR.NIRO_EV: dbc_dict('hyundai_kia_generic', None),
   CAR.NEXO: dbc_dict('hyundai_kia_generic', None),
   CAR.SELTOS: dbc_dict('hyundai_kia_generic', None),
+  CAR.SOUL_EV: dbc_dict('hyundai_kia_generic', None),
 }
 
 STEER_THRESHOLD = 150
