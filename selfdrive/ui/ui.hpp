@@ -226,6 +226,12 @@ typedef struct UIScene {
     int nOpkrDevelMode1;
     int nOpkrAutoScreenOff;
     int nOpkrAccelProfile;
+    int nOpkrUIBrightness;
+    int nOpkrUIVolumeBoost;
+    int nOpkrAutoLanechangedelay;
+    
+    int nSmoothBrightness;
+    int nLightSensor;
   } params;
 
 } UIScene;

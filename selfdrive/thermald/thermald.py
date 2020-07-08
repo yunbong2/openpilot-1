@@ -243,7 +243,7 @@ def thermald_thread():
           params.panda_disconnect()
       health_prev = health
     elif ignition == False or IsOpenpilotViewEnabled:
-      IsOpenpilotViewEnabled = int( params.get("IsOpenpilotViewEnabled") )
+      IsOpenpilotViewEnabled = params.get("IsOpenpilotViewEnabled") == b"1"
       ignition = IsOpenpilotViewEnabled
 
     # get_network_type is an expensive call. update every 10s
