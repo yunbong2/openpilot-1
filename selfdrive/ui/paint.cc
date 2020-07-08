@@ -113,13 +113,31 @@ static void draw_chevron(UIState *s, float x_in, float y_in, float sz,
   nvgFill(s->vg);
 }
 
-static void ui_draw_circle_image(NVGcontext *vg, float x, float y, int size, int image, NVGcolor color, float img_alpha, int img_y = 0) {
+
+// LOGW("got CarVin %s", value_vin);
+// 
+static void ui_draw_circle_image(NVGcontext *vg, float x, float y, int size, int image, NVGcolor color, float img_alpha, float angleSteers = 0) 
+{
   const int img_size = size * 1.5;
+  float img_rotation =  angleSteers/180*3.141592;
+
+  int ct_pos = -size * 0.75;
+
   nvgBeginPath(vg);
   nvgCircle(vg, x, y + (bdr_s * 1.5), size);
   nvgFillColor(vg, color);
   nvgFill(vg);
-  ui_draw_image(vg, x - (img_size / 2), img_y ? img_y : y - (size / 4), img_size, img_size, image, img_alpha);
+
+  nvgSave( vg );
+  nvgTranslate(vg,x,(y + (bdr_s*1.5)));
+  nvgRotate(vg,-img_rotation);
+
+
+  //LOGW("angleSteers = %.1f", angleSteers );
+  //LOGW("image %d,%d  %.1f,%.1f", img_x, img_y, x, (y + (bdr_s*1.5)) );
+  ui_draw_image(vg, ct_pos, ct_pos, img_size, img_size, image, img_alpha);
+
+  nvgRestore(vg);
 }
 
 static void ui_draw_circle_image(NVGcontext *vg, float x, float y, int size, int image, bool active) {
@@ -973,7 +991,7 @@ static void ui_draw_debug(UIState *s)
 
   ui_print( s, x_pos, y_pos+250, "Wheel:%.1f,%.1f,%.1f,%.1f", scene.wheel.fl, scene.wheel.fr, scene.wheel.rl, scene.wheel.rr );
 
-
+  ui_print( s, x_pos, y_pos+300, "%d, %d, %d, %d, %d", scene.params.nOpkrUIBrightness, scene.params.nLightSensor, scene.params.nSmoothBrightness, scene.params.nOpkrUIVolumeBoost, scene.params.nOpkrAutoLanechangedelay );
 
 /*
   ui_print( s, x_pos, y_pos+0, "sR:%.2f", scene.carParams.steerRatio );
@@ -1112,7 +1130,7 @@ static void ui_draw_vision_event(UIState *s) {
 
     if( is_engageable )  // debug_atom
     {
-      ui_draw_circle_image(s->vg, bg_wheel_x, bg_wheel_y, bg_wheel_size, s->img_wheel, color, 1.0f, bg_wheel_y - 25);
+      ui_draw_circle_image(s->vg, bg_wheel_x, bg_wheel_y, bg_wheel_size, s->img_wheel, color, 1.0f, s->scene.angleSteers );// bg_wheel_y - 25);
     }
     else  // debug
     {

@@ -455,6 +455,22 @@ EVENTS = {
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },  
 
+   EventName.rightBlindspot: {
+     ET.WARNING: Alert(
+       "우측에 차량 접근 중",
+       "차선변경을 위해 잠시 대기합니다",
+       AlertStatus.userPrompt, AlertSize.mid,
+       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1),
+   },
+
+   EventName.leftBlindspot: {
+     ET.WARNING: Alert(
+       "좌측에 차량 접근 중",
+       "차선변경을 위해 잠시 대기합니다",
+       AlertStatus.userPrompt, AlertSize.mid,
+       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1),
+   },
+
   EventName.steerSaturated: {
     ET.WARNING: Alert(
       "핸들을 잡아주세요",

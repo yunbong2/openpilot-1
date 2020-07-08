@@ -5,14 +5,15 @@ from selfdrive.car.hyundai.values import Buttons, SteerLimitParams, CAR
 from opendbc.can.packer import CANPacker
 from selfdrive.config import Conversions as CV
 from common.numpy_fast import interp
-from common.params import Params
-import common.log as trace1
-import common.CTime1000 as tm
 
 # speed controller
 from selfdrive.car.hyundai.spdcontroller  import SpdController
 from selfdrive.car.hyundai.spdctrlSlow  import SpdctrlSlow
 from selfdrive.car.hyundai.spdctrlNormal  import SpdctrlNormal
+
+from common.params import Params
+import common.log as trace1
+import common.CTime1000 as tm
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 LaneChangeState = log.PathPlan.LaneChangeState
@@ -115,7 +116,7 @@ class CarController():
 
 
   def cV_tune( self, v_ego, cv_value ):  # cV(곡률에 의한 변화)
-    self.kBPV = self.CP.lateralPIDatom.kBPV
+    self.sRKPHV = self.CP.lateralPIDatom.sRKPHV
     self.cVBPV = self.CP.lateralCVatom.cvBPV
     self.cvSteerMaxV1  = self.CP.lateralCVatom.cvSteerMaxV1
     self.cvSteerDeltaUpV1 = self.CP.lateralCVatom.cvSteerDeltaUpV1
@@ -129,19 +130,19 @@ class CarController():
     self.steerMax1 = interp( cv_value, cv_BPV, self.cvSteerMaxV1 )
     self.steerMax2 = interp( cv_value, cv_BPV, self.cvSteerMaxV2 )
     self.steerMaxV = [ float(self.steerMax1), float(self.steerMax2) ]
-    self.MAX = interp( v_ego, self.kBPV, self.steerMaxV )  
+    self.MAX = interp( v_ego, self.sRKPHV, self.steerMaxV )  
 
     # Up
     self.steerUP1 = interp( cv_value, cv_BPV, self.cvSteerDeltaUpV1 )
     self.steerUP2 = interp( cv_value, cv_BPV, self.cvSteerDeltaUpV2 )
     self.steerUPV = [ float(self.steerUP1), float(self.steerUP2) ]
-    self.UP = interp( v_ego, self.kBPV, self.steerUPV )
+    self.UP = interp( v_ego, self.sRKPHV, self.steerUPV )
 
     # dn
     self.steerDN1 = interp( cv_value, cv_BPV, self.cvSteerDeltaDnV1 )
     self.steerDN2 = interp( cv_value, cv_BPV, self.cvSteerDeltaDnV2 )    
     self.steerDNV = [ float(self.steerDN1), float(self.steerDN2) ]
-    self.DN = interp( v_ego, self.kBPV, self.steerDNV )
+    self.DN = interp( v_ego, self.sRKPHV, self.steerDNV )
 
 
 
@@ -239,14 +240,6 @@ class CarController():
     else:
       self.command_load = 0
 
-
-#  CC:car.CarControl(car.capnp), CS:CarState  CP:CarInterface.get_params
-  def update(self, CC, CS, frame, sm, CP ):
-    if self.CP != CP:
-      self.CP = CP
-
-    self.param_load()
-
     # speed controller
     if self.param_preOpkrAccelProfile != self.param_OpkrAccelProfile:
       self.param_preOpkrAccelProfile = self.param_OpkrAccelProfile
@@ -255,9 +248,16 @@ class CarController():
       elif self.param_OpkrAccelProfile == 2:
         self.SC = SpdctrlNormal()
       else:
-        self.SC = SpdctrlNormal()
+        self.SC = SpdctrlNormal()      
 
-    
+
+#  CC:car.CarControl(car.capnp), CS:CarState  CP:CarInterface.get_params
+  def update(self, CC, CS, frame, sm, CP ):
+    if self.CP != CP:
+      self.CP = CP
+
+    self.param_load()
+
 
     enabled = CC.enabled
     actuators = CC.actuators
@@ -337,10 +337,10 @@ class CarController():
       str_log2 = 'U={:.0f}  LK={:.0f} dir={} steer={:5.0f} '.format( CS.Mdps_ToiUnavail, CS.lkas_button_on, self.steer_torque_ratio_dir, CS.out.steeringTorque  )
       trace1.printf2( '{}'.format( str_log2 ) )
 
-    #if pcm_cancel_cmd:
-    #  can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
+    if pcm_cancel_cmd and self.CP.longcontrolEnabled:
+      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
 
-    if CS.out.cruiseState.standstill:
+    elif CS.out.cruiseState.standstill:
       # run only first time when the car stopped
       if self.last_lead_distance == 0 or not self.param_OpkrAutoResume:
         # get the lead distance from the Radar
@@ -377,4 +377,3 @@ class CarController():
 
     # counter inc
     return can_sends
-

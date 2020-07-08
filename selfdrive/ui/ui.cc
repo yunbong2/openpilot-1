@@ -954,7 +954,9 @@ int main(int argc, char* argv[]) {
       case 1: ui_get_params( "OpkrDevelMode1", &scene.params.nOpkrDevelMode1 ); break;
       case 2: ui_get_params( "OpkrAutoScreenOff", &scene.params.nOpkrAutoScreenOff ); break;
       case 3: ui_get_params( "OpkrAccelProfile", &scene.params.nOpkrAccelProfile ); break;
-      
+      case 4: ui_get_params( "OpkrUIBrightness", &scene.params.nOpkrUIBrightness ); break;
+      case 5: ui_get_params( "OpkrUIVolumeBoost", &scene.params.nOpkrUIVolumeBoost ); break;
+      case 6: ui_get_params( "OpkrAutoLanechangedelay", &scene.params.nOpkrAutoLanechangedelay ); break;
       default: nParamRead = 0; break;
     }
 
@@ -962,16 +964,21 @@ int main(int argc, char* argv[]) {
     if( nAwakeTime != nTimeOff )
     {
         nAwakeTime = nTimeOff;
-        //LOGW("nOpkrAutoScreenOff %d",nAwakeTime);
     }
     
     if( nAwakeTime == 0 )  nTimeOff = 30;
 
     // light sensor is only exposed on EONs
     float clipped_brightness = (s->light_sensor*brightness_m) + brightness_b;
-    if (clipped_brightness > 512) clipped_brightness = 512;
+    
+    clipped_brightness += scene.params.nOpkrUIBrightness;
+    if (clipped_brightness < 10) clipped_brightness = 10;
+    else if (clipped_brightness > 512) clipped_brightness = 512;
     smooth_brightness = clipped_brightness * 0.01 + smooth_brightness * 0.99;
     if (smooth_brightness > 255) smooth_brightness = 255;
+
+    scene.params.nSmoothBrightness = smooth_brightness;
+    scene.params.nLightSensor = clipped_brightness;
     set_brightness(s, (int)smooth_brightness);
 
     // resize vision for collapsing sidebar
@@ -1080,7 +1087,9 @@ int main(int argc, char* argv[]) {
       s->volume_timeout--;
     } else {
       int volume = fmin(MAX_VOLUME, MIN_VOLUME + s->scene.v_ego / 5);  // up one notch every 5 m/s
-      set_volume(volume);
+      int cur_volume = scene.params.nOpkrUIVolumeBoost + volume;
+      if( cur_volume < 0  ) cur_volume = 0;
+      set_volume( cur_volume );
       s->volume_timeout = 5 * UI_FREQ;
     }
 

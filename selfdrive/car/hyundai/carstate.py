@@ -26,6 +26,9 @@ class CarState(CarStateBase):
     self.lkas_button_on = False
     self.lkas_error = False
 
+    self.prev_cruise_main_button = False
+    self.prev_cruise_buttons = False
+
     self.main_on = False
     self.acc_active = False
     self.cruise_engaged_on = False
@@ -49,8 +52,8 @@ class CarState(CarStateBase):
     cp_sas = cp2 if self.sas_bus else cp
     cp_scc = cp2 if self.scc_bus == 1 else cp_cam if self.scc_bus == 2 else cp
 
-    self.prev_cruise_buttons = self.cruise_buttons
     self.prev_cruise_main_button = self.cruise_main_button
+    self.prev_cruise_buttons = self.cruise_buttons
 
     ret = car.CarState.new_message()
 
@@ -82,23 +85,28 @@ class CarState(CarStateBase):
     ret.steeringAngle = cp_sas.vl["SAS11"]['SAS_Angle'] - self.CP.lateralsRatom.steerOffset
     ret.steeringRate = cp_sas.vl["SAS11"]['SAS_Speed']
     ret.yawRate = cp.vl["ESP12"]['YAW_RATE']
-    self.TSigLHSw = cp.vl["CGW1"]['CF_Gway_TSigLHSw']
-    self.TSigRHSw = cp.vl["CGW1"]['CF_Gway_TSigRHSw']
-    leftBlinker = cp.vl["CGW1"]['CF_Gway_TurnSigLh'] != 0
-    rightBlinker = cp.vl["CGW1"]['CF_Gway_TurnSigRh'] != 0
     ret.steeringTorque = cp_mdps.vl["MDPS12"]['CR_Mdps_StrColTq']
     ret.steeringTorqueEps = cp_mdps.vl["MDPS12"]['CR_Mdps_OutTq']
     ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD
     self.mdps_error_cnt += 1 if cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0 else -self.mdps_error_cnt
     ret.steerWarning = self.mdps_error_cnt > 100 #cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0
 
+    # Blind Spot Detection and Lane Change Assist signals
+    ret.leftBlindspot = cp.vl["LCA11"]['CF_Lca_IndLeft'] != 0
+    ret.rightBlindspot = cp.vl["LCA11"]['CF_Lca_IndRight'] != 0
+
+    self.TSigLHSw = cp.vl["CGW1"]['CF_Gway_TSigLHSw']
+    self.TSigRHSw = cp.vl["CGW1"]['CF_Gway_TSigRHSw']
+    leftBlinker = cp.vl["CGW1"]['CF_Gway_TurnSigLh'] != 0
+    rightBlinker = cp.vl["CGW1"]['CF_Gway_TurnSigRh'] != 0
+
     if leftBlinker:
-      self.left_blinker_flash = 200
+      self.left_blinker_flash = 300
     elif  self.left_blinker_flash:
       self.left_blinker_flash -= 1
 
     if rightBlinker:
-      self.right_blinker_flash = 200
+      self.right_blinker_flash = 300
     elif  self.right_blinker_flash:
       self.right_blinker_flash -= 1
 
@@ -141,8 +149,7 @@ class CarState(CarStateBase):
     ret.cruiseState.standstill = cp_scc.vl["SCC11"]['SCCInfoDisplay'] == 4.  if not self.no_radar else False
 
     # most HKG cars has no long control, it is safer and easier to engage by main on
-
-    #if ret.cruiseState.enabled:
+    ret.cruiseState.modeSel, speed_kph = self.SC.update_cruiseSW( self )
     if self.acc_active:
       speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
       ret.cruiseState.speed = cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
@@ -169,8 +176,6 @@ class CarState(CarStateBase):
     #TODO: find pedal signal for EV/HYBRID Cars
     #ret.gas = cp.vl["EMS12"]['PV_AV_CAN'] / 100
     #ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
-
-    ret.espDisabled = cp.vl["TCS15"]['ESC_Off_Step'] != 0
 
     # TODO: refactor gear parsing in function
     # Gear Selection via Cluster - For those Kia/Hyundai which are not fully discovered, we can use the Cluster Indicator for Gear Selection, as this seems to be standard over all cars, but is not the preferred method.
