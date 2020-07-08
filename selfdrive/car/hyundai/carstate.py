@@ -132,6 +132,9 @@ class CarState(CarStateBase):
                                             cp.vl['EMS16']['CRUISE_LAMP_M']
     self.acc_active = (cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
                                       (cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0)
+
+    self.update_atom( cp, cp2, cp_cam )
+
     ret.cruiseState.available = self.main_on if not self.no_radar else \
                                       cp.vl['EMS16']['CRUISE_LAMP_M'] != 0
     ret.cruiseState.enabled =  ret.cruiseState.available  #if not self.CP.longcontrolEnabled else ret.cruiseState.enabled
