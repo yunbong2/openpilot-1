@@ -166,7 +166,7 @@ def below_steer_speed_alert(CP, sm, metric):
     "핸들을 잡아주세요",
     "%d %s 이하에서는 조향제어가 불가합니다" % (speed, unit),
     AlertStatus.userPrompt, AlertSize.mid,
-    Priority.MID, VisualAlert.steerRequired, AudibleAlert.none, 0., 0.4, .3)
+    Priority.MID, VisualAlert.none, AudibleAlert.none, 0., 0.4, .3)
 
 def calibration_incomplete_alert(CP, sm, metric):
   speed = int(Filter.MIN_SPEED * (CV.MS_TO_KPH if metric else CV.MS_TO_MPH))
@@ -203,7 +203,7 @@ EVENTS = {
       "오픈파일럿 사용준비가 되었습니다",
       "안전운전을 위해 항상 핸들을 잡고 도로교통 상황을 주시하세요",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 5.),
+      Priority.LOWER, VisualAlert.none, AudibleAlert.chimeReady, 5., 0., 5.),
   },
 
   EventName.startupWhitePanda: {
@@ -310,7 +310,7 @@ EVENTS = {
       "핸들을 잡아주세요",
       "차선이탈이 감지되었습니다",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeLaneDeparture, 5., 2., 3.),
   },
 
   EventName.canErrorPersistent: {
@@ -328,7 +328,7 @@ EVENTS = {
       "차량 매개 변수 식별 실패",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOWEST, VisualAlert.steerRequired, AudibleAlert.none, .0, .0, .1),
+      Priority.LOWEST, VisualAlert.none, AudibleAlert.none, .0, .0, .1),
   },
 
   EventName.steerTempUnavailableMute: {
@@ -344,7 +344,7 @@ EVENTS = {
       "도로상황에 주의를 기울이세요 : 주행 산만",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },
 
   EventName.promptDriverDistracted: {
@@ -352,7 +352,7 @@ EVENTS = {
       "도로상황에 주의하세요",
       "주행 산만",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2Repeat, .1, .1, .1),
+      Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeRoadWarning, 4., .1, .1),
   },
 
   EventName.driverDistracted: {
@@ -368,7 +368,7 @@ EVENTS = {
       "핸들을 터치하세요: 모니터링 없음",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },
 
   EventName.promptDriverUnresponsive: {
@@ -376,7 +376,7 @@ EVENTS = {
       "핸들을 터치하세요",
       "운전자 모니터링 없음",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2Repeat, .1, .1, .1),
+      Priority.MID, VisualAlert.none, AudibleAlert.none, .1, .1, .1),
   },
 
   EventName.driverUnresponsive: {
@@ -384,7 +384,7 @@ EVENTS = {
       "경고: 조향제어가 즉시 해제됩니다",
       "운전자 모니터링 없음",
       AlertStatus.critical, AlertSize.full,
-      Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
+      Priority.HIGH, VisualAlert.none, AudibleAlert.none, .1, .1, .1),
   },
 
   EventName.driverMonitorLowAcc: {
@@ -392,7 +392,7 @@ EVENTS = {
       "운전자 얼굴 확인 중",
       "운전자 얼굴 인식이 어렵습니다",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .4, 0., 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .4, 0., 1.),
   },
 
   EventName.manualRestart: {
@@ -405,7 +405,7 @@ EVENTS = {
 
   EventName.resumeRequired: {
     ET.WARNING: Alert(
-      "멈춤",
+      "잠시멈춤",
       "재출발을 위해 RES버튼을 누르세요",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
@@ -444,7 +444,7 @@ EVENTS = {
       "사용자 방향 전환 중",
       "다른 차량에 주의하세요",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },
 
   EventName.steerSaturated: {
@@ -452,7 +452,7 @@ EVENTS = {
       "핸들을 잡아주세요",
       "스티어링 토크가 높습니다",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, 1., 2., 3.),
   },
 
 
@@ -461,7 +461,7 @@ EVENTS = {
       "운전자 핸들 조향",
       "자동 조향 일시 중지",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 0., 0., .1),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .1),
   },
   
   EventName.steerTorqueLow: {
@@ -469,7 +469,7 @@ EVENTS = {
       "핸들을 잡아주세요",
       "자동 조향 일시 저하",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 0., 0., .1),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .1),
   },  
   # ********** events that affect controls state transitions **********
 
@@ -516,8 +516,8 @@ EVENTS = {
       "핸들을 잡아주세요",
       "조향제어가 일시적으로 비활성화 되었습니다",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeWarning1, .4, 2., 3.),
-    ET.NO_ENTRY: NoEntryAlert("Steering Temporarily Unavailable",
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .4, 2., 3.),
+    ET.NO_ENTRY: NoEntryAlert("조향제어가 일시적으로 비활성화 되었습니다",
                               duration_hud_alert=0.),
   },
 
@@ -577,7 +577,7 @@ EVENTS = {
   },
 
   EventName.wrongGear: {
-    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),  #ET.SOFT_DISABLE: SoftDisableAlert("기어가 드라이브모드가 아닙니다"),
+    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeGearDrive),  #ET.SOFT_DISABLE: SoftDisableAlert("기어가 드라이브모드가 아닙니다"),
     ET.NO_ENTRY: NoEntryAlert("기어가 드라이브모드가 아닙니다"),
   },
 
@@ -598,7 +598,7 @@ EVENTS = {
   },
 
   EventName.seatbeltNotLatched: {
-    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage), #ET.SOFT_DISABLE: SoftDisableAlert("안전벨트를 체결하세요"),
+    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeSeatBelt), #ET.SOFT_DISABLE: SoftDisableAlert("안전벨트를 체결하세요"),
     ET.NO_ENTRY: NoEntryAlert("안전벨트를 체결하세요"),
   },
 
@@ -651,7 +651,7 @@ EVENTS = {
   },
 
   EventName.controlsMismatch: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("컨트롤 불일치"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Controls Mismatch"),
   },
 
   EventName.canError: {
@@ -711,7 +711,7 @@ EVENTS = {
       "장치를 점검하세요",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY: NoEntryAlert("Harness Malfunction"),
+    ET.NO_ENTRY: NoEntryAlert("하네스 오작동"),
   },
 
   EventName.noTarget: {
@@ -736,7 +736,7 @@ EVENTS = {
       "속도가 너무 높습니다",
       "재 작동을 위해 차량의 속도를 낮추세요",
       AlertStatus.normal, AlertSize.mid,
-      Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarning2Repeat, 2.2, 3., 4.),
+      Priority.HIGH, VisualAlert.none, AudibleAlert.chimeWarning2Repeat, 2.2, 3., 4.),
     ET.NO_ENTRY: Alert(
       "속도가 너무 높습니다",
       "시작을 위해 차량의 속도를 낮추세요",
