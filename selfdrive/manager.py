@@ -186,7 +186,7 @@ managed_processes = {
   "sensord": ("selfdrive/sensord", ["./sensord"]),
   "clocksd": ("selfdrive/clocksd", ["./clocksd"]),
   "gpsd": ("selfdrive/sensord", ["./gpsd"]),
-  #"updated": "selfdrive.updated",   # delete able
+  "updated": "selfdrive.updated",   # delete able
   "dmonitoringmodeld": ("selfdrive/modeld", ["./dmonitoringmodeld"]),
   "modeld": ("selfdrive/modeld", ["./modeld"]),
   "driverview": "selfdrive.controls.lib.driverview",  # delete able
