@@ -191,7 +191,28 @@ def thermald_thread():
   pm = PowerMonitoring()
   no_panda_cnt = 0
 
-  IsDriverViewEnabled = 0
+  IsOpenpilotViewEnabled = 0
+
+  OpkrLoadStep = 0
+  OpkrAutoShutdown = 0
+  do_uninstall = 0
+  accepted_terms = 0
+  completed_training = 0
+  panda_signature = 0
+  while 1:
+    OpkrLoadStep += 1
+    if OpkrLoadStep == 1:
+      OpkrAutoShutdown = int( params.get("OpkrAutoShutdown") )
+    elif OpkrLoadStep == 2:
+      do_uninstall = params.get("DoUninstall") == b"1"
+    elif OpkrLoadStep == 3:
+      accepted_terms = params.get("HasAcceptedTerms") == terms_version 
+    elif OpkrLoadStep == 4:
+      completed_training = params.get("CompletedTrainingVersion") == training_version
+    elif OpkrLoadStep == 5:      
+      panda_signature = params.get("PandaFirmware")
+    else:
+      OpkrLoadStep = 0
 
   ts_last_ip = 0
   ip_addr = '255.255.255.255'
@@ -244,14 +265,12 @@ def thermald_thread():
           health_prev.health.hwType != log.HealthData.HwType.unknown:
           params.panda_disconnect()
       health_prev = health
-    elif ignition == False or IsDriverViewEnabled:
-      IsDriverViewEnabled = params.get("IsDriverViewEnabled") == b"1"
-      ignition = IsDriverViewEnabled
-      #print( 'ignition={} IsDriverViewEnabled ={} '.format( ignition,  IsDriverViewEnabled ) )
+    elif ignition == False or IsOpenpilotViewEnabled:
+      IsOpenpilotViewEnabled = int( params.get("IsOpenpilotViewEnabled") )      
+      ignition = IsOpenpilotViewEnabled
 
 
 
-    
     # get_network_type is an expensive call. update every 10s
     if (count % int(10. / DT_TRML)) == 0:
       try:
@@ -276,7 +295,6 @@ def thermald_thread():
       msg.thermal.batteryPercent = 100
       msg.thermal.batteryStatus = "Charging"
 
-    # kyd
     # update ip every 10 seconds
     ts = sec_since_boot()
     if ts - ts_last_ip >= 10.:
@@ -366,11 +384,11 @@ def thermald_thread():
       params.delete("Offroad_ConnectivityNeeded")
       params.delete("Offroad_ConnectivityNeededPrompt")
     """
-    do_uninstall = params.get("DoUninstall") == b"1"
-    accepted_terms = params.get("HasAcceptedTerms") == terms_version
-    completed_training = params.get("CompletedTrainingVersion") == training_version
 
-    panda_signature = params.get("PandaFirmware")
+    #accepted_terms = params.get("HasAcceptedTerms") == terms_version
+    #completed_training = params.get("CompletedTrainingVersion") == training_version
+    #panda_signature = params.get("PandaFirmware")
+
     fw_version_match = (panda_signature is None) or (panda_signature == FW_SIGNATURE)   # don't show alert is no panda is connected (None)
 
     #ignition = True  #  영상보기.
@@ -391,7 +409,7 @@ def thermald_thread():
 
     # don't start while taking snapshot
     if not should_start_prev:
-      is_viewing_driver = False  #params.get("IsDriverViewEnabled") == b"1"
+      is_viewing_driver = params.get("IsDriverViewEnabled") == b"1"
       is_taking_snapshot = params.get("IsTakingSnapshot") == b"1"
       should_start = should_start and (not is_taking_snapshot) and (not is_viewing_driver)
 
@@ -438,16 +456,20 @@ def thermald_thread():
       power_shutdown = False
       if msg.thermal.batteryStatus == "Discharging":
         delta_ts = current_ts - off_ts
+        
         if started_seen:
-          if msg.thermal.batteryPercent < BATT_PERC_OFF and delta_ts > 30:
+          if msg.thermal.batteryPercent <= BATT_PERC_OFF and (OpkrAutoShutdown and  delta_ts > OpkrAutoShutdown):
             power_shutdown = True
         elif  delta_ts > 240 and msg.thermal.batteryPercent < 10:
           power_shutdown = True
 
-      if power_shutdown:
-        os.system('LD_LIBRARY_PATH="" svc power shutdown')
-        print( 'power_shutdown batterypercent={} should_start={}'.format(msg.thermal.batteryPercent, should_start) )
 
+        if power_shutdown:
+          os.system('LD_LIBRARY_PATH="" svc power shutdown')
+          print( 'power_shutdown batterypercent={} should_start={}'.format(msg.thermal.batteryPercent, should_start) )
+
+      else:
+        off_ts = current_ts
 
       #if msg.thermal.batteryPercent < BATT_PERC_OFF and msg.thermal.batteryStatus == "Discharging" and \
       #   started_seen and (current_ts - off_ts) > 60:
@@ -455,7 +477,7 @@ def thermald_thread():
 
     # print( 'batterypercent={} should_start={}'.format(msg.thermal.batteryPercent, should_start) )
     # Offroad power monitoring
-    pm.calculate(health)
+    pm.calculate(health, msg )
     msg.thermal.offroadPowerUsage = pm.get_power_used()
 
     msg.thermal.chargingError = current_filter.x > 0. and msg.thermal.batteryPercent < 90  # if current is positive, then battery is being discharged

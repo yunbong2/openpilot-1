@@ -39,6 +39,7 @@ def get_battery_charging():
 
 
 def set_battery_charging(on):
+  print( 'set_battery_charging={}'.format( on ) )
   with open('/sys/class/power_supply/battery/charging_enabled', 'w') as f:
     f.write(f"{1 if on else 0}\n")
 
@@ -66,7 +67,7 @@ class PowerMonitoring:
     self.ts_last_charging_ctrl = None
 
   # Calculation tick
-  def calculate(self, health):
+  def calculate(self, health, msg ):
     try:
       now = time.time()
 
@@ -129,7 +130,11 @@ class PowerMonitoring:
             cloudlog.exception("Pulsed power measurement failed")
 
         # Start pulsed measurement and return
-        threading.Thread(target=perform_pulse_measurement, args=(now,)).start()
+        if msg.thermal.batteryPercent > 30: 
+            threading.Thread(target=perform_pulse_measurement, args=(now,)).start()
+            print( 'pulse = msg.thermal.batteryPercent={:.1f}'.format( msg.thermal.batteryPercent ) )
+        else:
+            print( 'skip = msg.thermal.batteryPercent={:.1f}'.format( msg.thermal.batteryPercent ) )
         self.next_pulsed_measurement_time = None
         return
 
