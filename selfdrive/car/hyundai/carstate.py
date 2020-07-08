@@ -3,7 +3,7 @@ from selfdrive.car.hyundai.values import DBC, STEER_THRESHOLD, FEATURES, CAR
 from selfdrive.car.interfaces import CarStateBase
 from opendbc.can.parser import CANParser
 from selfdrive.config import Conversions as CV
-
+from selfdrive.car.hyundai.spdcontroller  import SpdController
 from selfdrive.car.hyundai.values import Buttons
 
 GearShifter = car.CarState.GearShifter
@@ -40,6 +40,9 @@ class CarState(CarStateBase):
 
     self.TSigLHSw = 0
     self.TSigRHSw = 0
+    self.driverAcc_time = 0
+
+    self.SC = SpdController()
 
   def update(self, cp, cp2, cp_cam):
     cp_mdps = cp2 if self.mdps_bus else cp
@@ -90,12 +93,12 @@ class CarState(CarStateBase):
     ret.steerWarning = self.mdps_error_cnt > 100 #cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0
 
     if leftBlinker:
-      self.left_blinker_flash = 60
+      self.left_blinker_flash = 200
     elif  self.left_blinker_flash:
       self.left_blinker_flash -= 1
 
     if rightBlinker:
-      self.right_blinker_flash = 60
+      self.right_blinker_flash = 200
     elif  self.right_blinker_flash:
       self.right_blinker_flash -= 1
 
@@ -120,6 +123,7 @@ class CarState(CarStateBase):
       self.steerWarning += 1
 
     ret.steerWarning = steerWarning
+    
 
     # cruise state
     #ret.cruiseState.available = True
@@ -144,8 +148,6 @@ class CarState(CarStateBase):
     else:
       ret.cruiseState.speed = 0
 
-    self.cruise_main_button = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"]
-    self.cruise_buttons = cp.vl["CLU11"]["CF_Clu_CruiseSwState"]
 
     # TODO: Find brake pressure
     ret.brake = 0
@@ -166,7 +168,6 @@ class CarState(CarStateBase):
     #ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
 
     ret.espDisabled = cp.vl["TCS15"]['ESC_Off_Step'] != 0
-
 
     # TODO: refactor gear parsing in function
     # Gear Selection via Cluster - For those Kia/Hyundai which are not fully discovered, we can use the Cluster Indicator for Gear Selection, as this seems to be standard over all cars, but is not the preferred method.
@@ -219,15 +220,6 @@ class CarState(CarStateBase):
       else:
         ret.gearShifter = GearShifter.unknown
 
-
-    # atom append
-    self.pcm_acc_status = int(self.acc_active)
-    self.driverOverride = cp.vl["TCS13"]["DriverOverride"]     # 1 Acc,  2 bracking, 0 Normal
-    self.Lkas_LdwsSysState = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsSysState"]
-    self.lkas_error = self.Lkas_LdwsSysState  == 7
-    #if not self.lkas_error:
-    #  self.lkas_button_on = self.Lkas_LdwsSysState 
-
     # save the entire LKAS11 and CLU11
     self.lkas11 = cp_cam.vl["LKAS11"]
     self.clu11 = cp.vl["CLU11"]
@@ -238,9 +230,23 @@ class CarState(CarStateBase):
     self.steer_state = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiActive'] # 0 NOT ACTIVE, 1 ACTIVE
     self.lead_distance = cp_scc.vl["SCC11"]['ACC_ObjDist']
 
-
-
     return ret
+
+  def update_atom(self, cp, cp2, cp_cam):
+    # atom append
+    self.driverOverride = cp.vl["TCS13"]["DriverOverride"]     # 1 Acc,  2 bracking, 0 Normal
+    self.cruise_main_button = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"]
+    self.cruise_buttons = cp.vl["CLU11"]["CF_Clu_CruiseSwState"]         # clu_CruiseSwState
+    self.Lkas_LdwsSysState = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsSysState"]
+    self.lkas_error = self.Lkas_LdwsSysState  == 7
+    #if not self.lkas_error:
+    #  self.lkas_button_on = self.Lkas_LdwsSysState 
+
+    if self.driverOverride == 1:
+      self.driverAcc_time = 100
+    elif self.driverAcc_time:
+      self.driverAcc_time -= 1
+
 
   @staticmethod
   def get_can_parser(CP):

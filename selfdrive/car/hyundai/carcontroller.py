@@ -5,10 +5,14 @@ from selfdrive.car.hyundai.values import Buttons, SteerLimitParams, CAR
 from opendbc.can.packer import CANPacker
 from selfdrive.config import Conversions as CV
 from common.numpy_fast import interp
-from selfdrive.car.hyundai.spdcontroller  import SpdController
-#from selfdrive.car.hyundai.interface import CarInterface
+from common.params import Params
 import common.log as trace1
 import common.CTime1000 as tm
+
+# speed controller
+from selfdrive.car.hyundai.spdcontroller  import SpdController
+from selfdrive.car.hyundai.spdctrlSlow  import SpdctrlSlow
+from selfdrive.car.hyundai.spdctrlNormal  import SpdctrlNormal
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 LaneChangeState = log.PathPlan.LaneChangeState
@@ -42,13 +46,26 @@ class CarController():
     self.vRel = 0
 
     self.timer1 = tm.CTime1000("time")
-    self.SC = SpdController()    
     self.model_speed = 0
     self.model_sum = 0
     
     # hud
     self.hud_timer_left = 0
     self.hud_timer_right = 0
+
+
+    self.command_cnt = 0
+    self.command_load = 0
+    self.params = Params()
+
+    # param
+    self.param_preOpkrAccelProfile = -1
+    self.param_OpkrAccelProfile = 0
+    self.param_OpkrAutoResume = 0
+    self.param_OpkrWhoisDriver = 0
+
+    self.SC = None
+    self.traceCC = trace1.Loger("CarController")
 
 
 
@@ -97,9 +114,7 @@ class CarController():
     return sys_warning, sys_state
 
 
-  def cV_tune( self, v_ego_kph, cv_value ):  # cV(곡률에 의한 변화)
-    #cv_value = abs(self.angle_steers_des)
-
+  def cV_tune( self, v_ego, cv_value ):  # cV(곡률에 의한 변화)
     self.kBPV = self.CP.lateralPIDatom.kBPV
     self.cVBPV = self.CP.lateralCVatom.cvBPV
     self.cvSteerMaxV1  = self.CP.lateralCVatom.cvSteerMaxV1
@@ -114,28 +129,27 @@ class CarController():
     self.steerMax1 = interp( cv_value, cv_BPV, self.cvSteerMaxV1 )
     self.steerMax2 = interp( cv_value, cv_BPV, self.cvSteerMaxV2 )
     self.steerMaxV = [ float(self.steerMax1), float(self.steerMax2) ]
-    self.MAX = interp( v_ego_kph, self.kBPV, self.steerMaxV )  
+    self.MAX = interp( v_ego, self.kBPV, self.steerMaxV )  
 
     # Up
     self.steerUP1 = interp( cv_value, cv_BPV, self.cvSteerDeltaUpV1 )
     self.steerUP2 = interp( cv_value, cv_BPV, self.cvSteerDeltaUpV2 )
     self.steerUPV = [ float(self.steerUP1), float(self.steerUP2) ]
-    self.UP = interp( v_ego_kph, self.kBPV, self.steerUPV )
+    self.UP = interp( v_ego, self.kBPV, self.steerUPV )
 
     # dn
     self.steerDN1 = interp( cv_value, cv_BPV, self.cvSteerDeltaDnV1 )
     self.steerDN2 = interp( cv_value, cv_BPV, self.cvSteerDeltaDnV2 )    
     self.steerDNV = [ float(self.steerDN1), float(self.steerDN2) ]
-    self.DN = interp( v_ego_kph, self.kBPV, self.steerDNV )
+    self.DN = interp( v_ego, self.kBPV, self.steerDNV )
 
 
 
   def steerParams_torque(self, CS, abs_angle_steers, path_plan, CC ):
-
     param = SteerLimitParams()
     v_ego_kph = CS.out.vEgo * CV.MS_TO_KPH
 
-    self.cV_tune( v_ego_kph, self.model_speed )
+    self.cV_tune( CS.out.vEgo, self.model_speed )
     param.STEER_MAX = min( param.STEER_MAX, self.MAX)
     param.STEER_DELTA_UP = min( param.STEER_DELTA_UP, self.UP)
     param.STEER_DELTA_DOWN = min( param.STEER_DELTA_DOWN, self.DN )
@@ -176,18 +190,29 @@ class CarController():
     lane_change_torque_lower = 0
     if self.nBlinker > 10:
       lane_change_torque_lower = int(CS.out.leftBlinker) + int(CS.out.rightBlinker) * 2
-      #self.steer_torque_ratio_dir = 1
-      if CS.out.steeringPressed:
+      if CS.out.steeringPressed and self.param_OpkrWhoisDriver:
         self.steer_torque_ratio = 0.05      
 
     self.lane_change_torque_lower =  lane_change_torque_lower
+
     # smoth torque enable or disable
-    if self.steer_torque_ratio_dir >= 1:
+    ratio_pval = 0.001  # 10 sec
+    ratio_mval = 0.001  # 10 sec
+    if self.param_OpkrWhoisDriver == 1: # 민감
+      ratio_pval = 0.005  # 2 sec
+      ratio_mval = 0.01   # 1 sec
+    else:  # 보통.
+      ratio_pval = 0.002   # 5 sec    
+      ratio_mval = 0.005   # 2 sec   
+
+    if self.param_OpkrWhoisDriver == 0:
+      self.steer_torque_ratio = 1
+    elif self.steer_torque_ratio_dir >= 1:
       if self.steer_torque_ratio < 1:
-        self.steer_torque_ratio += 0.002  # 5 sec
+        self.steer_torque_ratio += ratio_pval   
     elif self.steer_torque_ratio_dir <= -1:
       if self.steer_torque_ratio > 0:
-        self.steer_torque_ratio -= 0.005  # 2 sec
+        self.steer_torque_ratio -= ratio_mval   
 
     if self.steer_torque_ratio < 0:
       self.steer_torque_ratio = 0
@@ -196,11 +221,43 @@ class CarController():
 
     return  param
 
+  def param_load(self ):
+    self.command_cnt += 1
+    if self.command_cnt > 100:
+      self.command_cnt = 0
+
+    if self.command_cnt % 10:
+      return
+
+    self.command_load += 1
+    if self.command_load == 1:
+      self.param_OpkrAccelProfile = int(self.params.get('OpkrAccelProfile')) 
+    elif self.command_load == 2:
+      self.param_OpkrAutoResume = int(self.params.get('OpkrAutoResume'))
+    elif self.command_load == 3:
+      self.param_OpkrWhoisDriver = int(self.params.get('OpkrWhoisDriver'))
+    else:
+      self.command_load = 0
 
 
+#  CC:car.CarControl(car.capnp), CS:CarState  CP:CarInterface.get_params
   def update(self, CC, CS, frame, sm, CP ):
     if self.CP != CP:
       self.CP = CP
+
+    self.param_load()
+
+    # speed controller
+    if self.param_preOpkrAccelProfile != self.param_OpkrAccelProfile:
+      self.param_preOpkrAccelProfile = self.param_OpkrAccelProfile
+      if self.param_OpkrAccelProfile == 1:
+        self.SC = SpdctrlSlow()
+      elif self.param_OpkrAccelProfile == 2:
+        self.SC = SpdctrlNormal()
+      else:
+        self.SC = SpdctrlNormal()
+
+    
 
     enabled = CC.enabled
     actuators = CC.actuators
@@ -212,8 +269,10 @@ class CarController():
     abs_angle_steers =  abs(actuators.steerAngle)
 
     self.dRel, self.yRel, self.vRel = SpdController.get_lead( sm )
-    self.model_speed, self.model_sum = self.SC.calc_va(  sm, CS.out.vEgo  )
-
+    if self.SC is not None:
+      self.model_speed, self.model_sum = self.SC.calc_va(  sm, CS.out.vEgo  )
+    else:
+      self.model_speed = self.model_sum = 0
 
     # Steering Torque
     param = self.steerParams_torque( CS, abs_angle_steers, path_plan, CC )
@@ -222,15 +281,15 @@ class CarController():
     new_steer = actuators.steer * param.STEER_MAX
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, param)
     self.steer_rate_limited = new_steer != apply_steer
-    apply_steer1 = apply_steer
+
     apply_steer_limit = param.STEER_MAX
     if self.steer_torque_ratio < 1:
       apply_steer_limit = int(self.steer_torque_ratio * param.STEER_MAX)
       apply_steer = self.limit_ctrl( apply_steer, apply_steer_limit, 0 )
 
-    #print( 'enable={:.0f} apply_steer={:.0f}/{:.0f}/{:.0f} actuators.steer={:.5f} CS.out.vEgo={:.3f}'.format( enabled, apply_steer1, apply_steer, self.apply_steer_last, actuators.steer, CS.out.vEgo * 3.6 ) )
+
     # disable if steer angle reach 90 deg, otherwise mdps fault in some models
-    lkas_active = enabled and abs(CS.out.steeringAngle) < 100. #and self.lkas_button
+    lkas_active = enabled and abs(CS.out.steeringAngle) < 90. #and self.lkas_button
 
     # fix for Genesis hard fault at low speed
     if CS.out.vEgo < 16.666667 and self.car_fingerprint == CAR.GENESIS:
@@ -249,8 +308,6 @@ class CarController():
     enabled_speed = 38 if CS.is_set_speed_in_mph else 60
     if clu11_speed > enabled_speed or not lkas_active:
       enabled_speed = clu11_speed
-
-    #print( 'clu11_speed={}  enabled={}'.format( clu11_speed, enabled ) )
 
     if frame == 0: # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"]
@@ -272,18 +329,20 @@ class CarController():
     can_sends.append(create_mdps12(self.packer, frame, CS.mdps12))
 
     str_log1 = 'torg:{:5.0f} C={:.1f}/{:.1f} V={:.1f}/{:.1f} CV={:.1f}/{:.3f}'.format(  apply_steer, CS.lead_objspd, CS.lead_distance, self.dRel, self.vRel, self.model_speed, self.model_sum )
-    str_log2 = 'limit={:.0f} LC={} tm={:.1f}'.format( apply_steer_limit, path_plan.laneChangeState, self.timer1.sampleTime()  )
+    str_log2 = 'limit={:.0f} tm={:.1f} '.format( apply_steer_limit, self.timer1.sampleTime()  )
     trace1.printf( '{} {}'.format( str_log1, str_log2 ) )
 
-    str_log2 = 'U={:.0f}  LK={:.0f} dir={} steer={:5.0f} '.format( CS.Mdps_ToiUnavail, CS.lkas_button_on, self.steer_torque_ratio_dir, CS.out.steeringTorque  )
-    trace1.printf2( '{}'.format( str_log2 ) )
+    run_speed_ctrl = self.param_OpkrAccelProfile and CS.acc_active and self.SC != None
+    if not run_speed_ctrl:
+      str_log2 = 'U={:.0f}  LK={:.0f} dir={} steer={:5.0f} '.format( CS.Mdps_ToiUnavail, CS.lkas_button_on, self.steer_torque_ratio_dir, CS.out.steeringTorque  )
+      trace1.printf2( '{}'.format( str_log2 ) )
 
     #if pcm_cancel_cmd:
     #  can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
 
     if CS.out.cruiseState.standstill:
       # run only first time when the car stopped
-      if self.last_lead_distance == 0:
+      if self.last_lead_distance == 0 or not self.param_OpkrAutoResume:
         # get the lead distance from the Radar
         self.last_lead_distance = CS.lead_distance
         self.resume_cnt = 0
@@ -298,6 +357,18 @@ class CarController():
     # reset lead distnce after the car starts moving
     elif self.last_lead_distance != 0:
       self.last_lead_distance = 0
+    elif run_speed_ctrl and self.SC != None:
+      is_sc_run = self.SC.update( CS, sm, self )
+      if is_sc_run:
+        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, self.SC.btn_type, self.SC.sc_clu_speed ))
+        self.resume_cnt += 1
+      else:
+        self.resume_cnt = 0
+
+      str1 = 'run={} cruise_set_mode={} kph={:.1f}/{:.1f} DO={:.0f}/{:.0f} '.format( is_sc_run, self.SC.cruise_set_mode, self.SC.cruise_set_speed_kph, CS.VSetDis, CS.driverOverride, CS.cruise_buttons)
+      str2 = 'btn_type={:.0f} speed={:.1f} cnt={:.0f}'.format( self.SC.btn_type, self.SC.sc_clu_speed, self.resume_cnt )
+      str_log  = str1 + str2
+      self.traceCC.add( str_log )        
 
 
     # 20 Hz LFA MFA message
