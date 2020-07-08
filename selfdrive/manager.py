@@ -571,6 +571,7 @@ def main():
     ("OpkrUIBrightness", "0"),
     ("OpkrEnableDriverMonitoring", "0"),
     ("OpkrEnableLogger", "0"),
+    ("OpkrEnableGetoffAlert", "0"),
     ("OpkrEnableLearner", "0"),
     ("OpkrAutoResume", "1"),
     ("OpkrTraceSet", "0"),

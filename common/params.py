@@ -112,6 +112,7 @@ keys = {
   "OpkrUIBrightness": [TxType.PERSISTENT],
   "OpkrEnableDriverMonitoring": [TxType.PERSISTENT],
   "OpkrEnableLogger": [TxType.PERSISTENT],
+  "OpkrEnableGetoffAlert": [TxType.PERSISTENT],
   "OpkrEnableLearner": [TxType.PERSISTENT],
   "OpkrAutoResume": [TxType.PERSISTENT],
   "OpkrTraceSet": [TxType.PERSISTENT],
