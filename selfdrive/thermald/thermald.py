@@ -117,7 +117,7 @@ _TEMP_THRS_H = [50., 65., 80., 10000]
 # temp thresholds to control fan speed - low hysteresis
 _TEMP_THRS_L = [42.5, 57.5, 72.5, 10000]
 # fan speed options
-_FAN_SPEEDS = [0, 32768, 32768, 65535]
+_FAN_SPEEDS = [0, 16384, 32768, 65535]
 # max fan speed only allowed if battery is hot
 _BAT_TEMP_THERSHOLD = 45.
 
@@ -153,7 +153,7 @@ def handle_fan_uno(max_cpu_temp, bat_temp, fan_speed, ignition):
 
 def thermald_thread():
   # prevent LEECO from undervoltage
-  BATT_PERC_OFF = 100 #10 if LEON else 3
+  BATT_PERC_OFF = 90 #10 if LEON else 3
 
   health_timeout = int(1000 * 2.5 * DT_TRML)  # 2.5x the expected health frequency
 
@@ -223,7 +223,7 @@ def thermald_thread():
   env = dict(os.environ)
   env['LD_LIBRARY_PATH'] = mediaplayer
 
-  self.getoff_alert = Params().get('OpkrEnableGetoffAlert') == b'1'
+  getoff_alert = Params().get('OpkrEnableGetoffAlert') == b'1'
 
   while 1:
     ts = sec_since_boot()
@@ -447,7 +447,7 @@ def thermald_thread():
         off_ts = current_ts
         os.system('echo powersave > /sys/class/devfreq/soc:qcom,cpubw/governor')
 
-      if sound_trigger == 1 and msg.thermal.batteryStatus == "Discharging" and started_seen and (sec_since_boot() - off_ts) > 2 and self.getoff_alert:
+      if sound_trigger == 1 and msg.thermal.batteryStatus == "Discharging" and started_seen and (sec_since_boot() - off_ts) > 2 and getoff_alert:
         subprocess.Popen([mediaplayer + 'mediaplayer', '/data/openpilot/selfdrive/assets/sounds/eondetach.wav'], shell = False, stdin=None, stdout=None, stderr=None, env = env, close_fds=True)
         sound_trigger = 0
 
@@ -471,6 +471,7 @@ def thermald_thread():
       else:
         off_ts = current_ts
 
+      #print( 'OpkrAutoShutdown = {}'.format( OpkrAutoShutdown ) )
       #if msg.thermal.batteryPercent < BATT_PERC_OFF and msg.thermal.batteryStatus == "Discharging" and \
       #   started_seen and (current_ts - off_ts) > 60:
       #  os.system('LD_LIBRARY_PATH="" svc power shutdown')
