@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ï»¿#!/usr/bin/env python3
 import os
 import time
 import sys
@@ -596,7 +596,7 @@ def main():
     ("OpkrWhoisDriver", "0"),
     ("OpkrTuneProfile", "0"),
     ("OpkrTuneStartAt", "0"),
-    ("OpkrAccelProfile", "0"),   #¾Ç¼¿ÇÁ·ÎÆÄÀÏ 0:¹Ì»ç¿ë, 1:ºêµå·´°Ô,2:º¸Åë,3:ºü¸£°Ô
+    ("OpkrAccelProfile", "0"),   #ì•…ì…€í”„ë¡œíŒŒì¼ 0:ë¯¸ì‚¬ìš©, 1:ë¸Œë“œëŸ½ê²Œ,2:ë³´í†µ,3:ë¹ ë¥´ê²Œ
     ("OpkrAutoLanechangedelay", "0"),
     ("OpkrDevelMode1", "1"),
     ("OpkrDevelMode2", "1"),
