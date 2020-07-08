@@ -398,13 +398,14 @@ def thermald_thread():
       if thermal_status_prev >= ThermalStatus.danger:
         params.delete("Offroad_TemperatureTooHigh")
 
+    current_ts = sec_since_boot()
     if should_start:
       if not should_start_prev:
         params.delete("IsOffroad")
 
       off_ts = None
       if started_ts is None:
-        started_ts = sec_since_boot()
+        started_ts = current_ts
         started_seen = True
         os.system('echo performance > /sys/class/devfreq/soc:qcom,cpubw/governor')
     else:
@@ -413,7 +414,7 @@ def thermald_thread():
 
       started_ts = None
       if off_ts is None:
-        off_ts = sec_since_boot()
+        off_ts = current_ts
         os.system('echo powersave > /sys/class/devfreq/soc:qcom,cpubw/governor')
 
       if sound_trigger == 1 and msg.thermal.batteryStatus == "Discharging" and started_seen and (sec_since_boot() - off_ts) > 2 and getoff_alert:
@@ -422,12 +423,31 @@ def thermald_thread():
 
       # shutdown if the battery gets lower than 3%, it's discharging, we aren't running for
       # more than a minute but we were running
-      if msg.thermal.batteryPercent < BATT_PERC_OFF and msg.thermal.batteryStatus == "Discharging" and \
-         started_seen and (sec_since_boot() - off_ts) > 60:
-        os.system('LD_LIBRARY_PATH="" svc power shutdown')
+      power_shutdown = False
+      if msg.thermal.batteryStatus == "Discharging":
+        delta_ts = current_ts - off_ts
+        
+        if started_seen:
+          if msg.thermal.batteryPercent <= BATT_PERC_OFF and (OpkrAutoShutdown and  delta_ts > OpkrAutoShutdown):
+            power_shutdown = True
+        elif  delta_ts > 240 and msg.thermal.batteryPercent < 10:
+          power_shutdown = True
 
+
+        if power_shutdown:
+          os.system('LD_LIBRARY_PATH="" svc power shutdown')
+
+      else:
+        off_ts = current_ts
+
+      #print( 'OpkrAutoShutdown = {}'.format( OpkrAutoShutdown ) )
+      #if msg.thermal.batteryPercent < BATT_PERC_OFF and msg.thermal.batteryStatus == "Discharging" and \
+      #   started_seen and (current_ts - off_ts) > 60:
+      #  os.system('LD_LIBRARY_PATH="" svc power shutdown')
+
+    # print( 'batterypercent={} should_start={}'.format(msg.thermal.batteryPercent, should_start) )
     # Offroad power monitoring
-    pm.calculate(health)
+    pm.calculate(health, msg )
     msg.thermal.offroadPowerUsage = pm.get_power_used()
 
     msg.thermal.chargingError = current_filter.x > 0. and msg.thermal.batteryPercent < 90  # if current is positive, then battery is being discharged
@@ -446,6 +466,9 @@ def thermald_thread():
     usb_power_prev = usb_power
     fw_version_match_prev = fw_version_match
     should_start_prev = should_start
+
+    if usb_power:
+      pm.charging_ctrl( msg, ts, 80, 70 )
 
     # report to server once per minute
     if (count % int(60. / DT_TRML)) == 0:
