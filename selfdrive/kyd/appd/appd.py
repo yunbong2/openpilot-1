@@ -79,6 +79,10 @@ def main(gctx=None):
   system("pm disable %s" % kakaonavi)
   system("pm disable %s" % softkey)
 
+  if opkr_boot_softkey and not softkey_is_running:
+    softkey_is_running = exec_app('1', softkey, softkey_main)
+    put_nonblocking('OpkrRunSoftkey', '0')
+
   thermal_sock = messaging.sub_sock('thermal')
 
   while opkr_enable_mixplorer or opkr_enable_quickedit or opkr_enable_atlanmap or opkr_enable_onenavi or opkr_enable_tmap or opkr_enable_kakaonavi or opkr_enable_softkey:
@@ -151,11 +155,6 @@ def main(gctx=None):
       stop_delay = None
       if start_delay is None:
         start_delay = frame + 5
-
-      if opkr_boot_softkey and frame > start_delay:
-        if not softkey_is_running:
-          softkey_is_running = exec_app('1', softkey, softkey_main)
-          put_nonblocking('OpkrRunSoftkey', '0')
 
       if opkr_boot_atlanmap and frame > start_delay:
         if not atlanmap_is_running:
