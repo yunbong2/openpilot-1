@@ -55,7 +55,7 @@ class CarInterface(CarInterfaceBase):
     # Hyundai port is a community feature for now
     ret.communityFeature = False
 
-    ret.steerActuatorDelay = 0.1  # Default delay
+    ret.steerActuatorDelay = 0.25  # Default delay
     ret.steerRateCost = 0.45
     ret.steerLimitTimer = 0.8
     tire_stiffness_factor = 0.75
@@ -218,6 +218,13 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1955. + STD_CARGO_KG
       ret.wheelbase = 2.90
       ret.steerRatio = 13.0
+      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.05], [0.01]]
+    elif candidate == CAR.SOUL_EV:
+      ret.lateralTuning.pid.kf = 0.00005
+      ret.mass = 1695. + STD_CARGO_KG
+      ret.wheelbase = 2.6
+      ret.steerRatio = 12.5
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.05], [0.01]]
 
