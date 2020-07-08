@@ -202,6 +202,8 @@ def thermald_thread():
   env = dict(os.environ)
   env['LD_LIBRARY_PATH'] = mediaplayer
 
+  self.getoff_alert = Params().get('OpkrEnableGetoffAlert') == b'1'
+
   while 1:
     ts = sec_since_boot()
     health = messaging.recv_sock(health_sock, wait=True)
@@ -427,7 +429,7 @@ def thermald_thread():
         off_ts = current_ts
         os.system('echo powersave > /sys/class/devfreq/soc:qcom,cpubw/governor')
 
-      if sound_trigger == 1 and msg.thermal.batteryStatus == "Discharging" and started_seen and (sec_since_boot() - off_ts) > 2:
+      if sound_trigger == 1 and msg.thermal.batteryStatus == "Discharging" and started_seen and (sec_since_boot() - off_ts) > 2 and self.getoff_alert:
         subprocess.Popen([mediaplayer + 'mediaplayer', '/data/openpilot/selfdrive/assets/sounds/eondetach.wav'], shell = False, stdin=None, stdout=None, stderr=None, env = env, close_fds=True)
         sound_trigger = 0
 
