@@ -310,6 +310,10 @@ class CarState(CarStateBase):
       ("ACC_ObjDist", "SCC11", 0),
       ("ACC_ObjRelSpd", "SCC11", 0),
       ("ACCMode", "SCC12", 1),
+
+      ("CF_Lca_Stat", "LCA11", 0),
+      ("CF_Lca_IndLeft", "LCA11", 0),
+      ("CF_Lca_IndRight", "LCA11", 0), 
     ]
 
     checks = [
