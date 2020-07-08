@@ -26,6 +26,8 @@ from selfdrive.locationd.calibration_helpers import Calibration
 
 import common.log as  trace1
 
+
+
 LDW_MIN_SPEED = 31 * CV.MPH_TO_MS
 LANE_DEPARTURE_THRESHOLD = 0.1
 STEER_ANGLE_SATURATION_TIMEOUT = 1.0 / DT_CTRL
@@ -45,7 +47,7 @@ class Controls:
     gc.disable()
     set_realtime_priority(3)
 
-
+    self.trace_log = trace1.Loger("controlsd")
     # Setup sockets
     self.pm = pm
     if self.pm is None:
@@ -119,7 +121,6 @@ class Controls:
     elif self.CP.lateralTuning.which() == 'lqr':
       self.LaC = LatControlLQR(self.CP)
 
-    self.old_state = 0
     self.state = State.disabled
     self.enabled = False
     self.active = False
@@ -229,7 +230,7 @@ class Controls:
     if not self.sm['pathPlan'].mpcSolutionValid:
       self.events.add(EventName.plannerError)
     if not self.sm['liveLocationKalman'].inputsOK and os.getenv("NOSENSOR") is None:
-      if self.sm.frame > 5 / DT_CTRL:  # Give locationd some time to receive all the inputs
+      if self.sm.frame > 10 / DT_CTRL:  # Give locationd some time to receive all the inputs
         self.events.add(EventName.sensorDataInvalid)
     if not self.sm['pathPlan'].paramsValid:
       self.events.add(EventName.vehicleModelInvalid)
@@ -336,17 +337,13 @@ class Controls:
     elif self.state == State.disabled:
       if self.events.any(ET.ENABLE):
         if self.events.any(ET.NO_ENTRY):
-          print( 'self.current_alert_types.append(ET.NO_ENTRY)' )
           self.current_alert_types.append(ET.NO_ENTRY)
 
         else:
           if self.events.any(ET.PRE_ENABLE):
-            print( 'self.state = State.preEnabled' )
             self.state = State.preEnabled
           else:
-            print( 'self.state = State.enabled' )
             self.state = State.enabled
-
           self.current_alert_types.append(ET.ENABLE)
           self.v_cruise_kph = initialize_v_cruise(CS.vEgo, CS.buttonEvents, self.v_cruise_kph_last)
 
@@ -358,10 +355,7 @@ class Controls:
     # Check if openpilot is engaged
     self.enabled = self.active or self.state == State.preEnabled
 
-    if self.old_state != self.state: 
-      print( 'cruise={:.0f} kph{:.1f} enable={} self.active={} self.state={}'.format( CS.cruiseState.enabled, self.v_cruise_kph, self.enabled, self.active, self.state ) )
-      self.old_state = self.state
-    #print( 'cruise={:.0f} kph{:.1f} enable={} self.active={} self.state={}'.format( CS.cruiseState.enabled, self.v_cruise_kph, self.enabled, self.active, self.state ) )
+    #print( 'enable={} self.active={}'.format( self.enabled, self.active ) )
 
   def state_control(self, CS):
     """Given the state, this function returns an actuators packet"""
@@ -398,20 +392,28 @@ class Controls:
     angle_control_saturated = self.CP.steerControlType == car.CarParams.SteerControlType.angle and \
       abs(actuators.steerAngle - CS.steeringAngle) > STEER_ANGLE_SATURATION_THRESHOLD
 
-    if angle_control_saturated and not CS.steeringPressed and self.active:
+    if CS.leftBlinker or CS.rightBlinker or CS.steeringPressed or not self.active:
+      self.saturated_count = 0
+    elif lac_log.saturated or angle_control_saturated:
       self.saturated_count += 1
     else:
       self.saturated_count = 0
 
     # Send a "steering required alert" if saturation count has reached the limit
-    if (lac_log.saturated and not CS.steeringPressed) or \
-       (self.saturated_count > STEER_ANGLE_SATURATION_TIMEOUT):
+    #if (lac_log.saturated and not CS.steeringPressed) or \
+    #   (self.saturated_count > STEER_ANGLE_SATURATION_TIMEOUT):
+    if (self.saturated_count > STEER_ANGLE_SATURATION_TIMEOUT):
       # Check if we deviated from the path
       left_deviation = actuators.steer > 0 and path_plan.dPoly[3] > 0.1
       right_deviation = actuators.steer < 0 and path_plan.dPoly[3] < -0.1
 
       if left_deviation or right_deviation:
+        event_len = self.events.__len__()
+        #if not event_len:
         self.events.add(EventName.steerSaturated)
+
+        str_log1 = 'dPoly[3]={:.5f} actuators.steer={:.5f} L:{:.0f} R:{:.0f} event_len={}'.format( path_plan.dPoly[3], actuators.steer, left_deviation, right_deviation, event_len )
+        self.trace_log.add( str_log1 )
 
     return actuators, v_acc_sol, a_acc_sol, lac_log
 

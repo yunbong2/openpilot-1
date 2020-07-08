@@ -29,6 +29,7 @@ class AtomConf():
 
 
     self.deadzone = 0.1
+    self.cameraOffset = 0.06
     self.steerOffset = 0.0
     self.steerRatio = 11.5
     self.steerRateCost = 0.4
@@ -67,6 +68,7 @@ class AtomConf():
     self.steerRateCost = conf['steerRateCost']
 
     self.deadzone = conf['deadzone']
+    self.cameraOffset = conf['cameraOffset']
     self.steerOffset = conf['steerOffset']
     self.learnerParams = conf['learnerParams']
     self.tire_stiffness_factor = conf['tire_stiffness_factor']

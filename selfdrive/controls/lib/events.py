@@ -447,6 +447,14 @@ EVENTS = {
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },
 
+  EventName.emgButtonManual: {
+    ET.WARNING: Alert(
+      "핸들을 잡아주세요",
+      "비상등 점멸 중",
+      AlertStatus.userPrompt, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+  },  
+
   EventName.steerSaturated: {
     ET.WARNING: Alert(
       "핸들을 잡아주세요",
