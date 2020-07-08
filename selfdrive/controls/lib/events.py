@@ -441,7 +441,7 @@ EVENTS = {
 
   EventName.laneChangeManual: {
     ET.WARNING: Alert(
-      "수동 차선 변경 중",
+      "사용자 방향 전환 중",
       "다른 차량에 주의하세요",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
