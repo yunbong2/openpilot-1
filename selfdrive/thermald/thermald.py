@@ -153,7 +153,7 @@ def handle_fan_uno(max_cpu_temp, bat_temp, fan_speed, ignition):
 
 def thermald_thread():
   # prevent LEECO from undervoltage
-  BATT_PERC_OFF = 90 #10 if LEON else 3
+  BATT_PERC_OFF = 100 #10 if LEON else 3
 
   health_timeout = int(1000 * 2.5 * DT_TRML)  # 2.5x the expected health frequency
 
@@ -191,29 +191,6 @@ def thermald_thread():
   pm = PowerMonitoring()
   no_panda_cnt = 0
 
-  IsOpenpilotViewEnabled = 0
-
-  OpkrLoadStep = 0
-  OpkrAutoShutdown = 0
-  do_uninstall = 0
-  accepted_terms = 0
-  completed_training = 0
-  panda_signature = 0
-  while 1:
-    OpkrLoadStep += 1
-    if OpkrLoadStep == 1:
-      OpkrAutoShutdown = int( params.get("OpkrAutoShutdown") )
-    elif OpkrLoadStep == 2:
-      do_uninstall = params.get("DoUninstall") == b"1"
-    elif OpkrLoadStep == 3:
-      accepted_terms = params.get("HasAcceptedTerms") == terms_version 
-    elif OpkrLoadStep == 4:
-      completed_training = params.get("CompletedTrainingVersion") == training_version
-    elif OpkrLoadStep == 5:      
-      panda_signature = params.get("PandaFirmware")
-    else:
-      OpkrLoadStep = 0
-
   ts_last_ip = 0
   ip_addr = '255.255.255.255'
 
@@ -245,7 +222,6 @@ def thermald_thread():
       else:
         no_panda_cnt = 0
         ignition = health.health.ignitionLine or health.health.ignitionCan
-     
 
       # Setup fan handler on first connect to panda
       if handle_fan is None and health.health.hwType != log.HealthData.HwType.unknown:
@@ -265,11 +241,6 @@ def thermald_thread():
           health_prev.health.hwType != log.HealthData.HwType.unknown:
           params.panda_disconnect()
       health_prev = health
-    elif ignition == False or IsOpenpilotViewEnabled:
-      IsOpenpilotViewEnabled = int( params.get("IsOpenpilotViewEnabled") )      
-      ignition = IsOpenpilotViewEnabled
-
-
 
     # get_network_type is an expensive call. update every 10s
     if (count % int(10. / DT_TRML)) == 0:
@@ -385,13 +356,12 @@ def thermald_thread():
       params.delete("Offroad_ConnectivityNeededPrompt")
     """
 
-    #accepted_terms = params.get("HasAcceptedTerms") == terms_version
-    #completed_training = params.get("CompletedTrainingVersion") == training_version
-    #panda_signature = params.get("PandaFirmware")
+    do_uninstall = params.get("DoUninstall") == b"1"
+    accepted_terms = params.get("HasAcceptedTerms") == terms_version
+    completed_training = params.get("CompletedTrainingVersion") == training_version
 
+    panda_signature = params.get("PandaFirmware")
     fw_version_match = (panda_signature is None) or (panda_signature == FW_SIGNATURE)   # don't show alert is no panda is connected (None)
-
-    #ignition = True  #  영상보기.
 
     should_start = ignition
 
@@ -466,7 +436,6 @@ def thermald_thread():
 
         if power_shutdown:
           os.system('LD_LIBRARY_PATH="" svc power shutdown')
-          print( 'power_shutdown batterypercent={} should_start={}'.format(msg.thermal.batteryPercent, should_start) )
 
       else:
         off_ts = current_ts
