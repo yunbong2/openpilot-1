@@ -46,7 +46,7 @@ def main(gctx=None):
   opkr_enable_kakaonavi = True #if params.get("OpkrEnableKakaonavi", encoding='utf8') == "1" else False
   opkr_boot_kakaonavi = True if params.get("OpkrBootKakaonavi", encoding='utf8') == "1" else False
   opkr_enable_softkey = True #if params.get("OpkrEnableSoftkey", encoding='utf8') == "1" else False
-  opkr_boot_softkey = True if params.get("OpkrBootSoftkey", encoding='utf8') == "1" else False
+  #opkr_boot_softkey = True if params.get("OpkrBootSoftkey", encoding='utf8') == "1" else False
   
   mixplorer_is_running = False
   quickedit_is_running = False
@@ -78,10 +78,6 @@ def main(gctx=None):
   system("pm disable %s" % tmap)
   system("pm disable %s" % kakaonavi)
   system("pm disable %s" % softkey)
-
-  if opkr_boot_softkey and not softkey_is_running:
-    softkey_is_running = exec_app('1', softkey, softkey_main)
-    put_nonblocking('OpkrRunSoftkey', '0')
 
   thermal_sock = messaging.sub_sock('thermal')
 
@@ -158,21 +154,33 @@ def main(gctx=None):
 
       if opkr_boot_atlanmap and frame > start_delay:
         if not atlanmap_is_running:
+          if not softkey_is_running:
+            softkey_is_running = exec_app(status, softkey, softkey_main)
+            put_nonblocking('OpkrRunSoftkey', '0')
           atlanmap_is_running = exec_app('1', atlanmap, atlanmap_main)
           put_nonblocking('OpkrRunAtlanmap', '0')
 
       if opkr_boot_onenavi and frame > start_delay:
         if not onenavi_is_running:
+          if not softkey_is_running:
+            softkey_is_running = exec_app(status, softkey, softkey_main)
+            put_nonblocking('OpkrRunSoftkey', '0')
           onenavi_is_running = exec_app('1', onenavi, onenavi_main)
           put_nonblocking('OpkrRunOnenavi', '0')
 
       if opkr_boot_tmap and frame > start_delay:
         if not tmap_is_running:
+          if not softkey_is_running:
+            softkey_is_running = exec_app(status, softkey, softkey_main)
+            put_nonblocking('OpkrRunSoftkey', '0')
           tmap_is_running = exec_app('1', tmap, tmap_main)
           put_nonblocking('OpkrRunTmap', '0')
 
       if opkr_boot_kakaonavi and frame > start_delay:
         if not kakaonavi_is_running:
+          if not softkey_is_running:
+            softkey_is_running = exec_app(status, softkey, softkey_main)
+            put_nonblocking('OpkrRunSoftkey', '0')
           kakaonavi_is_running = exec_app('1', kakaonavi, kakaonavi_main)
           put_nonblocking('OpkrRunKakaonavi', '0')
 
