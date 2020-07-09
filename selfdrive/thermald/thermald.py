@@ -17,6 +17,8 @@ from selfdrive.swaglog import cloudlog
 import cereal.messaging as messaging
 from selfdrive.loggerd.config import get_available_percent
 from selfdrive.pandad import get_expected_signature
+from selfdrive.kegman_conf import kegman_conf
+kegman = kegman_conf()
 from selfdrive.thermald.power_monitoring import PowerMonitoring, get_battery_capacity, get_battery_status, get_battery_current, get_battery_voltage, get_usb_present
 
 FW_SIGNATURE = get_expected_signature()
@@ -26,7 +28,7 @@ NetworkType = log.ThermalData.NetworkType
 NetworkStrength = log.ThermalData.NetworkStrength
 CURRENT_TAU = 15.   # 15s time constant
 CPU_TEMP_TAU = 5.   # 5s time constant
-DAYS_NO_CONNECTIVITY_MAX = 30000  # do not allow to engage after a week without internet
+DAYS_NO_CONNECTIVITY_MAX = 7  # do not allow to engage after a week without internet
 DAYS_NO_CONNECTIVITY_PROMPT = 4  # send an offroad prompt after 4 days with no internet
 DISCONNECT_TIMEOUT = 5.  # wait 5 seconds before going offroad after disconnect so you get an alert
 
@@ -300,6 +302,7 @@ def thermald_thread():
       put_nonblocking("Offroad_InvalidTime", json.dumps(OFFROAD_ALERTS["Offroad_InvalidTime"]))
     time_valid_prev = time_valid
 
+'''
     # Show update prompt
     try:
       last_update = datetime.datetime.fromisoformat(params.get("LastUpdateTime", encoding='utf8'))
@@ -327,6 +330,7 @@ def thermald_thread():
       current_connectivity_alert = None
       params.delete("Offroad_ConnectivityNeeded")
       params.delete("Offroad_ConnectivityNeededPrompt")
+'''
 
     do_uninstall = params.get("DoUninstall") == b"1"
     accepted_terms = params.get("HasAcceptedTerms") == terms_version
@@ -390,7 +394,7 @@ def thermald_thread():
 
       # shutdown if the battery gets lower than 3%, it's discharging, we aren't running for
       # more than a minute but we were running
-      if msg.thermal.batteryPercent < BATT_PERC_OFF and msg.thermal.batteryStatus == "Discharging" and \
+      if msg.thermal.batteryPercent <= BATT_PERC_OFF and msg.thermal.batteryStatus == "Discharging" and \
          started_seen and (sec_since_boot() - off_ts) > 60:
         os.system('LD_LIBRARY_PATH="" svc power shutdown')
 
