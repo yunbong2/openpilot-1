@@ -443,6 +443,7 @@ void handle_message(UIState *s, SubMaster &sm) {
     scene.freeSpace = data.getFreeSpace();
     scene.thermalStatus = data.getThermalStatus();
     scene.paTemp = data.getPa0();
+    scene.ipAddr = data.getIpAddr();
 
     s->thermal_started = data.getStarted();
   }
