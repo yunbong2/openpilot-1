@@ -98,19 +98,19 @@ static void ui_draw_sidebar_metric(UIState *s, const char* label_str, const char
 
   if (!message_str) {
     nvgFillColor(s->vg, COLOR_WHITE);
-    nvgFontSize(s->vg, 78);
+    nvgFontSize(s->vg, 78*0.85);
     nvgFontFaceId(s->vg, s->font_sans_bold);
     nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, metric_x + 50, metric_y + 50, metric_w - 60, value_str, NULL);
 
     nvgFillColor(s->vg, COLOR_WHITE);
-    nvgFontSize(s->vg, 48);
+    nvgFontSize(s->vg, 48*0.85);
     nvgFontFaceId(s->vg, s->font_sans_regular);
     nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, metric_x + 50, metric_y + 50 + 66, metric_w - 60, label_str, NULL);
   } else {
     nvgFillColor(s->vg, COLOR_WHITE);
-    nvgFontSize(s->vg, 48);
+    nvgFontSize(s->vg, 48*0.85);
     nvgFontFaceId(s->vg, s->font_sans_bold);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, metric_x + 35, metric_y + (strchr(message_str, '\n') ? 40 : 50), metric_w - 50, message_str, NULL);
