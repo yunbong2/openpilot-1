@@ -201,7 +201,20 @@ def thermald_thread():
   env['LD_LIBRARY_PATH'] = mediaplayer
 
   getoff_alert = Params().get('OpkrEnableGetoffAlert') == b'1'
-  OpkrAutoShutdown = int( params.get("OpkrAutoShutdown") )
+  if int( params.get("OpkrAutoShutdown") ) == 0:
+    OpkrAutoShutdown = 0
+  elif int( params.get("OpkrAutoShutdown") ) == 1:
+    OpkrAutoShutdown = 10
+  elif int( params.get("OpkrAutoShutdown") ) == 2:
+    OpkrAutoShutdown = 20
+  elif int( params.get("OpkrAutoShutdown") ) == 3:
+    OpkrAutoShutdown = 30
+  elif int( params.get("OpkrAutoShutdown") ) == 4:
+    OpkrAutoShutdown = 60
+  elif int( params.get("OpkrAutoShutdown") ) == 5:
+    OpkrAutoShutdown = 120
+  elif int( params.get("OpkrAutoShutdown") ) == 6:
+    OpkrAutoShutdown = 240
 
   while 1:
     ts = sec_since_boot()
