@@ -47,10 +47,6 @@ class kegman_conf():
         self.config.update({"cameraOffset":"0.06"})
         self.element_updated = True
 
-      if "battPercOff" not in self.config:
-        self.config.update({"battPercOff":"100"})
-        self.element_updated = True
-
       if "tuneGernby" not in self.config:
         self.config.update({"tuneGernby":"1"})
         self.config.update({"Kp":"-1"})
@@ -96,7 +92,7 @@ class kegman_conf():
 
     else:
       self.config = {"cameraOffset":"0.06", "battChargeMin":"70", "battChargeMax":"80", \
-                     "wheelTouchSeconds":"30000", "battPercOff":"100", \
+                     "wheelTouchSeconds":"30000", \
                      "tuneGernby":"1", \
                      "Kp":"-1", "Ki":"-1", "liveParams":"1", "deadzone":"0.1", \
                      "steerRatio":"-1", "steerRateCost":"-1", "Kf":"-1", \
