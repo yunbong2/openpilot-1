@@ -137,7 +137,7 @@ keys = {
   "OpkrBootTmap": [TxType.PERSISTENT],
   "OpkrRunKakaonavi": [TxType.PERSISTENT],
   "OpkrBootKakaonavi": [TxType.PERSISTENT],
-  "FingerprintIssuedCars": [TxType.PERSISTENT],
+  "FingerprintIssuedFix": [TxType.PERSISTENT],
 }
 
 

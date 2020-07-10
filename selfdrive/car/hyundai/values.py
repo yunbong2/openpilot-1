@@ -51,9 +51,9 @@ class Buttons:
 
 
 params = Params()
-fingerprint_issued_cars = params.get("FingerprintIssuedCars", encoding='utf8') == "1"
+fingerprint_issued_fix = params.get("FingerprintIssuedFix", encoding='utf8') == "1"
 
-if fingerprint_issued_cars:
+if fingerprint_issued_fix:
   FINGERPRINTS = {
     CAR.AVANTE: [{}],
     CAR.SONATA: [{}],

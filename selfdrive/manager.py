@@ -614,7 +614,7 @@ def main():
     ("OpkrBootTmap", "0"),
     ("OpkrRunKakaonavi", "0"),
     ("OpkrBootKakaonavi", "0"),
-    ("FingerprintIssuedCars", "0"),
+    ("FingerprintIssuedFix", "0"),
   ]
 
   # set unset params
