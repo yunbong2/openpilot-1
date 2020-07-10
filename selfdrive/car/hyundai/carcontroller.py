@@ -293,7 +293,7 @@ class CarController():
 
     # fix for Genesis hard fault at low speed
     #if CS.out.vEgo < 16.666667 and self.car_fingerprint == CAR.GENESIS:
-      lkas_active = 0
+    #  lkas_active = 0
 
     if not lkas_active:
       apply_steer = 0
