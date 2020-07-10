@@ -91,9 +91,6 @@ class CarState(CarStateBase):
     self.mdps_error_cnt += 1 if cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0 else -self.mdps_error_cnt
     ret.steerWarning = self.mdps_error_cnt > 100 #cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0
 
-    # Blind Spot Detection and Lane Change Assist signals
-    ret.leftBlindspot = cp.vl["LCA11"]['CF_Lca_IndLeft'] != 0
-    ret.rightBlindspot = cp.vl["LCA11"]['CF_Lca_IndRight'] != 0
 
     self.TSigLHSw = cp.vl["CGW1"]['CF_Gway_TSigLHSw']
     self.TSigRHSw = cp.vl["CGW1"]['CF_Gway_TSigRHSw']
@@ -228,6 +225,10 @@ class CarState(CarStateBase):
       else:
         ret.gearShifter = GearShifter.unknown
 
+    # Blind Spot Detection and Lane Change Assist signals
+    ret.leftBlindspot = cp.vl["LCA11"]['CF_Lca_IndLeft'] != 0
+    ret.rightBlindspot = cp.vl["LCA11"]['CF_Lca_IndRight'] != 0
+
     # save the entire LKAS11 and CLU11
     self.lkas11 = cp_cam.vl["LKAS11"]
     self.clu11 = cp.vl["CLU11"]
@@ -325,6 +326,7 @@ class CarState(CarStateBase):
       ("CGW1", 10),
       ("CGW4", 5),
       ("WHL_SPD11", 50),
+      ("LCA11", 50),    
     ]
 
     if CP.mdpsBus == 0:

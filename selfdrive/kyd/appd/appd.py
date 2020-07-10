@@ -77,7 +77,7 @@ def main(gctx=None):
   system("pm disable %s" % onenavi)
   system("pm disable %s" % tmap)
   system("pm disable %s" % kakaonavi)
-  system("pm disable %s" % softkey)
+  #system("pm disable %s" % softkey)
 
   thermal_sock = messaging.sub_sock('thermal')
 
