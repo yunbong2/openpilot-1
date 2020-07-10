@@ -54,7 +54,7 @@ def main(gctx=None):
   onenavi_is_running = False
   tmap_is_running = False
   kakaonavi_is_running = False
-  softkey_is_running = False
+  softkey_is_running = True if params.get("OpkrBootSoftkey", encoding='utf8') == "1" else False
 
   allow_auto_boot = True
   last_started = False
