@@ -35,7 +35,7 @@ def start_offroad():
   system("am start -n ai.comma.plus.offroad/.MainActivity")
 
   if opkr_boot_softkey:
-    system("am start -n com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity &")
+    system("am start -n com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
 
 def set_package_permissions():
   pm_grant("ai.comma.plus.offroad", "android.permission.ACCESS_FINE_LOCATION")
