@@ -337,8 +337,8 @@ class CarController():
       str_log2 = 'U={:.0f}  LK={:.0f} dir={} steer={:5.0f} '.format( CS.Mdps_ToiUnavail, CS.lkas_button_on, self.steer_torque_ratio_dir, CS.out.steeringTorque  )
       trace1.printf2( '{}'.format( str_log2 ) )
 
-    if pcm_cancel_cmd and self.CP.longcontrolEnabled:
-      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
+    #if pcm_cancel_cmd and self.CP.longcontrolEnabled:
+    #  can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
 
     elif CS.out.cruiseState.standstill:
       # run only first time when the car stopped
@@ -360,7 +360,7 @@ class CarController():
     elif run_speed_ctrl and self.SC != None:
       is_sc_run = self.SC.update( CS, sm, self )
       if is_sc_run:
-        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, self.SC.btn_type, self.SC.sc_clu_speed ))
+        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.scc_bus, CS.clu11, self.SC.btn_type, self.SC.sc_clu_speed ))
         self.resume_cnt += 1
       else:
         self.resume_cnt = 0
