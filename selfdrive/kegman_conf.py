@@ -91,6 +91,10 @@ class kegman_conf():
         self.config.update({"ALCtimer":"1.0"})
         self.element_updated = True
 
+      if "getOffAlert" not in self.config:
+        self.config.update({"getOffAlert":"1"})
+        self.element_updated = True
+
       if self.element_updated:
         print("updated")
         self.write_config(self.config)
