@@ -1,4 +1,4 @@
-#include "ui.hpp"
+﻿#include "ui.hpp"
 #include <assert.h>
 #include <map>
 #include <cmath>
@@ -453,13 +453,13 @@ static void ui_draw_vision_maxspeed(UIState *s) {
 
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   const int text_x = viz_maxspeed_x + (viz_maxspeed_xo / 2) + (viz_maxspeed_w / 2);
-  ui_draw_text(s->vg, text_x, 148, "MAX", 26 * 2.5, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), s->font_sans_regular);
+  ui_draw_text(s->vg, text_x, 148, "설정속도", 26 * 1.7, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), s->font_sans_regular);
 
   if (is_cruise_set) {
     snprintf(maxspeed_str, sizeof(maxspeed_str), "%d", maxspeed_calc);
-    ui_draw_text(s->vg, text_x, 242, maxspeed_str, 48 * 2.5, COLOR_WHITE, s->font_sans_bold);
+    ui_draw_text(s->vg, text_x, 242, maxspeed_str, 48 * 2, COLOR_WHITE, s->font_sans_bold);
   } else {
-    ui_draw_text(s->vg, text_x, 242, "N/A", 42 * 2.5, COLOR_WHITE_ALPHA(100), s->font_sans_semibold);
+    ui_draw_text(s->vg, text_x, 242, "-", 42 * 2, COLOR_WHITE_ALPHA(100), s->font_sans_semibold);
   }
 }
 
@@ -514,9 +514,9 @@ static void ui_draw_vision_speedlimit(UIState *s) {
   color = s->is_ego_over_limit ? COLOR_WHITE : COLOR_BLACK;
   if (is_speedlim_valid) {
     snprintf(speedlim_str, sizeof(speedlim_str), "%d", speedlim_calc);
-    ui_draw_text(s->vg, text_x, viz_speedlim_y + (is_speedlim_valid ? 170 : 165), speedlim_str, 48*2.5, color, s->font_sans_bold);
+    ui_draw_text(s->vg, text_x, viz_speedlim_y + (is_speedlim_valid ? 170 : 165), speedlim_str, 48*2, color, s->font_sans_bold);
   } else {
-    ui_draw_text(s->vg, text_x, viz_speedlim_y + (is_speedlim_valid ? 170 : 165), "N/A", 42*2.5, color, s->font_sans_semibold);
+    ui_draw_text(s->vg, text_x, viz_speedlim_y + (is_speedlim_valid ? 170 : 165), "N/A", 42*2, color, s->font_sans_semibold);
   }
 }
 
@@ -535,8 +535,8 @@ static void ui_draw_vision_speed(UIState *s) {
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
 
   snprintf(speed_str, sizeof(speed_str), "%d", (int)speed);
-  ui_draw_text(s->vg, viz_speed_x + viz_speed_w / 2, 240, speed_str, 96*2.5, COLOR_WHITE, s->font_sans_bold);
-  ui_draw_text(s->vg, viz_speed_x + viz_speed_w / 2, 320, s->is_metric?"km/h":"mph", 36*2.5, COLOR_WHITE_ALPHA(200), s->font_sans_regular);
+  ui_draw_text(s->vg, viz_speed_x + viz_speed_w / 2, 240, speed_str, 96*2, COLOR_WHITE, s->font_sans_bold);
+  ui_draw_text(s->vg, viz_speed_x + viz_speed_w / 2, 320, s->is_metric?"km/h":"mph", 36*2, COLOR_WHITE_ALPHA(200), s->font_sans_regular);
 }
 
 static void ui_draw_vision_event(UIState *s) {
@@ -698,16 +698,16 @@ void ui_draw_vision_alert(UIState *s, cereal::ControlsState::AlertSize va_size, 
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
 
   if (va_size == cereal::ControlsState::AlertSize::SMALL) {
-    ui_draw_text(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+15, va_text1, 40*2.5, COLOR_WHITE, s->font_sans_semibold);
+    ui_draw_text(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+15, va_text1, 40*2, COLOR_WHITE, s->font_sans_semibold);
   } else if (va_size == cereal::ControlsState::AlertSize::MID) {
-    ui_draw_text(s->vg, alr_x+alr_w/2, alr_y+alr_h/2-45, va_text1, 48*2.5, COLOR_WHITE, s->font_sans_bold);
-    ui_draw_text(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+75, va_text2, 36*2.5, COLOR_WHITE, s->font_sans_regular);
+    ui_draw_text(s->vg, alr_x+alr_w/2, alr_y+alr_h/2-45, va_text1, 48*2, COLOR_WHITE, s->font_sans_bold);
+    ui_draw_text(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+75, va_text2, 36*2, COLOR_WHITE, s->font_sans_regular);
   } else if (va_size == cereal::ControlsState::AlertSize::FULL) {
-    nvgFontSize(s->vg, (longAlert1?72:96)*2.5);
+    nvgFontSize(s->vg, (longAlert1?72:96)*2);
     nvgFontFaceId(s->vg, s->font_sans_bold);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, alr_x, alr_y+(longAlert1?360:420), alr_w-60, va_text1, NULL);
-    nvgFontSize(s->vg, 48*2.5);
+    nvgFontSize(s->vg, 48*2);
     nvgFontFaceId(s->vg,  s->font_sans_regular);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BOTTOM);
     nvgTextBox(s->vg, alr_x, alr_h-(longAlert1?300:360), alr_w-60, va_text2, NULL);
