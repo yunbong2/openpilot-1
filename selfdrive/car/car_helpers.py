@@ -22,9 +22,8 @@ def get_startup_event(car_recognized, controller_available, hw_type):
     event = EventName.startupNoCar
   elif car_recognized and not controller_available:
     event = EventName.startupNoControl
-  #elif hw_type == HwType.whitePanda:   #debug
+  #elif hw_type == HwType.whitePanda:
   #  event = EventName.startupWhitePanda
-
   return event
 
 
@@ -108,7 +107,7 @@ def fingerprint(logcan, sendcan, has_relay):
   Params().put("CarVin", vin)
 
   finger = gen_empty_fingerprint()
-  candidate_cars = {i: all_known_cars() for i in [0]}  # attempt fingerprint on bus 0 only
+  candidate_cars = {i: all_known_cars() for i in [0, 1]}  # attempt fingerprint on both bus 0 and 1
   frame = 0
   frame_fingerprint = 10  # 0.1s
   car_fingerprint = None

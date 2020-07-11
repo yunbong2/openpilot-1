@@ -1,4 +1,4 @@
-# This Python file uses the following encoding: utf-8
+﻿# This Python file uses the following encoding: utf-8
 # -*- coding: utf-8 -*-
 from cereal import log, car
 
@@ -180,14 +180,8 @@ def calibration_incomplete_alert(CP, sm, metric):
 EVENTS = {
   # ********** events with no alerts **********
 
-  #EventName.gasPressed: {ET.PRE_ENABLE: None},
-  EventName.gasPressed: {
-    ET.PERMANENT: Alert(
-      "gasPressed",
-      "check debug",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-  },
+  EventName.gasPressed: {ET.PRE_ENABLE: None},
+
   # ********** events only containing alerts displayed in all states **********
 
   EventName.debugAlert: {
@@ -439,38 +433,6 @@ EVENTS = {
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1),
   },
 
-  EventName.laneChangeManual: {
-    ET.WARNING: Alert(
-      "사용자 방향 전환 중",
-      "다른 차량에 주의하세요",
-      AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
-  },
-
-  EventName.emgButtonManual: {
-    ET.WARNING: Alert(
-      "핸들을 잡아주세요",
-      "비상등 점멸 중",
-      AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
-  },  
-
-   EventName.rightBlindspot: {
-     ET.WARNING: Alert(
-       "우측에 차량 접근 중",
-       "차선변경을 위해 잠시 대기합니다",
-       AlertStatus.userPrompt, AlertSize.mid,
-       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1),
-   },
-
-   EventName.leftBlindspot: {
-     ET.WARNING: Alert(
-       "좌측에 차량 접근 중",
-       "차선변경을 위해 잠시 대기합니다",
-       AlertStatus.userPrompt, AlertSize.mid,
-       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1),
-   },
-
   EventName.steerSaturated: {
     ET.WARNING: Alert(
       "핸들을 잡아주세요",
@@ -479,22 +441,6 @@ EVENTS = {
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 1., 2., 3.),
   },
 
-
-  EventName.steerTorqueOver: {
-    ET.WARNING: Alert(
-      "운전자 핸들 조향",
-      "자동 조향 일시 중지",
-      AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .1),
-  },
-  
-  EventName.steerTorqueLow: {
-    ET.WARNING: Alert(
-      "핸들을 잡아주세요",
-      "자동 조향 일시 저하",
-      AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .1),
-  },  
   # ********** events that affect controls state transitions **********
 
   EventName.pcmEnable: {
@@ -561,16 +507,6 @@ EVENTS = {
 
   EventName.belowEngageSpeed: {
     ET.NO_ENTRY: NoEntryAlert("차량의 속도 낮음"),
-  },
-
-
-  EventName.neosUpdateRequired: {
-    ET.PERMANENT: Alert(
-      "NEOS 업데이트 필요",
-      "업데이트를 위해 기다리세요",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.HIGHEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY: NoEntryAlert("NEOS 업데이트 필요"),
   },
 
   EventName.sensorDataInvalid: {
@@ -718,13 +654,8 @@ EVENTS = {
   },
 
   EventName.plannerError: {
-    #ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Planner Solution Error"),
-    #ET.NO_ENTRY: NoEntryAlert("Planner Solution Error"),
-    ET.WARNING: Alert(
-    "핸들을 잡아주세요",
-    "Planner Solution Error",
-    AlertStatus.userPrompt, AlertSize.mid,
-    Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 0., 0., 5.),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Planner Solution Error"),
+    ET.NO_ENTRY: NoEntryAlert("Planner Solution Error"),
   },
 
   EventName.relayMalfunction: {

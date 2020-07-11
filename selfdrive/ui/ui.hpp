@@ -56,7 +56,6 @@ const int nav_w = 640;
 const int nav_ww= 760;
 const int sbr_w = 300;
 const int bdr_s = 30;
-const int bdr_is = 30;
 const int box_x = sbr_w+bdr_s;
 const int box_y = bdr_s;
 const int box_w = vwp_w-sbr_w-(bdr_s*2);
@@ -111,19 +110,10 @@ typedef struct UIScene {
   float v_ego;
   bool decel_for_model;
 
-  struct _WHEEL_VEGO
-  {
-    float fl;
-    float fr;
-    float rl;
-    float rr;
-  } wheel;
-
   float speedlimit;
   bool speedlimit_valid;
   bool map_valid;
 
-  
   float curvature;
   int engaged;
   bool engageable;
@@ -157,8 +147,6 @@ typedef struct UIScene {
 
   float awareness_status;
 
-  bool recording;
-
   // Used to show gps planner status
   bool gps_planner_active;
 
@@ -172,68 +160,7 @@ typedef struct UIScene {
   cereal::HealthData::HwType hwType;
   int satelliteCount;
   uint8_t athenaStatus;
-
   std::string ipAddr;
-
-  // pathcoloring
-  float output_scale;
-  bool steerOverride;
-
-  // dev ui
-  uint16_t maxCpuTemp;
-  uint32_t maxBatTemp;
-  float angleSteers;  
-  float angleSteersDes;
-
-  bool brakePress;
-  bool  brakeLights;
-  bool leftBlinker;
-  bool rightBlinker;
-
-  cereal::CarState::GearShifter  getGearShifter;  
-
-  struct _STATUS_
-  {
-      char text1[512];
-      char text2[512];
-  } alert;
-
-
-
-
-  struct LateralsRatom {
-    int learnerParams;
-    float deadzone;
-    float steerOffset;
-    float tireStiffnessFactor;
-  };
-
-  struct _CAR_PARAMS
-  {
-      float steerRatio;
-      struct LateralsRatom  lateralsRatom;
-  } carParams;
-
-  struct _CRUISE_STATE
-  {
-    bool standstill;
-    int  modeSel;
-  } cruiseState;
-
-
-  struct  _PARAMS
-  {
-    int nOpkrDevelMode1;
-    int nOpkrAutoScreenOff;
-    int nOpkrAccelProfile;
-    int nOpkrUIBrightness;
-    int nOpkrUIVolumeBoost;
-    int nOpkrAutoLanechangedelay;
-    
-    int nSmoothBrightness;
-    int nLightSensor;
-  } params;
-
 } UIScene;
 
 typedef struct {

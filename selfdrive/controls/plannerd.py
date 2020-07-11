@@ -11,7 +11,7 @@ from selfdrive.controls.lib.pathplanner import PathPlanner
 import cereal.messaging as messaging
 
 
-def plannerd_thread(sm=None, pm=None): 
+def plannerd_thread(sm=None, pm=None):
   gc.disable()
 
   # start the loop
@@ -27,7 +27,7 @@ def plannerd_thread(sm=None, pm=None):
   VM = VehicleModel(CP)
 
   if sm is None:
-    sm = messaging.SubMaster(['carState', 'controlsState', 'radarState', 'model', 'liveParameters', "carParams"])
+    sm = messaging.SubMaster(['carState', 'controlsState', 'radarState', 'model', 'liveParameters'])
 
   if pm is None:
     pm = messaging.PubMaster(['plan', 'liveLongitudinalMpc', 'pathPlan', 'liveMpc'])
@@ -36,8 +36,7 @@ def plannerd_thread(sm=None, pm=None):
   sm['liveParameters'].sensorValid = True
   sm['liveParameters'].steerRatio = CP.steerRatio
   sm['liveParameters'].stiffnessFactor = 1.0
-  #print( 'plannerd_thread={}'.formaT( sm['liveParameters'] ) )
-  
+
   while True:
     sm.update()
 

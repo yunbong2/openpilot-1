@@ -39,7 +39,6 @@ def get_battery_charging():
 
 
 def set_battery_charging(on):
-  print( 'set_battery_charging={}'.format( on ) )
   with open('/sys/class/power_supply/battery/charging_enabled', 'w') as f:
     f.write(f"{1 if on else 0}\n")
 
@@ -64,10 +63,9 @@ class PowerMonitoring:
     self.power_used_uWh = 0                     # Integrated power usage in uWh since going into offroad
     self.next_pulsed_measurement_time = None
     self.integration_lock = threading.Lock()
-    self.ts_last_charging_ctrl = None
 
   # Calculation tick
-  def calculate(self, health, msg ):
+  def calculate(self, health):
     try:
       now = time.time()
 
@@ -130,11 +128,7 @@ class PowerMonitoring:
             cloudlog.exception("Pulsed power measurement failed")
 
         # Start pulsed measurement and return
-        if msg.thermal.batteryPercent > 30: 
-            threading.Thread(target=perform_pulse_measurement, args=(now,)).start()
-            print( 'pulse = msg.thermal.batteryPercent={:.1f}'.format( msg.thermal.batteryPercent ) )
-        else:
-            print( 'skip = msg.thermal.batteryPercent={:.1f}'.format( msg.thermal.batteryPercent ) )
+        threading.Thread(target=perform_pulse_measurement, args=(now,)).start()
         self.next_pulsed_measurement_time = None
         return
 
@@ -169,14 +163,3 @@ class PowerMonitoring:
   # Get the power usage
   def get_power_used(self):
     return int(self.power_used_uWh)
-
-
-
-  def charging_ctrl(self, msg, ts, to_discharge, to_charge ):
-    if self.ts_last_charging_ctrl is None or (ts - self.ts_last_charging_ctrl) >= 60.:
-      battery_changing = get_battery_charging()
-      if msg.thermal.batteryPercent >= to_discharge and battery_changing:
-        set_battery_charging(False)
-      elif msg.thermal.batteryPercent <= to_charge and not battery_changing:
-        set_battery_charging(True)
-      self.ts_last_charging_ctrl = ts

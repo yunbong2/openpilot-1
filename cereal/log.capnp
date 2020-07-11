@@ -529,8 +529,6 @@ struct ControlsState @0x97ff69c53601abf1 {
 
   decelForModel @54 :Bool;
   canErrorCounter @57 :UInt32;
-  alertTextMsg1  @58 :Text;
-  alertTextMsg2  @59 :Text;  
 
   lateralControlState :union {
     indiState @52 :LateralINDIState;
@@ -801,7 +799,6 @@ struct PathPlan {
   desire @17 :Desire;
   laneChangeState @18 :LaneChangeState;
   laneChangeDirection @19 :LaneChangeDirection;
-  laneChangeBSM @20 :LaneChangeBSM;
 
   enum Desire {
     none @0;
@@ -825,12 +822,6 @@ struct PathPlan {
     left @1;
     right @2;
   }
-
-  enum LaneChangeBSM {
-    none @0;
-    left @1;
-    right @2;
-  }  
 }
 
 struct LiveLocationKalman {

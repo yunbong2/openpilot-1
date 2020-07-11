@@ -164,18 +164,18 @@ ThermalStatus = cereal.log.ThermalData.ThermalStatus
 # comment out anything you don't want to run
 managed_processes = {
   "thermald": "selfdrive.thermald.thermald",
-  "uploader": "selfdrive.loggerd.uploader",  # delete able
-  "deleter": "selfdrive.loggerd.deleter",   # delete able
+  "uploader": "selfdrive.loggerd.uploader",
+  "deleter": "selfdrive.loggerd.deleter",
   "controlsd": "selfdrive.controls.controlsd",
   "plannerd": "selfdrive.controls.plannerd",
   "radard": "selfdrive.controls.radard",
   "dmonitoringd": "selfdrive.controls.dmonitoringd",
   "ubloxd": ("selfdrive/locationd", ["./ubloxd"]),
-  "loggerd": ("selfdrive/loggerd", ["./loggerd"]),  # delete able
-  "logmessaged": "selfdrive.logmessaged",   # delete able
+  "loggerd": ("selfdrive/loggerd", ["./loggerd"]),
+  "logmessaged": "selfdrive.logmessaged",
   "locationd": "selfdrive.locationd.locationd",
   "tombstoned": "selfdrive.tombstoned",
-  "logcatd": ("selfdrive/logcatd", ["./logcatd"]),  # delete able
+  "logcatd": ("selfdrive/logcatd", ["./logcatd"]),
   "proclogd": ("selfdrive/proclogd", ["./proclogd"]),
   "boardd": ("selfdrive/boardd", ["./boardd"]),   # not used directly
   "pandad": "selfdrive.pandad",
@@ -186,11 +186,10 @@ managed_processes = {
   "sensord": ("selfdrive/sensord", ["./sensord"]),
   "clocksd": ("selfdrive/clocksd", ["./clocksd"]),
   "gpsd": ("selfdrive/sensord", ["./gpsd"]),
-  "updated": "selfdrive.updated",   # delete able
+  #"updated": "selfdrive.updated",
   "dmonitoringmodeld": ("selfdrive/modeld", ["./dmonitoringmodeld"]),
   "modeld": ("selfdrive/modeld", ["./modeld"]),
-  "driverview": "selfdrive.controls.lib.driverview",  # delete able
-  "appd": "selfdrive.kyd.appd.appd",  
+  "driverview": "selfdrive.controls.lib.driverview",
 }
 
 daemon_processes = {
@@ -224,9 +223,8 @@ if ANDROID:
   persistent_processes += [
     'logcatd',
     'tombstoned',
-    'updated',
+    #'updated',
     'deleter',
-    'appd',    
   ]
 
 car_started_processes = [
@@ -430,28 +428,10 @@ def manager_thread():
   cloudlog.info("manager start")
   cloudlog.info({"environ": os.environ})
 
+  # save boot log
+  subprocess.call(["./loggerd", "--bootlog"], cwd=os.path.join(BASEDIR, "selfdrive/loggerd"))
 
   params = Params()
-
-  EnableDriverMonitoring = int(params.get('OpkrEnableDriverMonitoring')) 
-  EnableLogger = int(params.get('OpkrEnableLogger')) 
-
-  if not EnableDriverMonitoring:
-    car_started_processes.remove( 'dmonitoringd' )
-    car_started_processes.remove( 'dmonitoringmodeld' )
-    
-
-  if not EnableLogger:
-    car_started_processes.remove( 'loggerd' )
-    persistent_processes.remove( 'logmessaged' )
-    persistent_processes.remove( 'uploader' )
-    persistent_processes.remove( 'logcatd' )
-    persistent_processes.remove( 'updated' )
-    persistent_processes.remove( 'deleter' )
-  else:
-    # save boot log
-    subprocess.call(["./loggerd", "--bootlog"], cwd=os.path.join(BASEDIR, "selfdrive/loggerd"))
-
 
   # start daemon processes
   for p in daemon_processes:
@@ -491,7 +471,7 @@ def manager_thread():
         if p in persistent_processes:
           start_managed_process(p)
 
-    if msg.thermal.freeSpace < 0.1:
+    if msg.thermal.freeSpace < 0.05:
       logger_dead = True
 
     if msg.thermal.started and "driverview" not in running:
@@ -582,39 +562,6 @@ def main():
     ("OpenpilotEnabledToggle", "1"),
     ("LaneChangeEnabled", "1"),
     ("IsDriverViewEnabled", "0"),
-    ("IsOpenpilotViewEnabled", "0"),
-    ("OpkrAutoShutdown", "0"),
-    ("OpkrAutoScreenOff", "0"),
-    ("OpkrUIVolumeBoost", "0"),
-    ("OpkrUIBrightness", "0"),
-    ("OpkrEnableDriverMonitoring", "1"),
-    ("OpkrEnableLogger", "0"),
-    ("OpkrEnableGetoffAlert", "1"),
-    ("OpkrEnableLearner", "0"),
-    ("OpkrAutoResume", "1"),
-    ("OpkrTraceSet", "0"),
-    ("OpkrWhoisDriver", "0"),
-    ("OpkrTuneProfile", "0"),
-    ("OpkrTuneStartAt", "0"),
-    ("OpkrAccelProfile", "0"),   #악셀프로파일 0:미사용, 1:브드럽게,2:보통,3:빠르게
-    ("OpkrAutoLanechangedelay", "0"),
-    ("OpkrDevelMode1", "1"),
-    ("OpkrDevelMode2", "1"),
-    ("OpkrRunMixplorer", "0"),
-    ("OpkrRunQuickedit", "0"),
-    ("OpkrEnableSoftkey", "0"),
-    ("OpkrRunSoftkey", "0"),
-    ("OpkrBootSoftkey", "0"),
-    ("OpkrEnableNavigation", "0"),
-    ("OpkrRunAtlanmap", "0"),
-    ("OpkrBootAtlanmap", "0"),
-    ("OpkrRunOnenavi", "0"),
-    ("OpkrBootOnenavi", "0"),
-    ("OpkrRunTmap", "0"),
-    ("OpkrBootTmap", "0"),
-    ("OpkrRunKakaonavi", "0"),
-    ("OpkrBootKakaonavi", "0"),
-    ("FingerprintIssuedFix", "0"),
   ]
 
   # set unset params

@@ -1,11 +1,10 @@
 from common.numpy_fast import interp
 import numpy as np
+from selfdrive.kegman_conf import kegman_conf
 from cereal import log
-from selfdrive.atom_conf import AtomConf
 
-ATOMC = AtomConf()
-
-CAMERA_OFFSET = ATOMC.cameraOffset  # m from center car to camera
+kegman = kegman_conf()
+CAMERA_OFFSET = float(kegman.conf['cameraOffset'])  # m from center car to camera
 
 
 def compute_path_pinv(l=50):
