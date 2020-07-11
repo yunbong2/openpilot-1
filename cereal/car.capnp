@@ -432,7 +432,6 @@ struct CarParams {
     deadzone @1 :Float32;
     steerOffset @2 :Float32;
     tireStiffnessFactor @3 :Float32;
-    cameraOffset @4 :Float32;
   }
 
   struct LateralCVatom {
