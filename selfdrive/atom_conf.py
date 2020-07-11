@@ -31,11 +31,13 @@ class AtomConf():
     self.deadzone = 0.1
     self.cameraOffset = 0.06
     self.steerOffset = 0.0
-    self.steerRatio = 11.5
-    self.steerRateCost = 0.4
-    self.tire_stiffness_factor = 1.0
+    self.steerRatio = 12.5
+    self.steerRateCost = 0.5
+    self.tire_stiffness_factor = 1.
     self.steerActuatorDelay = 0.1
     self.steerLimitTimer = 0.4
+
+    self.steerTorqueOverMax = 180
 
     self.read_tune()
 
@@ -74,3 +76,5 @@ class AtomConf():
     self.tire_stiffness_factor = conf['tire_stiffness_factor']
     self.steerActuatorDelay = conf['steerActuatorDelay']
     self.steerLimitTimer = conf['steerLimitTimer']
+
+    self.steerTorqueOverMax = conf['steerTorqueOverMax']
