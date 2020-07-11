@@ -17,7 +17,7 @@ class kegman_conf():
                   "deadzone":0.0, "steerOffset":0.0, "cameraOffset":0.06, \
                   "steerLimitTimer":0.4,
                   "steerActuatorDelay":0.1,
-                  "steerTorqueOverMax":180}
+                  "steerTorqueOverMax":180 }
 
 
 
