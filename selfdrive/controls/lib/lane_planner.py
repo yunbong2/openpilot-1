@@ -1,4 +1,4 @@
-from common.numpy_fast import interp
+ï»¿from common.numpy_fast import interp
 import numpy as np
 from cereal import log
 from selfdrive.atom_conf import AtomConf
@@ -22,11 +22,11 @@ def compute_path_pinv(l=50):
 def model_polyfit(points, path_pinv):
   return np.dot(path_pinv, [float(x) for x in points])
 
-#076 Ãß°¡±â´É
+#076 ì¶”ê°€ê¸°ëŠ¥
 def eval_poly(poly, x):
   return poly[3] + poly[2]*x + poly[1]*x**2 + poly[0]*x**3
 
-#076 ·ÎÁ÷ º¸¿Ï
+#076 ë¡œì§ ë³´ì™„
 def calc_d_poly(l_poly, r_poly, p_poly, l_prob, r_prob, lane_width, v_ego):
   # This will improve behaviour when lanes suddenly widen
   # these numbers were tested on 2000segments and found to work well
@@ -85,7 +85,7 @@ class LanePlanner():
     self.l_prob = md.leftLane.prob  # left line prob
     self.r_prob = md.rightLane.prob  # right line prob
 
-    if len(md.meta.desireState): #076 º¸¿Ï
+    if len(md.meta.desireState): #076 ë³´ì™„
       self.l_lane_change_prob = md.meta.desireState[log.PathPlan.Desire.laneChangeLeft - 1]
       self.r_lane_change_prob = md.meta.desireState[log.PathPlan.Desire.laneChangeRight - 1]
 
