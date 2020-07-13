@@ -1,4 +1,4 @@
-﻿from common.numpy_fast import interp
+from common.numpy_fast import interp
 import numpy as np
 from cereal import log
 from selfdrive.atom_conf import AtomConf
