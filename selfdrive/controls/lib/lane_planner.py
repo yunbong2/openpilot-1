@@ -5,7 +5,7 @@ from selfdrive.atom_conf import AtomConf
 
 ATOMC = AtomConf()
 
-CAMERA_OFFSET = ATOMC.cameraOffset  # m from center car to camera
+CAMERA_OFFSET = 0.00  # m from center car to camera
 
 def compute_path_pinv(l=50):
   deg = 3
@@ -85,8 +85,8 @@ class LanePlanner():
 
   def update_d_poly(self, v_ego):
     # only offset left and right lane lines; offsetting p_poly does not make sense
-    self.l_poly[3] += CAMERA_OFFSET
-    self.r_poly[3] += CAMERA_OFFSET
+    self.l_poly[3] += CAMERA_OFFSET + ATOMC.cameraOffset
+    self.r_poly[3] += CAMERA_OFFSET + ATOMC.cameraOffset
 
     # Find current lanewidth
     self.lane_width_certainty += 0.05 * (self.l_prob * self.r_prob - self.lane_width_certainty)
