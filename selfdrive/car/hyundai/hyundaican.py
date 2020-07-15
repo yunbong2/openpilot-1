@@ -76,7 +76,6 @@ def create_clu11(packer, frame, bus, clu11, button, speed = None):
 def create_lfa_mfa(packer, frame, enabled):
   values = {
     "ACTIVE": enabled,
-    "HDA_USM": 2,
   }
 
   # ACTIVE 1 = Green steering wheel icon

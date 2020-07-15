@@ -191,7 +191,7 @@ class CarController():
       self.steer_torque_ratio_dir = 1
 
     lane_change_torque_lower = 0
-    if self.nBlinker > 10:
+    if self.nBlinker > 10 and v_ego_kph > 1:
       lane_change_torque_lower = int(CS.out.leftBlinker) + int(CS.out.rightBlinker) * 2
       if CS.out.steeringPressed and self.param_OpkrWhoisDriver:
         self.steer_torque_ratio = 0.05      
@@ -311,12 +311,11 @@ class CarController():
     if clu11_speed > enabled_speed or not lkas_active:
       enabled_speed = clu11_speed
 
-    if frame == 0: # initialize counts from last received count signals
-      self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"]
-
-    self.lkas11_cnt = (self.lkas11_cnt + 1) % 0x10
-
     can_sends = []
+    if frame == 0: # initialize counts from last received count signals
+      self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"] + 1
+    self.lkas11_cnt %= 0x10
+
     can_sends.append(create_lkas11(self.packer, self.lkas11_cnt, self.car_fingerprint, apply_steer, steer_req,
                                    CS.lkas11, sys_warning, sys_state, CC, enabled, 0 ))
     if CS.mdps_bus or CS.scc_bus == 1: # send lkas11 bus 1 if mdps is on bus 1                               
@@ -330,7 +329,7 @@ class CarController():
     #else: # send mdps12 to LKAS to prevent LKAS error if no cancel cmd
     can_sends.append(create_mdps12(self.packer, frame, CS.mdps12))
 
-    str_log1 = 'torg:{:5.0f} C={:.1f}/{:.1f} V={:.1f}/{:.1f} CV={:.1f}/{:.3f}'.format(  apply_steer, CS.lead_objspd, CS.lead_distance, self.dRel, self.vRel, self.model_speed, self.model_sum )
+    str_log1 = 'CV={:.1f}/{:.3f} torg:{:5.0f}'.format(  self.model_speed, self.model_sum, apply_steer )
     str_log2 = 'limit={:.0f} tm={:.1f} '.format( apply_steer_limit, self.timer1.sampleTime()  )
     trace1.printf( '{} {}'.format( str_log1, str_log2 ) )
 
@@ -339,8 +338,8 @@ class CarController():
       str_log2 = 'U={:.0f}  LK={:.0f} dir={} steer={:5.0f} '.format( CS.Mdps_ToiUnavail, CS.lkas_button_on, self.steer_torque_ratio_dir, CS.out.steeringTorque  )
       trace1.printf2( '{}'.format( str_log2 ) )
 
-    #if pcm_cancel_cmd and self.CP.longcontrolEnabled:
-    #  can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
+    if pcm_cancel_cmd and self.CP.longcontrolEnabled:
+      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL))
 
     elif CS.out.cruiseState.standstill:
       # run only first time when the car stopped
@@ -378,4 +377,5 @@ class CarController():
       can_sends.append(create_lfa_mfa(self.packer, frame, enabled))
 
     # counter inc
+    self.lkas11_cnt += 1
     return can_sends

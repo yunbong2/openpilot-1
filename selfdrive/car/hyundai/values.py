@@ -179,8 +179,9 @@ FEATURES = {
   "use_cluster_gears": [CAR.KONA, CAR.GRANDEUR, CAR.K7, CAR.MOHAVE, CAR.I30, CAR.AVANTE],     # Use Cluster for Gear Selection, rather than Transmission
   "use_tcu_gears": [CAR.K5, CAR.SONATA, CAR.SONATA_TURBO],                                    # Use TCU Message for Gear Selection
   "use_elect_gears": [CAR.K5_HEV, CAR.SONATA_HEV, CAR.GRANDEUR_HEV, CAR.IONIQ_HEV, CAR.IONIQ_EV, CAR.NIRO_HEV, CAR.KONA_HEV, CAR.KONA_EV, CAR.NIRO_EV, CAR.NEXO], # Use TCU Message for Gear Selection
-  "use_elect_ems": [CAR.K5_HEV, CAR.SONATA_HEV, CAR.GRANDEUR_HEV, CAR.IONIQ_HEV, CAR.IONIQ_EV, CAR.NIRO_HEV, CAR.KONA_HEV, CAR.KONA_EV, CAR.NIRO_EV, CAR.NEXO],
 }
+
+EV_HYBRID = [CAR.K5_HEV, CAR.SONATA_HEV, CAR.GRANDEUR_HEV, CAR.IONIQ_HEV, CAR.IONIQ_EV, CAR.NIRO_HEV, CAR.KONA_HEV, CAR.KONA_EV, CAR.NIRO_EV, CAR.NEXO]
 
 DBC = {
   CAR.AVANTE: dbc_dict('hyundai_kia_generic', None),
