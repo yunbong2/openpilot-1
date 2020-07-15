@@ -455,6 +455,10 @@ class CarState(CarStateBase):
         ("SCC12", 50),
       ]
 
+    signals, checks = CarState.get_parser_ev_hybrid( CP, signals, checks )
+    signals, checks = CarState.get_parser_gears( CP, signals, checks )
+
+
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 0)
 
   @staticmethod
@@ -542,6 +546,7 @@ class CarState(CarStateBase):
         ("SCC11", 50),
         ("SCC12", 50),
       ]
+      
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 1)
 
   @staticmethod
