@@ -5,7 +5,6 @@ from selfdrive.car.hyundai.values import Buttons, SteerLimitParams, CAR
 from opendbc.can.packer import CANPacker
 from selfdrive.config import Conversions as CV
 from common.numpy_fast import interp
-from selfdrive.atom_conf import AtomConf
 
 # speed controller
 from selfdrive.car.hyundai.spdcontroller  import SpdController
@@ -18,8 +17,6 @@ import common.CTime1000 as tm
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 LaneChangeState = log.PathPlan.LaneChangeState
-
-ATOMC = AtomConf()
 
 
 class CarController():
@@ -42,7 +39,6 @@ class CarController():
     self.steer_torque_over_timer = 0
     self.steer_torque_ratio = 1
     self.steer_torque_ratio_dir = 1
-    self.steer_torque_over_max = ATOMC.steerTorqueOverMax
 
     self.dRel = 0
     self.yRel = 0
@@ -159,7 +155,7 @@ class CarController():
 
 
     # streer over check
-    if v_ego_kph > 5 and abs( CS.out.steeringTorque ) > self.steer_torque_over_max:  #사용자 핸들 토크
+    if v_ego_kph > 5 and abs( CS.out.steeringTorque ) > 180:  #사용자 핸들 토크
       self.steer_torque_over_timer = 1
     else:
       self.steer_torque_over_timer = 0
