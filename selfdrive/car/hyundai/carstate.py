@@ -367,6 +367,9 @@ class CarState(CarStateBase):
 
       ("CF_Lvr_GearInf", "LVR11", 0),        # Transmission Gear (0 = N or P, 1-8 = Fwd, 14 = Rev)
 
+      ("CF_Lca_IndLeft", "LCA11", 0),
+      ("CF_Lca_IndRight", "LCA11", 0),
+
       ("MainMode_ACC", "SCC11", 0),
       ("VSetDis", "SCC11", 0),
       ("SCCInfoDisplay", "SCC11", 0),
