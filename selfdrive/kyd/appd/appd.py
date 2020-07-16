@@ -71,12 +71,12 @@ def main(gctx=None):
   put_nonblocking('OpkrRunSoftkey', '0')
 
   # we want to disable all app when boot
-  #system("pm disable %s" % mixplorer)
-  #system("pm disable %s" % quickedit)
-  #system("pm disable %s" % atlanmap)
-  #system("pm disable %s" % onenavi)
-  #system("pm disable %s" % tmap)
-  #system("pm disable %s" % kakaonavi)
+  system("pm disable %s" % mixplorer)
+  system("pm disable %s" % quickedit)
+  system("pm disable %s" % atlanmap)
+  system("pm disable %s" % onenavi)
+  system("pm disable %s" % tmap)
+  system("pm disable %s" % kakaonavi)
   #system("pm disable %s" % softkey)
 
   thermal_sock = messaging.sub_sock('thermal')
