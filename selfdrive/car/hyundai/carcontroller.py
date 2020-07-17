@@ -167,7 +167,7 @@ class CarController():
       self.nBlinker = 0
 
     # 차선이 없고 앞차량이 없으면.
-    steer_angle_lower = self.dRel > 20 and (not CC.hudControl.leftLaneVisible and not CC.hudControl.rightLaneVisible)
+    steer_angle_lower = self.dRel > 20 and (not CC.hudControl.leftLaneVisible  and not CC.hudControl.rightLaneVisible)
 
     if v_ego_kph < 1:
       self.steer_torque_over_timer = 0
@@ -325,7 +325,7 @@ class CarController():
     #else: # send mdps12 to LKAS to prevent LKAS error if no cancel cmd
     can_sends.append(create_mdps12(self.packer, frame, CS.mdps12))
 
-    str_log1 = 'CV={:.1f}/{:.3f} torg:{:5.0f}'.format(  self.model_speed, self.model_sum, apply_steer )
+    str_log1 = 'CV={:5.1f}/{:5.3f} torg:{:5.0f}'.format(  self.model_speed, self.model_sum, apply_steer )
     str_log2 = 'limit={:.0f} tm={:.1f} '.format( apply_steer_limit, self.timer1.sampleTime()  )
     trace1.printf( '{} {}'.format( str_log1, str_log2 ) )
 
