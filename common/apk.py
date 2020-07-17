@@ -30,20 +30,37 @@ def install_apk(path):
   return ret == 0
 
 def start_offroad():
+  system("pm disable com.mixplorer")
+  system("pm disable com.rhmsoft.edit.pro")
+  system("pm disable com.skt.tmap.ku")
+  system("pm disable com.gmd.hidesoftkeys")
   opkr_boot_softkey = True if params.get("OpkrBootSoftkey", encoding='utf8') == "1" else False
+  opkr_boot_tmap = True if params.get("OpkrBootTmap", encoding='utf8') == "1" else False
 
   set_package_permissions()
   system("am start -n ai.comma.plus.offroad/.MainActivity")
 
   if opkr_boot_softkey:
+    system("pm enable com.gmd.hidesoftkeys")
     system("am start -n com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
+
+  if opkr_boot_tmap:
+    if not opkr_boot_softkey:
+      system("pm enable com.gmd.hidesoftkeys")
+      system("am start -n com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
+    system("pm enable com.skt.tmap.ku")
+    system("am start -n com.skt.tmap.ku/com.skt.tmap.activity.TmapNaviActivity")
+    
 
 def set_package_permissions():
   pm_grant("ai.comma.plus.offroad", "android.permission.ACCESS_FINE_LOCATION")
   pm_grant("ai.comma.plus.offroad", "android.permission.READ_PHONE_STATE")
   pm_grant("ai.comma.plus.offroad", "android.permission.READ_EXTERNAL_STORAGE")
+  pm_grant("com.skt.tmap.ku", "android.permission.ACCESS_FINE_LOCATION")
   appops_set("ai.comma.plus.offroad", "SU", "allow")
   appops_set("ai.comma.plus.offroad", "WIFI_SCAN", "allow")
+  appops_set("com.mixplorer", "SU", "allow")
+  appops_set("com.rhmsoft.edit.pro", "SU", "allow")
   appops_set("com.gmd.hidesoftkeys", "SU", "allow")
 
 def appops_set(package, op, mode):
