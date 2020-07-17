@@ -57,6 +57,7 @@ def set_package_permissions():
   pm_grant("ai.comma.plus.offroad", "android.permission.ACCESS_FINE_LOCATION")
   pm_grant("ai.comma.plus.offroad", "android.permission.READ_PHONE_STATE")
   pm_grant("ai.comma.plus.offroad", "android.permission.READ_EXTERNAL_STORAGE")
+  pm_grant("com.skt.tmap.ku", "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
   pm_grant("com.skt.tmap.ku", "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE")
   appops_set("ai.comma.plus.offroad", "SU", "allow")
   appops_set("ai.comma.plus.offroad", "WIFI_SCAN", "allow")
