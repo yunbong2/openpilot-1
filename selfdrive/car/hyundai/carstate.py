@@ -1,14 +1,28 @@
 from cereal import car
 from selfdrive.car.hyundai.values import DBC, STEER_THRESHOLD, FEATURES
-from selfdrive.car.interfaces import CarStateBase
 from opendbc.can.parser import CANParser
 from selfdrive.config import Conversions as CV
 
 GearShifter = car.CarState.GearShifter
 
+class CarState():
 
-class CarState(CarStateBase):
-  def update(self, cp, cp_cam):
+  def __init__(self, CP):
+    self.CP = CP
+    # initialize can parser
+    self.car_fingerprint = CP.carFingerprint
+    self.left_blinker_on = 0
+    self.left_blinker_flash = 0
+    self.right_blinker_on = 0
+    self.right_blinker_flash = 0
+    self.lca_left = 0
+    self.lca_right = 0
+    self.mdps_bus = CP.mdpsBus
+
+  def update(self, cp, cp2, cp_cam):
+  
+    cp_mdps = cp2 if self.mdps_bus else cp
+
     ret = car.CarState.new_message()
 
     ret.doorOpen = any([cp.vl["CGW1"]['CF_Gway_DrvDrSw'], cp.vl["CGW1"]['CF_Gway_AstDrSw'],
@@ -23,6 +37,9 @@ class CarState(CarStateBase):
     ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr + ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
 
+    self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
+    ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
+
     ret.standstill = ret.vEgoRaw < 0.1
 
     ret.steeringAngle = cp.vl["SAS11"]['SAS_Angle']
@@ -36,8 +53,12 @@ class CarState(CarStateBase):
     ret.steerWarning = cp.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0
 
     # cruise state
-    ret.cruiseState.available = cp.vl["SCC11"]['MainMode_ACC'] != 0
-    ret.cruiseState.enabled = cp.vl["SCC12"]['ACCMode'] != 0 or ret.cruiseState.available != 0
+    self.main_on = (cp.vl["SCC11"]["MainMode_ACC"] != 0)
+    self.acc_active = (cp.vl["SCC12"]['ACCMode'] != 0)
+    self.update_atom( cp, cp2, cp_cam )
+
+    ret.cruiseState.available = self.main_on
+    ret.cruiseState.enabled =  ret.cruiseState.available
     ret.cruiseState.standstill = cp.vl["SCC11"]['SCCInfoDisplay'] == 4.
 
     if ret.cruiseState.enabled:
@@ -112,8 +133,9 @@ class CarState(CarStateBase):
     # save the entire LKAS11 and CLU11
     self.lkas11 = cp_cam.vl["LKAS11"]
     self.clu11 = cp.vl["CLU11"]
+    self.mdps12 = cp_mdps.vl["MDPS12"]
     self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
-    self.steer_state = cp.vl["MDPS12"]['CF_Mdps_ToiActive'] # 0 NOT ACTIVE, 1 ACTIVE
+    self.steer_state = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiActive'] # 0 NOT ACTIVE, 1 ACTIVE
     self.lead_distance = cp.vl["SCC11"]['ACC_ObjDist']
 
     return ret
@@ -200,6 +222,24 @@ class CarState(CarStateBase):
       ("EMS12", 100),
       ("EMS16", 100),
     ]
+    if not CP.mdpsBus:
+      signals += [
+        ("CR_Mdps_StrColTq", "MDPS12", 0),
+        ("CF_Mdps_Def", "MDPS12", 0),
+        ("CF_Mdps_ToiActive", "MDPS12", 0),
+        ("CF_Mdps_ToiUnavail", "MDPS12", 0),
+        ("CF_Mdps_MsgCount2", "MDPS12", 0),
+        ("CF_Mdps_Chksum2", "MDPS12", 0),
+        ("CF_Mdps_ToiFlt", "MDPS12", 0),
+        ("CF_Mdps_SErr", "MDPS12", 0),
+        ("CR_Mdps_StrTq", "MDPS12", 0),
+        ("CF_Mdps_FailStat", "MDPS12", 0),
+        ("CR_Mdps_OutTq", "MDPS12", 0)
+      ]
+      checks += [
+        ("MDPS12", 50)
+      ]
+
     if CP.carFingerprint in FEATURES["use_cluster_gears"]:
       signals += [
         ("CF_Clu_InhibitD", "CLU15", 0),
@@ -229,6 +269,30 @@ class CarState(CarStateBase):
       ]
 
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 0)
+
+  @staticmethod
+  def get_can2_parser(CP):
+    signals = []
+    checks = []
+    if CP.mdpsBus == 1:
+      signals += [
+        ("CR_Mdps_StrColTq", "MDPS12", 0),
+        ("CF_Mdps_Def", "MDPS12", 0),
+        ("CF_Mdps_ToiActive", "MDPS12", 0),
+        ("CF_Mdps_ToiUnavail", "MDPS12", 0),
+        ("CF_Mdps_MsgCount2", "MDPS12", 0),
+        ("CF_Mdps_Chksum2", "MDPS12", 0),
+        ("CF_Mdps_ToiFlt", "MDPS12", 0),
+        ("CF_Mdps_SErr", "MDPS12", 0),
+        ("CR_Mdps_StrTq", "MDPS12", 0),
+        ("CF_Mdps_FailStat", "MDPS12", 0),
+        ("CR_Mdps_OutTq", "MDPS12", 0)
+      ]
+      checks += [
+        ("MDPS12", 50)
+      ]
+
+    return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 1)
 
   @staticmethod
   def get_cam_can_parser(CP):

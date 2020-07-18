@@ -6,6 +6,9 @@ from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness,
 from selfdrive.car.interfaces import CarInterfaceBase
 
 class CarInterface(CarInterfaceBase):
+  def __init__(self, CP, CarController, CarState):
+    super().__init__(CP, CarController, CarState)
+    self.cp2 = self.CS.get_can2_parser(CP)
 
   @staticmethod
   def compute_gb(accel, speed):
@@ -17,12 +20,12 @@ class CarInterface(CarInterfaceBase):
 
     ret.carName = "hyundai"
     ret.safetyModel = car.CarParams.SafetyModel.hyundai
-    ret.radarOffCan = True
+    ret.radarOffCan = False
 
     # Hyundai port is a community feature for now
     ret.communityFeature = False
 
-    ret.steerActuatorDelay = 0.2  # Default delay
+    ret.steerActuatorDelay = 0.3  # Default delay
     ret.steerRateCost = 0.5
     ret.steerLimitTimer = 0.4
     tire_stiffness_factor = 1.
@@ -147,14 +150,18 @@ class CarInterface(CarInterfaceBase):
 
     ret.enableCamera = is_ecu_disconnected(fingerprint[0], FINGERPRINTS, ECU_FINGERPRINT, candidate, Ecu.fwdCamera) or has_relay
 
+    # ignore CAN2 address if L-CAN on the same BUS
+    ret.mdpsBus = 1 if 593 in fingerprint[1] and 1296 not in fingerprint[1] else 0
+
     return ret
 
   def update(self, c, can_strings):
     self.cp.update_strings(can_strings)
+    self.cp2.update_strings(can_strings)
     self.cp_cam.update_strings(can_strings)
 
-    ret = self.CS.update(self.cp, self.cp_cam)
-    ret.canValid = self.cp.can_valid and self.cp_cam.can_valid
+    ret = self.CS.update(self.cp, self.cp2, self.cp_cam)
+    ret.canValid = self.cp.can_valid and self.cp2.can_valid and self.cp_cam.can_valid
 
     # TODO: button presses
     ret.buttonEvents = []
