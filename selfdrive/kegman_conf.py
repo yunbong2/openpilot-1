@@ -119,6 +119,12 @@ class kegman_conf():
         self.config.update({"deviceOffTimer":"30"})
         self.element_updated = True
 
+      if "steerMax" not in self.config:
+        self.config.update({"steerMax":"255"})
+        self.config.update({"deltaUp":"3"})
+        self.config.update({"deltaDown":"7"})
+        self.element_updated = True
+
       if "outerLG" not in self.config:
         self.config.update({"outerLG":"-1"})
         self.config.update({"innerLG":"-1"})
@@ -144,6 +150,7 @@ class kegman_conf():
                      "Kp":"-1", "Ki":"-1", "Kf":"-1", \
                      "outerLG":"-1", "innerLG":"-1", "timeConst":"-1", "actEffect":"-1", \
                      "scale":"-1", "ki":"-1", "dc_gain":"-1", \
+                     "deltaUp":"3", "deltaDown":"7", "steerMax":"255", \
                      "steerRatio":"-1", "steerRateCost":"-1", "liveParams":"1", "deadzone":"0.1", \
                      "sR_boost":"0", "sR_BP0":"0", "sR_BP1":"0", "sR_time":"0.2", \
                      "ALCnudgeLess":"1", "ALCminSpeed":"60", "ALCtimer":"1.0"}
