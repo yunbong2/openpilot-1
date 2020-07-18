@@ -24,6 +24,29 @@ class kegman_conf():
       if self.conf['Kf'] == "-1":
         self.conf['Kf'] = str('{:f}'.format(CP.lateralTuning.pid.kf))
         write_conf = True
+    elif CP.lateralTuning.which() == 'indi':
+      if self.conf['outerLG'] == "-1":
+        self.conf['outerLG'] = str(round(CP.lateralTuning.indi.outerLoopGain,2))
+        write_conf = True
+      if self.conf['innerLG'] == "-1":
+        self.conf['innerLG'] = str(round(CP.lateralTuning.indi.innerLoopGain,2))
+        write_conf = True
+      if self.conf['timeConst'] == "-1":
+        self.conf['timeConst'] = str(round(CP.lateralTuning.indi.timeConstant,2))
+        write_conf = True
+      if self.conf['actEffect'] == "-1":
+        self.conf['actEffect'] = str(round(CP.lateralTuning.indi.actuatorEffectiveness,2))
+        write_conf = True
+    elif CP.lateralTuning.which() == 'lqr':
+      if self.conf['scale'] == "-1":
+        self.conf['scale'] = str(round(CP.lateralTuning.lqr.scale,2))
+        write_conf = True
+      if self.conf['ki'] == "-1":
+        self.conf['ki'] = str(round(CP.lateralTuning.lqr.ki,3))
+        write_conf = True
+      if self.conf['dc_gain'] == "-1":
+        self.conf['dc_gain'] = str('{:f}'.format(CP.lateralTuning.lqr.dcGain))
+        write_conf = True
     
     if self.conf['steerRatio'] == "-1":
       self.conf['steerRatio'] = str(round(CP.steerRatio,3))
@@ -68,7 +91,7 @@ class kegman_conf():
         self.element_updated = True
 	
       if "deadzone" not in self.config:
-        self.config.update({"deadzone":"2.0"})
+        self.config.update({"deadzone":"0.1"})
         self.element_updated = True
 	
       if "Kf" not in self.config:
@@ -96,6 +119,20 @@ class kegman_conf():
         self.config.update({"deviceOffTimer":"30"})
         self.element_updated = True
 
+      if "outerLG" not in self.config:
+        self.config.update({"outerLG":"-1"})
+        self.config.update({"innerLG":"-1"})
+        self.config.update({"timeConst":"-1"})
+        self.config.update({"actEffect":"-1"})
+        self.element_updated = True
+
+      if "scale" not in self.config:
+        self.config.update({"scale":"-1"})
+        self.config.update({"ki":"-1"})
+        self.config.update({"dc_gain":"-1"})
+        self.element_updated = True
+
+
       if self.element_updated:
         print("updated")
         self.write_config(self.config)
@@ -104,8 +141,10 @@ class kegman_conf():
       self.config = {"cameraOffset":"0.06", "battChargeMin":"70", "battChargeMax":"80", \
                      "wheelTouchSeconds":"30000", "battPercOff":"100", "carVoltageMinEonShutdown":"11800", \
                      "tuneGernby":"1", "getOffAlert":"1", "deviceOffTimer":"30", \
-                     "Kp":"-1", "Ki":"-1", "liveParams":"1", "deadzone":"0.1", \
-                     "steerRatio":"-1", "steerRateCost":"-1", "Kf":"-1", \
+                     "Kp":"-1", "Ki":"-1", "Kf":"-1", \
+                     "outerLG":"-1", "innerLG":"-1", "timeConst":"-1", "actEffect":"-1", \
+                     "scale":"-1", "ki":"-1", "dc_gain":"-1", \
+                     "steerRatio":"-1", "steerRateCost":"-1", "liveParams":"1", "deadzone":"0.1", \
                      "sR_boost":"0", "sR_BP0":"0", "sR_BP1":"0", "sR_time":"0.2", \
                      "ALCnudgeLess":"1", "ALCminSpeed":"60", "ALCtimer":"1.0"}
 
