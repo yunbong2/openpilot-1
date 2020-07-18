@@ -62,7 +62,7 @@ class CarInterface(CarInterfaceBase):
     """
 
     tire_stiffness_factor = 1.
-    ret.steerActuatorDelay = 0.1  # Default delay
+    ret.steerActuatorDelay = 0.125  # Default delay
     ret.steerRateCost = 0.5
     ret.steerLimitTimer = 0.4
 
