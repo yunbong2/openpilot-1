@@ -1,16 +1,17 @@
 from cereal import car
-from selfdrive.car.hyundai.values import DBC, STEER_THRESHOLD, FEATURES
+from selfdrive.car.hyundai.values import DBC, STEER_THRESHOLD, FEATURES, CAR
+from selfdrive.car.interfaces import CarStateBase
 from opendbc.can.parser import CANParser
 from selfdrive.config import Conversions as CV
 
 GearShifter = car.CarState.GearShifter
 
-class CarState():
 
+class CarState(CarStateBase):
   def __init__(self, CP):
-    self.CP = CP
+    super().__init__(CP)
+    
     # initialize can parser
-    self.car_fingerprint = CP.carFingerprint
     self.left_blinker_on = 0
     self.left_blinker_flash = 0
     self.right_blinker_on = 0
