@@ -36,7 +36,7 @@ class CarState(CarStateBase):
     ret.wheelSpeeds.rl = cp.vl["WHL_SPD11"]['WHL_SPD_RL'] * CV.KPH_TO_MS
     ret.wheelSpeeds.rr = cp.vl["WHL_SPD11"]['WHL_SPD_RR'] * CV.KPH_TO_MS
     ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr + ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
-    ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
+    vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
 
     self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
     ret.vEgo = self.clu_Vanz * CV.KPH_TO_MS
@@ -56,14 +56,16 @@ class CarState(CarStateBase):
     # cruise state
     self.main_on = (cp.vl["SCC11"]["MainMode_ACC"] != 0)
     self.acc_active = (cp.vl["SCC12"]['ACCMode'] != 0)
-
+    
     ret.cruiseState.available = self.main_on
     ret.cruiseState.enabled =  ret.cruiseState.available
     ret.cruiseState.standstill = cp.vl["SCC11"]['SCCInfoDisplay'] == 4.
+
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
 
-    if ret.cruiseState.enabled:
-      speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
+    if self.acc_active:
+      is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
+      speed_conv = CV.MPH_TO_MS if is_set_speed_in_mph else CV.KPH_TO_MS
       ret.cruiseState.speed = cp.vl["SCC11"]['VSetDis'] * speed_conv
     else:
       ret.cruiseState.speed = 0
