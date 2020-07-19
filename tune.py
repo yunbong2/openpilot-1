@@ -42,15 +42,15 @@ button_delay = 0.2
 kegman = kegman_conf()
 kegman.conf['tuneGernby'] = "1"
 #kegman.write_config(kegman.conf)
-if CP.lateralTuning.which() == 'pid':
-  param = ["cameraOffset", "Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
+
+param = ["cameraOffset", "Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
            "sR_BP1", "sR_time", "steerRateCost"]
-#if CP.lateralTuning.which() == 'indi':
-#  param = ["cameraOffset", "outerLG", "innerLG", "timeConst", "actEffect", "steerRatio", "sR_boost", "sR_BP0", \
+#param = ["cameraOffset", "outerLG", "innerLG", "timeConst", "actEffect", "steerRatio", "sR_boost", "sR_BP0", \
 #           "sR_BP1", "sR_time", "steerRateCost"]
-#if CP.lateralTuning.which() == 'lqr':
+
 #  param = ["cameraOffset", "scale", "ki", "dc_gain", "steerRatio", "sR_boost", "sR_BP0", \
 #           "sR_BP1", "sR_time", "steerRateCost"]
+
 #param = ["Kp", "Ki", "Kf", "steerRatio", "sR_boost", "sR_BP0", \
 #         "sR_BP1", "sR_time", "steerRateCost", "deadzone", "slowOnCurves", \
 #         "1barBP0", "1barBP1", "1barMax", "2barBP0", "2barBP1", \
