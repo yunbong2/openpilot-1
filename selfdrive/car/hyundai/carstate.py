@@ -76,8 +76,8 @@ class CarState(CarStateBase):
     ret.brakeLights = bool(cp.vl["TCS13"]['BrakeLight'] or ret.brakePressed)
 
     #TODO: find pedal signal for EV/HYBRID Cars
-    ret.gas = cp.vl["EMS12"]['TPS'] else 0
-    ret.gasPressed = cp.vl["EMS12"]['TPS'] else 0
+    ret.gas = cp.vl["EMS12"]['TPS']
+    ret.gasPressed = cp.vl["EMS12"]['TPS']
 
     # TODO: refactor gear parsing in function
     # Gear Selection via Cluster - For those Kia/Hyundai which are not fully discovered, we can use the Cluster Indicator for Gear Selection, as this seems to be standard over all cars, but is not the preferred method.
