@@ -77,7 +77,7 @@ class CarState(CarStateBase):
 
     #TODO: find pedal signal for EV/HYBRID Cars
     ret.gas = cp.vl["EMS12"]['PV_AV_CAN'] / 100
-    ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
+    ret.gasPressed = bool(cp.vl["EMS12"]['TPS'])
 
     # TODO: refactor gear parsing in function
     # Gear Selection via Cluster - For those Kia/Hyundai which are not fully discovered, we can use the Cluster Indicator for Gear Selection, as this seems to be standard over all cars, but is not the preferred method.
@@ -202,8 +202,10 @@ class CarState(CarStateBase):
       ("ACC_ObjDist", "SCC11", 0),
       ("ACCMode", "SCC12", 1),
 
+      ("BRAKE_ACT", "EMS12", 0),
       ("PV_AV_CAN", "EMS12", 0),
-      ("CF_Ems_AclAct", "EMS16", 0),
+      ("TPS", "EMS12", 0),
+
     ]
 
     checks = [
@@ -220,7 +222,6 @@ class CarState(CarStateBase):
       ("SCC11", 50),
       ("SCC12", 50),
       ("EMS12", 100),
-      ("EMS16", 100),
     ]
     if not CP.mdpsBus:
       signals += [
