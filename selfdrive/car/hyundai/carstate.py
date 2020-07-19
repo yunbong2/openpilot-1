@@ -56,7 +56,6 @@ class CarState(CarStateBase):
     # cruise state
     self.main_on = (cp.vl["SCC11"]["MainMode_ACC"] != 0)
     self.acc_active = (cp.vl["SCC12"]['ACCMode'] != 0)
-    self.update_atom( cp, cp2, cp_cam )
 
     ret.cruiseState.available = self.main_on
     ret.cruiseState.enabled =  ret.cruiseState.available
