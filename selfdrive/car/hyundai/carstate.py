@@ -52,10 +52,7 @@ class CarState(CarStateBase):
     ret.steeringTorqueEps = cp_mdps.vl["MDPS12"]['CR_Mdps_OutTq']
     ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD
     ret.steerWarning = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0
-    ret.steer_state = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiActive'] #0 NOT ACTIVE, 1 ACTIVE
-    ret.steer_error = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail']
-    self.stopped = cp.vl["SCC11"]['SCCInfoDisplay'] == 4.
-    self.lead_distance = cp.vl["SCC11"]['ACC_ObjDist']
+
     # cruise state
     self.main_on = (cp.vl["SCC11"]["MainMode_ACC"] != 0)
     self.acc_active = (cp.vl["SCC12"]['ACCMode'] != 0)
@@ -234,6 +231,23 @@ class CarState(CarStateBase):
       ("CGW4", 5),
       ("WHL_SPD11", 50),
     ]
+    if not CP.mdpsBus:
+      signals += [
+        ("CR_Mdps_StrColTq", "MDPS12", 0),
+        ("CF_Mdps_Def", "MDPS12", 0),
+        ("CF_Mdps_ToiActive", "MDPS12", 0),
+        ("CF_Mdps_ToiUnavail", "MDPS12", 0),
+        ("CF_Mdps_MsgCount2", "MDPS12", 0),
+        ("CF_Mdps_Chksum2", "MDPS12", 0),
+        ("CF_Mdps_ToiFlt", "MDPS12", 0),
+        ("CF_Mdps_SErr", "MDPS12", 0),
+        ("CR_Mdps_StrTq", "MDPS12", 0),
+        ("CF_Mdps_FailStat", "MDPS12", 0),
+        ("CR_Mdps_OutTq", "MDPS12", 0)
+      ]
+      checks += [
+        ("MDPS12", 50)
+      ]
 
     if CP.carFingerprint in FEATURES["use_cluster_gears"]:
       signals += [
