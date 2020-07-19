@@ -52,7 +52,10 @@ class CarState(CarStateBase):
     ret.steeringTorqueEps = cp_mdps.vl["MDPS12"]['CR_Mdps_OutTq']
     ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD
     ret.steerWarning = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0
-
+    ret.steer_state = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiActive'] #0 NOT ACTIVE, 1 ACTIVE
+    ret.steer_error = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail']
+    self.stopped = cp.vl["SCC11"]['SCCInfoDisplay'] == 4.
+    self.lead_distance = cp.vl["SCC11"]['ACC_ObjDist']
     # cruise state
     self.main_on = (cp.vl["SCC11"]["MainMode_ACC"] != 0)
     self.acc_active = (cp.vl["SCC12"]['ACCMode'] != 0)
@@ -136,9 +139,6 @@ class CarState(CarStateBase):
     self.lkas11 = cp_cam.vl["LKAS11"]
     self.clu11 = cp.vl["CLU11"]
     self.mdps12 = cp_mdps.vl["MDPS12"]
-    self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
-    self.steer_state = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiActive'] # 0 NOT ACTIVE, 1 ACTIVE
-    self.lead_distance = cp.vl["SCC11"]['ACC_ObjDist']
 
     return ret
 

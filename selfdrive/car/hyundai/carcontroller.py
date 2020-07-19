@@ -83,7 +83,7 @@ class CarController():
                                    left_lane, right_lane,
                                    left_lane_warning, right_lane_warning, 0))
 
-    if CS.mdps_bus == 1: # send lkas11 bus 1 if mdps or scc is on bus 1
+    if CS.mdps_bus: # send lkas11 bus 1 if mdps or scc is on bus 1
       can_sends.append(create_lkas11(self.packer, frame, self.car_fingerprint, apply_steer, lkas_active,
                                    CS.lkas11, sys_warning, sys_state, enabled, left_lane, right_lane,
                                    left_lane_warning, right_lane_warning, 1))
