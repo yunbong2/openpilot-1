@@ -64,8 +64,8 @@ while True:
   print ("")
   print (print_letters(kegman.conf[param[j]]))
   print ("")
-  print ("w: +1   1: +0.1   3: +0.05   5: +0.01   7: +0.001   r: +0.00001")
-  print ("x: -1   a: -0.1   d: -0.05   g: -0.01   j: -0.001   v: -0.00001")
+  print ("q: +50   w: +1   1: +0.1   3: +0.05   5: +0.01   7: +0.001   r: +0.00001")
+  print ("a: -50   x: -1   a: -0.1   d: -0.05   g: -0.01   j: -0.001   v: -0.00001")
 #  print ("w,1,3,5,7,r to incr 1,0.1,0.05,0.01,0.001,0.00001")
 #  print ("x,a,d,g,j,v to decr 1,0.1,0.05,0.01,0.001,0.00001")
   print ("0: 0   L: 1")
@@ -103,6 +103,10 @@ while True:
     kegman.conf[param[j]] = str(round((float(kegman.conf[param[j]]) + 1),5))
     write_json = True
 
+  elif (char == "q"):
+    kegman.conf[param[j]] = str(round((float(kegman.conf[param[j]]) + 50),5))
+    write_json = True
+
   elif (char == "j"):
     kegman.conf[param[j]] = str(round((float(kegman.conf[param[j]]) - 0.001),5))
     write_json = True
@@ -121,6 +125,10 @@ while True:
 
   elif (char == "x"):
     kegman.conf[param[j]] = str(round((float(kegman.conf[param[j]]) - 1),5))
+    write_json = True
+
+  elif (char == "a"):
+    kegman.conf[param[j]] = str(round((float(kegman.conf[param[j]]) - 50),5))
     write_json = True
 
   elif (char == "0"):
