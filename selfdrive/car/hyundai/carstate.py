@@ -60,9 +60,9 @@ class CarState(CarStateBase):
     ret.cruiseState.available = self.main_on
     ret.cruiseState.enabled =  ret.cruiseState.available
     ret.cruiseState.standstill = cp.vl["SCC11"]['SCCInfoDisplay'] == 4.
+    self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
 
     if ret.cruiseState.enabled:
-      is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
       speed_conv = CV.MPH_TO_MS if is_set_speed_in_mph else CV.KPH_TO_MS
       ret.cruiseState.speed = cp.vl["SCC11"]['VSetDis'] * speed_conv
     else:
