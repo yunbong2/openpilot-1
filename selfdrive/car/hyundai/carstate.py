@@ -234,23 +234,6 @@ class CarState(CarStateBase):
       ("CGW4", 5),
       ("WHL_SPD11", 50),
     ]
-    if not CP.mdpsBus:
-      signals += [
-        ("CR_Mdps_StrColTq", "MDPS12", 0),
-        ("CF_Mdps_Def", "MDPS12", 0),
-        ("CF_Mdps_ToiActive", "MDPS12", 0),
-        ("CF_Mdps_ToiUnavail", "MDPS12", 0),
-        ("CF_Mdps_MsgCount2", "MDPS12", 0),
-        ("CF_Mdps_Chksum2", "MDPS12", 0),
-        ("CF_Mdps_ToiFlt", "MDPS12", 0),
-        ("CF_Mdps_SErr", "MDPS12", 0),
-        ("CR_Mdps_StrTq", "MDPS12", 0),
-        ("CF_Mdps_FailStat", "MDPS12", 0),
-        ("CR_Mdps_OutTq", "MDPS12", 0)
-      ]
-      checks += [
-        ("MDPS12", 50)
-      ]
 
     if CP.carFingerprint in FEATURES["use_cluster_gears"]:
       signals += [
